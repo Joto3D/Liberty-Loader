@@ -39,6 +39,7 @@ extension AppModel {
             if mod.description == nil { mod.description = info?.summary }
             if let requirements = await client.requirements(modID: link.modID) { mod.requirements = requirements }
             try store.update(mod)
+            try store.refreshPins()
 
             if let picture = info?.picture_url.flatMap(URL.init(string:)), store.previewImageURL(for: mod) == nil {
                 await savePreview(picture, into: store.folderURL(for: mod))

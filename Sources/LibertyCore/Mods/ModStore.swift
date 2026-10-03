@@ -18,6 +18,11 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     public var version: String?
     /// Newest version seen on Nexus Mods during the last update check.
     public var latestVersion: String?
+    /// Kept at the top or bottom of the load order (from the mod's description, or set by the user).
+    public var loadOrderPin: LoadOrderPin?
+    /// True when the user chose the pin (or chose "Don't Pin"); auto-detection then leaves it alone.
+    public var pinIsManual: Bool?
+
     /// Mods this one needs, as listed on Nexus Mods (nil = unknown).
     public var requirements: [NexusRequirement]?
 
@@ -66,6 +71,45 @@ public final class ModStore {
             decoder.dateDecodingStrategy = .iso8601
             mods = try decoder.decode([InstalledMod].self, from: data)
         }
+        // Mods installed before pins existed get them on first launch.
+        if !detectPins().isEmpty { try? save() }
+    }
+
+    /// Names of mods that were pinned automatically since the app last asked.
+    public private(set) var recentlyAutoPinned: [String] = []
+
+    public func takeRecentlyAutoPinned() -> [String] {
+        defer { recentlyAutoPinned = [] }
+        return recentlyAutoPinned
+    }
+
+    /// Looks for load-order hints in the descriptions of mods that have no pin yet.
+    /// Returns the names of newly pinned mods (not saved; callers save).
+    @discardableResult
+    public func detectPins() -> [String] {
+        var pinned: [String] = []
+        for i in mods.indices where mods[i].loadOrderPin == nil && mods[i].pinIsManual != true {
+            let text = [mods[i].description, manifest(for: mods[i])?.description].compactMap { $0 }.joined(separator: "\n")
+            if let pin = LoadOrderHint.detect(in: text) {
+                mods[i].loadOrderPin = pin
+                pinned.append(mods[i].name)
+            }
+        }
+        recentlyAutoPinned += pinned
+        return pinned
+    }
+
+    /// Pins (or unpins with nil) a mod by the user's choice.
+    public func setPin(_ pin: LoadOrderPin?, for id: UUID) throws {
+        guard let i = mods.firstIndex(where: { $0.id == id }) else { return }
+        mods[i].loadOrderPin = pin
+        mods[i].pinIsManual = true
+        try save()
+    }
+
+    /// Re-runs detection (e.g. after a Nexus summary was added) and saves if anything changed.
+    public func refreshPins() throws {
+        if !detectPins().isEmpty { try save() }
     }
 
     public func folderURL(for mod: InstalledMod) -> URL {
@@ -110,6 +154,7 @@ public final class ModStore {
                 mod.selectedSubOption = 0
             }
             mods[index] = mod
+            detectPins()
             try save()
             LibertyLog.shared.info("Updated mod \(mod.name) from \(source.lastPathComponent)")
             return mod
@@ -126,6 +171,7 @@ public final class ModStore {
             folderName: id.uuidString
         )
         mods.append(mod)
+        detectPins()
         try save()
         LibertyLog.shared.info("Installed mod \(mod.name) from \(source.lastPathComponent)")
         return mod
@@ -203,6 +249,7 @@ public final class ModStore {
     }
 
     func save() throws {
+        mods = LoadOrderHint.normalized(mods)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         encoder.dateEncodingStrategy = .iso8601

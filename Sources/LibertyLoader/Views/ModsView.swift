@@ -271,7 +271,7 @@ struct ModRow: View {
     let isConflicting: Bool
     @State private var isHovered = false
 
-    private var manifest: ModManifest? { model.store?.manifest(for: mod) }
+    private var manifest: ModManifest? { model.manifestCache[mod.id] }
 
     private var conflictList: String { conflictsWith.joined(separator: ", ") }
 
@@ -284,7 +284,7 @@ struct ModRow: View {
         HStack(alignment: .center, spacing: 14) {
             Image(systemName: "line.3.horizontal")
                 .foregroundStyle(Color.hdMuted.opacity(isHovered ? 1 : 0.3))
-            ModPreview(url: model.store?.previewImageURL(for: mod))
+            ModPreview(url: model.previewCache[mod.id])
                 .opacity(mod.enabled ? 1 : 0.5)
 
             VStack(alignment: .leading, spacing: 5) {
@@ -301,6 +301,18 @@ struct ModRow: View {
                         }
                         .buttonStyle(.plain)
                         .help("Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here.")
+                    }
+                    if let pin = mod.loadOrderPin {
+                        Group {
+                            if pin == .bottom {
+                                HDTag(text: "Pinned last", color: .hdYellow)
+                            } else {
+                                HDTag(text: "Pinned first", color: .hdYellow)
+                            }
+                        }
+                        .help(mod.pinIsManual == true
+                              ? Text("You pinned this mod. Right-click to change it.")
+                              : Text("The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it."))
                     }
                     ForEach(model.missingRequirements(for: mod), id: \.self) { requirement in
                         Button {
@@ -348,6 +360,11 @@ struct ModRow: View {
         .onHover { isHovered = $0 }
         .contextMenu {
             Button("Show in Finder") { model.revealModFolder(mod) }
+            Menu("Load Order") {
+                Button("Keep at Bottom") { model.setPin(.bottom, for: mod.id) }
+                Button("Keep at Top") { model.setPin(.top, for: mod.id) }
+                Button("Don't Pin") { model.setPin(nil, for: mod.id) }
+            }
             if mod.nexusModID != nil {
                 Button("Open on Nexus Mods") { model.openNexusPage(mod) }
             }
@@ -394,7 +411,7 @@ struct ModPreview: View {
 
     var body: some View {
         Group {
-            if let url, let image = NSImage(contentsOf: url) {
+            if let url, let image = ImageCache.shared.image(at: url) {
                 Image(nsImage: image).resizable().scaledToFill()
             } else {
                 Image(systemName: "shippingbox.fill")

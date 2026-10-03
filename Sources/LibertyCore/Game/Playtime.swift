@@ -52,10 +52,13 @@ public final class PlaytimeStore {
         record = (try? Data(contentsOf: fileURL)).flatMap { try? JSONDecoder().decode(PlaytimeRecord.self, from: $0) } ?? PlaytimeRecord()
     }
 
-    public func update(isRunning: Bool, now: Date = Date()) {
-        guard record.update(isRunning: isRunning, now: now) else { return }
+    /// Returns true when the record changed.
+    @discardableResult
+    public func update(isRunning: Bool, now: Date = Date()) -> Bool {
+        guard record.update(isRunning: isRunning, now: now) else { return false }
         try? FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try? JSONEncoder().encode(record).write(to: fileURL, options: .atomic)
+        return true
     }
 }
 
