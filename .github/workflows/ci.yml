@@ -20,4 +20,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: LibertyLoader
-          path: build/LibertyLoader.dmg
+          path: |
+            build/LibertyLoader.dmg
+            build/LibertyLoader.zip

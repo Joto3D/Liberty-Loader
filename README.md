@@ -8,6 +8,17 @@ A native macOS launcher for **Helldivers 2** running through **CrossOver**. One 
 - **Tune performance** with presets matched to your Mac, plus CrossOver bottle settings
   (D3DMetal/DXVK, MSync/ESync, Metal FPS overlay).
 
+Also included:
+
+- **Nexus Mods integration**: the "Mod Manager Download" button installs mods directly, and
+  mod updates are checked against Nexus (needs your personal API key, set in Settings).
+- **Mod profiles**: save and switch between mod setups ("Cosmetics only", "Everything").
+- **Mod previews**: icons from `manifest.json` or the Nexus preview picture.
+- **Custom performance presets** and a **High Resolution (Retina) Mode** switch.
+- **Menu bar icon** with launch, force quit and profile switching.
+- **Playtime tracking** and a **stuck-launch helper** that offers to force quit and retry.
+- **In-app updates** from GitHub Releases.
+
 ## Requirements
 
 - macOS 14 Sonoma or newer (Apple Silicon recommended)
@@ -60,6 +71,12 @@ Helldivers 2 mods are patch files in `Helldivers 2/data`: `<hash>.patch_<n>` plu
   `CX_GRAPHICS_BACKEND`, `WINEMSYNC`, `WINEESYNC`, `MTL_HUD_ENABLED`.
 - A backup is taken before every change. The first backup of each file is kept forever, so
   **Restore Original Settings** always returns to how things were before Liberty Loader.
+
+### Releases & updates
+Push a tag such as `v0.2.0`; the Release workflow builds and publishes `LibertyLoader.dmg`
+(new installs) and `LibertyLoader.zip` (used by the built-in updater). The app checks
+`releases/latest` on launch and can replace itself and relaunch. Builds are ad-hoc signed, so
+macOS shows a Gatekeeper prompt on first launch (System Settings → Privacy & Security → Open Anyway).
 
 ## Project layout
 

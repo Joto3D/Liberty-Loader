@@ -10,6 +10,20 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     public var installedAt: Date
     /// Mod contents, relative to the store's mods directory.
     public var folderName: String
+
+    // Set for mods installed from Nexus Mods, used for update checks.
+    public var nexusModID: Int?
+    public var nexusFileID: Int?
+    /// Installed version as reported by Nexus Mods.
+    public var version: String?
+    /// Newest version seen on Nexus Mods during the last update check.
+    public var latestVersion: String?
+
+    public var hasUpdate: Bool {
+        guard let version, let latestVersion else { return false }
+        if let installed = AppVersion(version), let latest = AppVersion(latestVersion) { return latest > installed }
+        return version != latestVersion
+    }
 }
 
 /// A mod with its selected option resolved to concrete patch files.
@@ -54,8 +68,10 @@ public final class ModStore {
 
     // MARK: Install / remove
 
+    /// Installs a mod. With `replacing`, the existing mod's files are swapped for the new download
+    /// while its place in the load order, enabled state and chosen variant are kept.
     @discardableResult
-    public func install(from source: URL) throws -> InstalledMod {
+    public func install(from source: URL, replacing existingID: UUID? = nil) throws -> InstalledMod {
         let fm = FileManager.default
         let id = UUID()
         let staging = rootURL.appendingPathComponent("staging-\(id.uuidString)")
@@ -70,6 +86,23 @@ public final class ModStore {
 
         let manifest = try? ModManifest.load(from: folder.appendingPathComponent("manifest.json"))
         let fallbackName = source.deletingPathExtension().lastPathComponent
+
+        if let existingID, let index = mods.firstIndex(where: { $0.id == existingID }) {
+            var mod = mods[index]
+            try? fm.removeItem(at: folderURL(for: mod))
+            mod.folderName = id.uuidString
+            mod.name = manifest?.name ?? mod.name
+            mod.description = manifest?.description ?? mod.description
+            if let options = manifest?.options, let selected = mod.selectedOption, selected >= options.count {
+                mod.selectedOption = 0
+                mod.selectedSubOption = 0
+            }
+            mods[index] = mod
+            try save()
+            LibertyLog.shared.info("Updated mod \(mod.name) from \(source.lastPathComponent)")
+            return mod
+        }
+
         let mod = InstalledMod(
             id: id,
             name: manifest?.name ?? fallbackName,
@@ -84,6 +117,21 @@ public final class ModStore {
         try save()
         LibertyLog.shared.info("Installed mod \(mod.name) from \(source.lastPathComponent)")
         return mod
+    }
+
+    /// Manifest icon if the mod ships one, otherwise a `preview.*` image saved at install time.
+    public func previewImageURL(for mod: InstalledMod) -> URL? {
+        let folder = folderURL(for: mod)
+        let fm = FileManager.default
+        if let icon = manifest(for: mod)?.iconPath, !icon.isEmpty {
+            let url = folder.appendingPathComponent(icon.replacingOccurrences(of: "\\", with: "/"))
+            if fm.fileExists(atPath: url.path) { return url }
+        }
+        for ext in ["png", "jpg", "jpeg", "webp", "gif"] {
+            let url = folder.appendingPathComponent("preview.\(ext)")
+            if fm.fileExists(atPath: url.path) { return url }
+        }
+        return nil
     }
 
     public func uninstall(_ id: UUID) throws {
@@ -110,6 +158,12 @@ public final class ModStore {
         let insertAt = destination - source.filter { $0 < destination }.count
         remaining.insert(contentsOf: moving, at: max(0, min(insertAt, remaining.count)))
         mods = remaining
+        try save()
+    }
+
+    /// Replaces the whole list (same mods, new order/settings).
+    public func replaceAll(_ newMods: [InstalledMod]) throws {
+        mods = newMods
         try save()
     }
 

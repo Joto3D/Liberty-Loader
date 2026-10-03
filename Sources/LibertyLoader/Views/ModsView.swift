@@ -1,3 +1,4 @@
+import AppKit
 import LibertyCore
 import SwiftUI
 
@@ -6,10 +7,21 @@ struct ModsView: View {
     @Environment(AppModel.self) private var model
     @State private var isDropTargeted = false
     @State private var confirmPurge = false
+    @State private var showSaveProfile = false
+    @State private var newProfileName = ""
 
     var body: some View {
         VStack(spacing: 0) {
             StatusBanner().padding([.horizontal, .top])
+            ForEach(model.nexusDownloads, id: \.self) { label in
+                HStack {
+                    ProgressView().controlSize(.small)
+                    Text("Downloading \(label)…")
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top, 8)
+            }
             if model.mods.isEmpty {
                 emptyState
             } else {
@@ -40,6 +52,33 @@ struct ModsView: View {
         .toolbar {
             ToolbarItemGroup {
                 Button { model.showImporter = true } label: { Label("Install Mod", systemImage: "plus") }
+                Menu {
+                    ForEach(model.profiles) { profile in
+                        Button(profile.name) { model.applyProfile(profile) }
+                    }
+                    if !model.profiles.isEmpty { Divider() }
+                    Button("Save Current Setup as Profile…") {
+                        newProfileName = ""
+                        showSaveProfile = true
+                    }
+                    if !model.profiles.isEmpty {
+                        Menu("Delete Profile") {
+                            ForEach(model.profiles) { profile in
+                                Button(profile.name, role: .destructive) { model.deleteProfile(profile) }
+                            }
+                        }
+                    }
+                } label: {
+                    Label("Profiles", systemImage: "person.2.crop.square.stack")
+                }
+                .help("Switch between saved mod setups.")
+                Button {
+                    Task { await model.checkModUpdates() }
+                } label: {
+                    Label("Check for Mod Updates", systemImage: "arrow.triangle.2.circlepath")
+                }
+                .help("Checks Nexus Mods for newer versions of mods installed from there.")
+                .disabled(model.isCheckingModUpdates || !model.mods.contains { $0.nexusModID != nil })
                 Button(action: model.applyModsNow) { Label("Apply Now", systemImage: "arrow.down.doc") }
                     .help("Copy enabled mods into the game folder (also done automatically on launch).")
                     .disabled(model.game == nil || model.isGameRunning)
@@ -53,6 +92,13 @@ struct ModsView: View {
                 }
             }
         }
+        .alert("Save Profile", isPresented: $showSaveProfile) {
+            TextField("Name, e.g. Cosmetics only", text: $newProfileName)
+            Button("Save") { model.saveProfile(named: newProfileName) }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Saves which mods are on, their order and chosen variants.")
+        }
         .confirmationDialog("Remove all mod files from the game folder?", isPresented: $confirmPurge) {
             Button("Remove", role: .destructive, action: model.purgeMods)
         } message: {
@@ -64,7 +110,7 @@ struct ModsView: View {
         VStack(spacing: 12) {
             Image(systemName: "shippingbox").font(.system(size: 48)).foregroundStyle(.secondary)
             Text("No mods yet").font(.title2.bold())
-            Text("Drop a mod .zip, .7z or .rar here (e.g. from Nexus Mods), or click Install Mod.")
+            Text("Drop a mod .zip, .7z or .rar here, click Install Mod, or use “Mod Manager Download” on Nexus Mods.")
                 .foregroundStyle(.secondary)
             Button("Install Mod…") { model.showImporter = true }
                 .buttonStyle(.borderedProminent)
@@ -87,6 +133,7 @@ struct ModRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
+            ModPreview(url: model.store?.previewImageURL(for: mod))
             Toggle("", isOn: Binding(
                 get: { mod.enabled },
                 set: { var m = mod; m.enabled = $0; model.update(m) }
@@ -103,6 +150,19 @@ struct ModRow: View {
                             .foregroundStyle(.orange)
                             .help("Changes the same game files as: \(conflictsWith.joined(separator: ", "))")
                     }
+                    if mod.hasUpdate {
+                        Button {
+                            model.openNexusPage(mod)
+                        } label: {
+                            Label("Update \(mod.latestVersion ?? "")", systemImage: "arrow.down.circle.fill")
+                                .font(.caption)
+                        }
+                        .buttonStyle(.borderless)
+                        .help("Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here.")
+                    }
+                    if let version = mod.version {
+                        Text("v\(version)").font(.caption).foregroundStyle(.secondary)
+                    }
                 }
                 if let description = mod.description, !description.isEmpty {
                     Text(description).font(.caption).foregroundStyle(.secondary).lineLimit(2)
@@ -114,6 +174,9 @@ struct ModRow: View {
         .padding(.vertical, 4)
         .contextMenu {
             Button("Show in Finder") { model.revealModFolder(mod) }
+            if mod.nexusModID != nil {
+                Button("Open on Nexus Mods") { model.openNexusPage(mod) }
+            }
             Button("Uninstall", role: .destructive) { model.uninstall(mod) }
         }
     }
@@ -146,5 +209,24 @@ struct ModRow: View {
             }
         }
         .controlSize(.small)
+    }
+}
+
+/// Small thumbnail from the mod's icon or Nexus preview image.
+@MainActor
+struct ModPreview: View {
+    let url: URL?
+
+    var body: some View {
+        Group {
+            if let url, let image = NSImage(contentsOf: url) {
+                Image(nsImage: image).resizable().scaledToFill()
+            } else {
+                Image(systemName: "shippingbox").foregroundStyle(.secondary)
+            }
+        }
+        .frame(width: 56, height: 56)
+        .background(.quaternary)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

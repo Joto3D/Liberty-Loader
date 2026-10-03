@@ -1,7 +1,7 @@
 import Foundation
 
 /// A bundle of game and bottle settings tuned for a performance target.
-public struct PerformancePreset: Identifiable, Equatable, Sendable {
+public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
     public let id: String
     public let name: String
     public let summary: String
@@ -9,6 +9,9 @@ public struct PerformancePreset: Identifiable, Equatable, Sendable {
     public let gameSettings: [String: String]
     public let graphicsBackend: BottleConfig.GraphicsBackend
     public let msync: Bool
+    /// Only set by custom presets; nil leaves the bottle setting unchanged.
+    public var esync: Bool? = nil
+    public var metalHUD: Bool? = nil
 
     public static let maxPerformance = PerformancePreset(
         id: "max-performance",

@@ -42,6 +42,11 @@ public enum GameLauncher {
         (try? Shell.run("/usr/bin/pgrep", ["-if", "helldivers2.exe"]).status) == 0
     }
 
+    /// Steam running in any bottle (it rewrites the bottle's registry when it exits).
+    public static func isSteamRunning() -> Bool {
+        (try? Shell.run("/usr/bin/pgrep", ["-if", "steam\\.exe"]).status) == 0
+    }
+
     /// Force-quits every Windows process in the bottle (the game, Steam, stuck helpers).
     public static func killBottle(crossOver: CrossOverInstall, game: GamePaths) throws {
         try Shell.run(crossOver.wineURL.path, ["--bottle", game.bottleName, "wineboot", "--kill"])

@@ -12,6 +12,11 @@ struct PerformanceView: View {
     ).id
     @State private var skippedKeys: [String] = []
     @State private var filter = ""
+    @State private var retinaEnabled: Bool?
+    @State private var showSavePreset = false
+    @State private var newPresetName = ""
+
+    private var allPresets: [PerformancePreset] { PerformancePreset.all + model.customPresets }
 
     private var recommended: PerformancePreset {
         PerformancePreset.recommended(cpuBrand: SystemInfo.cpuBrand, memoryBytes: SystemInfo.memoryBytes)
@@ -29,6 +34,13 @@ struct PerformanceView: View {
         .navigationTitle("Performance")
         .onAppear(perform: load)
         .onChange(of: model.game) { load() }
+        .alert("Save Preset", isPresented: $showSavePreset) {
+            TextField("Name, e.g. My Settings", text: $newPresetName)
+            Button("Save") { model.saveCustomPreset(named: newPresetName, config: config ?? UserSettingsConfig(text: ""), bottle: bottleConfig) }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Saves your current game and bottle settings so you can switch back to them later.")
+        }
     }
 
     // MARK: Sections
@@ -39,9 +51,14 @@ struct PerformanceView: View {
                 ForEach(PerformancePreset.all) { preset in
                     Text(preset.id == recommended.id ? "\(preset.name) (recommended)" : preset.name).tag(preset.id)
                 }
+                if !model.customPresets.isEmpty {
+                    Divider()
+                    ForEach(model.customPresets) { preset in
+                        Text(preset.name).tag(preset.id)
+                    }
+                }
             }
-            .pickerStyle(.segmented)
-            if let preset = PerformancePreset.all.first(where: { $0.id == selectedPresetID }) {
+            if let preset = allPresets.first(where: { $0.id == selectedPresetID }) {
                 Text(preset.summary).font(.callout).foregroundStyle(.secondary)
                 HStack {
                     Button("Apply \(preset.name)") { apply(preset) }
@@ -49,6 +66,18 @@ struct PerformanceView: View {
                         .disabled(model.game == nil || model.isGameRunning)
                     Button("Restore Original Settings", action: restoreOriginal)
                         .disabled(model.game == nil)
+                    Spacer()
+                    Button("Save Current as Preset…") {
+                        newPresetName = ""
+                        showSavePreset = true
+                    }
+                    .disabled(config == nil)
+                    if !preset.isBuiltIn {
+                        Button("Delete", role: .destructive) {
+                            model.deleteCustomPreset(preset)
+                            selectedPresetID = recommended.id
+                        }
+                    }
                 }
             }
             if !skippedKeys.isEmpty {
@@ -83,6 +112,17 @@ struct PerformanceView: View {
                     get: { bottleConfig.metalHUDEnabled },
                     set: { value in editBottle { $0.metalHUDEnabled = value } }
                 ))
+                if let retinaEnabled {
+                    Toggle("High Resolution (Retina) Mode", isOn: Binding(
+                        get: { retinaEnabled },
+                        set: { setRetina($0) }
+                    ))
+                    .disabled(model.isBottleBusy)
+                    Text(model.isBottleBusy
+                         ? "Quit the game and Steam (or use Force Quit Bottle) to change this."
+                         : "Off gives much higher FPS. On looks sharper but renders 4× the pixels.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
             } else {
                 Text("No bottle selected.").foregroundStyle(.secondary)
             }
@@ -127,9 +167,10 @@ struct PerformanceView: View {
     // MARK: Actions
 
     private func load() {
-        guard let game = model.game else { config = nil; bottleConfig = nil; return }
+        guard let game = model.game else { config = nil; bottleConfig = nil; retinaEnabled = nil; return }
         config = try? UserSettingsConfig.load(from: game.userSettingsURL)
         bottleConfig = (try? BottleConfig.load(from: game.bottleConfigURL)) ?? BottleConfig(text: "")
+        retinaEnabled = (try? WineRegistryFile.load(from: game.userRegistryURL)).map { RetinaMode.isEnabled(in: $0) }
     }
 
     private func apply(_ preset: PerformancePreset) {
@@ -143,6 +184,8 @@ struct PerformanceView: View {
             editBottle {
                 $0.graphicsBackend = preset.graphicsBackend
                 $0.msyncEnabled = preset.msync
+                if let esync = preset.esync { $0.esyncEnabled = esync }
+                if let metalHUD = preset.metalHUD { $0.metalHUDEnabled = metalHUD }
             }
             model.statusMessage = "\(preset.name) applied. Restart the game if it is running."
         }
@@ -159,6 +202,18 @@ struct PerformanceView: View {
         }
     }
 
+    private func setRetina(_ enabled: Bool) {
+        guard let game = model.game, !model.isBottleBusy else { return }
+        model.perform {
+            var registry = try WineRegistryFile.load(from: game.userRegistryURL)
+            try model.backups?.backup(game.userRegistryURL, label: "Retina mode")
+            RetinaMode.set(enabled, in: &registry)
+            try registry.write(to: game.userRegistryURL)
+            retinaEnabled = enabled
+            model.statusMessage = "High Resolution Mode turned \(enabled ? "on" : "off")."
+        }
+    }
+
     private func saveAdvanced() {
         guard let game = model.game, let config else { return }
         model.perform {
@@ -171,7 +226,9 @@ struct PerformanceView: View {
     private func restoreOriginal() {
         guard let game = model.game, let backups = model.backups else { return }
         model.perform {
-            for file in [game.userSettingsURL, game.bottleConfigURL] where backups.original(for: file) != nil {
+            // The registry is rewritten by Wine on exit, so only restore it while the bottle is idle.
+            let files = [game.userSettingsURL, game.bottleConfigURL] + (model.isBottleBusy ? [] : [game.userRegistryURL])
+            for file in files where backups.original(for: file) != nil {
                 try backups.restoreOriginal(of: file)
             }
             model.statusMessage = "Original settings restored."

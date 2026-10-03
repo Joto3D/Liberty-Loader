@@ -5,7 +5,7 @@ import Foundation
 public struct BottleConfig: Equatable {
     public static let environmentSection = "EnvironmentVariables"
 
-    public enum GraphicsBackend: String, CaseIterable, Identifiable, Sendable {
+    public enum GraphicsBackend: String, Codable, CaseIterable, Identifiable, Sendable {
         case d3dmetal, dxvk, wined3d
         public var id: String { rawValue }
         public var displayName: String {

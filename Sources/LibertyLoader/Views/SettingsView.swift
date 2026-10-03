@@ -6,10 +6,12 @@ import UniformTypeIdentifiers
 @MainActor
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
+    @State private var apiKeyDraft: String?
 
     var body: some View {
         @Bindable var model = model
         Form {
+            StatusBanner()
             Section("CrossOver") {
                 LabeledContent("Location", value: model.crossOver?.appURL.path ?? "Not found")
                 LabeledContent("Version", value: model.crossOver?.version ?? "—")
@@ -44,6 +46,46 @@ struct SettingsView: View {
                 Text("Launch")
             } footer: {
                 Text("Passed to the game the same way as Steam's launch options.")
+            }
+
+            Section {
+                SecureField("Personal API key", text: Binding(
+                    get: { apiKeyDraft ?? model.nexusAPIKey },
+                    set: { apiKeyDraft = $0 }
+                ))
+                HStack {
+                    Button("Save Key") {
+                        model.nexusAPIKey = (apiKeyDraft ?? model.nexusAPIKey).trimmingCharacters(in: .whitespacesAndNewlines)
+                        apiKeyDraft = nil
+                        model.statusMessage = "Nexus Mods API key saved."
+                    }
+                    .disabled(apiKeyDraft == nil)
+                    Button("Get My API Key") {
+                        NSWorkspace.shared.open(URL(string: "https://www.nexusmods.com/users/myaccount?tab=api")!)
+                    }
+                    Button("Browse Helldivers 2 Mods") {
+                        NSWorkspace.shared.open(URL(string: "https://www.nexusmods.com/helldivers2/mods/")!)
+                    }
+                }
+            } header: {
+                Text("Nexus Mods")
+            } footer: {
+                Text("With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain.")
+            }
+
+            Section("App Updates") {
+                LabeledContent("Installed version", value: model.currentVersionText)
+                Toggle("Check for updates automatically", isOn: $model.autoCheckUpdates)
+                HStack {
+                    Button("Check Now") { Task { await model.checkForUpdates(userInitiated: true) } }
+                    if let release = model.availableUpdate {
+                        Button(model.isInstallingUpdate ? "Installing…" : "Install \(release.version.description)") {
+                            Task { await model.installUpdate() }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(model.isInstallingUpdate)
+                    }
+                }
             }
 
             Section("Backups") {

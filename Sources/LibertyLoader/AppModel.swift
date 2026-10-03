@@ -27,16 +27,48 @@ final class AppModel {
     var statusMessage: String?
     var errorMessage: String?
     var showImporter = false
+    var isSteamRunning = false
+
+    // Launch watchdog: set when a launch never produced a running game.
+    var showStuckPrompt = false
+    var watchdog = LaunchWatchdog()
+
+    // Playtime
+    var playtime = PlaytimeRecord()
+
+    // Profiles & presets
+    var profiles: [ModProfile] = []
+    var customPresets: [PerformancePreset] = []
+
+    // Nexus Mods
+    var nexusAPIKey: String {
+        didSet { Keychain.set(nexusAPIKey, for: Keys.nexusKeychain) }
+    }
+    var nexusDownloads: [String] = []
+    var isCheckingModUpdates = false
+
+    // App updates
+    var availableUpdate: ReleaseInfo?
+    var isInstallingUpdate = false
+    var autoCheckUpdates: Bool {
+        didSet { UserDefaults.standard.set(autoCheckUpdates, forKey: Keys.autoUpdate) }
+    }
 
     let store: ModStore?
     let backups: BackupManager?
+    let profileStore = ModProfileStore()
+    let presetStore = PresetStore()
+    let playtimeStore = PlaytimeStore()
     let supportDirectory = ModStore.defaultRoot
+    private var monitoring = false
 
     private enum Keys {
         static let bottle = "selectedBottlePath"
         static let crossOver = "crossOverPath"
         static let launchArgs = "launchArguments"
         static let buildID = "lastDeployedBuildID"
+        static let autoUpdate = "autoCheckUpdates"
+        static let nexusKeychain = "nexus-api-key"
     }
 
     init() {
@@ -46,8 +78,16 @@ final class AppModel {
         launchArguments = UserDefaults.standard.string(forKey: Keys.launchArgs) ?? ""
         store = try? ModStore()
         backups = try? BackupManager(directory: ModStore.defaultRoot.appendingPathComponent("Backups"))
+        nexusAPIKey = Keychain.get(Keys.nexusKeychain) ?? ""
+        autoCheckUpdates = UserDefaults.standard.object(forKey: Keys.autoUpdate) as? Bool ?? true
         mods = store?.mods ?? []
+        profiles = profileStore.profiles
+        customPresets = presetStore.custom
+        playtime = playtimeStore.record
     }
+
+    /// Game or Steam is running in a bottle; bottle/registry files must not be edited then.
+    var isBottleBusy: Bool { isGameRunning || isSteamRunning }
 
     var game: GamePaths? {
         let withGame = bottles.filter { $0.game != nil }
@@ -81,7 +121,8 @@ final class AppModel {
             let command = try GameLauncher.command(crossOver: crossOver, game: game, launchArguments: args)
             try GameLauncher.launch(command)
             statusMessage = "Launching Helldivers 2 via Steam in “\(game.bottleName)”…"
-            pollRunningState()
+            watchdog.didLaunch()
+            showStuckPrompt = false
         } catch {
             fail(error)
         }
@@ -92,19 +133,42 @@ final class AppModel {
         do {
             try GameLauncher.killBottle(crossOver: crossOver, game: game)
             isGameRunning = false
+            isSteamRunning = false
+            watchdog.reset()
+            showStuckPrompt = false
             statusMessage = "Stopped all processes in “\(game.bottleName)”."
         } catch {
             fail(error)
         }
     }
 
-    private func pollRunningState() {
+    /// Polls process state for the running indicator, playtime and the launch watchdog.
+    func startMonitoring() {
+        guard !monitoring else { return }
+        monitoring = true
         Task {
-            for _ in 0..<60 {
-                try? await Task.sleep(for: .seconds(2))
-                isGameRunning = GameLauncher.isGameRunning()
-                if isGameRunning { return }
+            while true {
+                let (game, steam) = await Task.detached {
+                    (GameLauncher.isGameRunning(), GameLauncher.isSteamRunning())
+                }.value
+                isGameRunning = game
+                isSteamRunning = steam
+                playtimeStore.update(isRunning: game)
+                playtime = playtimeStore.record
+                if watchdog.check(gameRunning: game) {
+                    showStuckPrompt = true
+                    watchdog.reset()
+                }
+                try? await Task.sleep(for: .seconds(game ? 15 : 5))
             }
+        }
+    }
+
+    func retryLaunch() {
+        forceQuit()
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            launch()
         }
     }
 
@@ -112,6 +176,8 @@ final class AppModel {
 
     func reloadMods() {
         mods = store?.mods ?? []
+        profiles = profileStore.profiles
+        customPresets = presetStore.custom
         if let store, let deployer {
             conflicts = deployer.plan(for: store.resolvedEnabledMods()).conflicts
         }

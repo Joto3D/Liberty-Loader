@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Builds Liberty Loader and wraps the executable in a macOS .app bundle (and optionally a .dmg).
 #   scripts/bundle.sh            -> build/Liberty Loader.app
-#   scripts/bundle.sh --dmg      -> also build/LibertyLoader.dmg
+#   scripts/bundle.sh --dmg      -> also build/LibertyLoader.dmg and build/LibertyLoader.zip (used by in-app updates)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -30,6 +30,13 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>LSApplicationCategoryType</key><string>public.app-category.games</string>
     <key>NSHighResolutionCapable</key><true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key><string>Nexus Mods download</string>
+            <key>CFBundleURLSchemes</key><array><string>nxm</string></array>
+        </dict>
+    </array>
 </dict>
 </plist>
 PLIST
@@ -39,7 +46,8 @@ codesign --force --deep --sign "${SIGN_IDENTITY:--}" "$APP"
 echo "Built $APP"
 
 if [[ "${1:-}" == "--dmg" ]]; then
-  rm -f build/LibertyLoader.dmg
+  rm -f build/LibertyLoader.dmg build/LibertyLoader.zip
+  ditto -c -k --keepParent "$APP" build/LibertyLoader.zip
   hdiutil create -volname "Liberty Loader" -srcfolder "$APP" -ov -format UDZO build/LibertyLoader.dmg
-  echo "Built build/LibertyLoader.dmg"
+  echo "Built build/LibertyLoader.dmg and build/LibertyLoader.zip"
 fi

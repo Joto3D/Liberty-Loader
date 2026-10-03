@@ -10,9 +10,12 @@ struct PlayView: View {
             VStack(alignment: .leading, spacing: 20) {
                 header
                 StatusBanner()
+                if let release = model.availableUpdate { appUpdateBanner(release) }
+                if model.showStuckPrompt { stuckBanner }
                 checklist
                 if model.gameUpdatedSinceLastSync { updateWarning }
                 launchControls
+                playtimeBox
             }
             .padding(28)
             .frame(maxWidth: 720, alignment: .leading)
@@ -47,6 +50,73 @@ struct PlayView: View {
                 CheckRow(ok: true, title: "\(enabled) mod\(enabled == 1 ? "" : "s") enabled", detail: model.conflicts.isEmpty ? nil : "\(model.conflicts.count) file conflict(s) — later mods in the list win.")
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(6)
+        }
+    }
+
+    private func appUpdateBanner(_ release: ReleaseInfo) -> some View {
+        GroupBox {
+            HStack(alignment: .top) {
+                Image(systemName: "arrow.down.circle.fill").foregroundStyle(.blue)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Liberty Loader \(release.version.description) is available").bold()
+                    if !release.notes.isEmpty {
+                        Text(release.notes).font(.caption).foregroundStyle(.secondary).lineLimit(4)
+                    }
+                    HStack {
+                        Button(model.isInstallingUpdate ? "Installing…" : "Install and Restart") {
+                            Task { await model.installUpdate() }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(model.isInstallingUpdate)
+                        Button("Later") { model.availableUpdate = nil }
+                    }
+                }
+                Spacer()
+            }
+            .padding(6)
+        }
+    }
+
+    private var stuckBanner: some View {
+        GroupBox {
+            HStack(alignment: .top) {
+                Image(systemName: "hourglass.badge.plus").foregroundStyle(.orange)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Helldivers 2 hasn't started").bold()
+                    Text("Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again.")
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        Button("Force Quit and Retry", action: model.retryLaunch)
+                            .buttonStyle(.borderedProminent)
+                        Button("Keep Waiting") { model.showStuckPrompt = false }
+                    }
+                }
+                Spacer()
+            }
+            .padding(6)
+        }
+    }
+
+    private var playtimeBox: some View {
+        GroupBox {
+            HStack(spacing: 24) {
+                VStack(alignment: .leading) {
+                    Text("Total playtime").font(.caption).foregroundStyle(.secondary)
+                    Text(PlaytimeRecord.format(model.playtime.total())).font(.title3.bold())
+                }
+                VStack(alignment: .leading) {
+                    Text("Sessions").font(.caption).foregroundStyle(.secondary)
+                    Text("\(model.playtime.sessionCount)").font(.title3.bold())
+                }
+                if model.playtime.lastSessionSeconds > 0 {
+                    VStack(alignment: .leading) {
+                        Text("Last session").font(.caption).foregroundStyle(.secondary)
+                        Text(PlaytimeRecord.format(model.playtime.lastSessionSeconds)).font(.title3.bold())
+                    }
+                }
+                Spacer()
+            }
             .padding(6)
         }
     }
