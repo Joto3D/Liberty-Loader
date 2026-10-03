@@ -55,8 +55,13 @@ public struct NexusClient {
     }
 
     public func downloadURL(for link: NXMLink) async throws -> URL {
-        var path = "games/\(link.game)/mods/\(link.modID)/files/\(link.fileID)/download_link.json"
-        if let key = link.key, let expires = link.expires {
+        try await downloadURL(game: link.game, modID: link.modID, fileID: link.fileID, key: link.key, expires: link.expires)
+    }
+
+    /// Without `key`/`expires` this only works for premium accounts.
+    public func downloadURL(game: String = gameDomain, modID: Int, fileID: Int, key: String? = nil, expires: String? = nil) async throws -> URL {
+        var path = "games/\(game)/mods/\(modID)/files/\(fileID)/download_link.json"
+        if let key, let expires {
             path += "?key=\(key)&expires=\(expires)"
         }
         let links: [DownloadLink] = try await get(path)
@@ -76,7 +81,7 @@ public struct NexusClient {
         return destination
     }
 
-    private func get<T: Decodable>(_ path: String) async throws -> T {
+    func get<T: Decodable>(_ path: String) async throws -> T {
         guard !apiKey.isEmpty else { throw ClientError.missingAPIKey }
         guard let url = URL(string: path, relativeTo: base) else { throw ClientError.noDownloadLink }
         var request = URLRequest(url: url)

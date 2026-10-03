@@ -12,8 +12,10 @@ struct PlayView: View {
             hero
             if let release = model.availableUpdate { appUpdateBanner(release) }
             if model.showStuckPrompt { stuckBanner }
+            if model.crashReport != nil { crashBanner }
             if model.gameUpdatedSinceLastSync { gameUpdateBanner }
             stats
+            warPanel
             checklist
         }
         .navigationTitle("Play")
@@ -169,6 +171,96 @@ struct PlayView: View {
         }
     }
 
+    private var crashBanner: some View {
+        HDBanner(
+            icon: "exclamationmark.octagon.fill",
+            color: .hdDanger,
+            title: Text("Helldivers 2 may have crashed"),
+            message: model.crashReport?.files.isEmpty == false
+                ? Text("The game closed shortly after starting and wrote a crash file. Try one of these fixes:")
+                : Text("The game closed shortly after starting. Try one of these fixes:")
+        ) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Button("Disable Mods and Retry", action: model.disableModsAndRetry)
+                        .buttonStyle(HDPrimaryButtonStyle())
+                    Button("Switch Graphics Backend", action: model.switchGraphicsBackend)
+                        .buttonStyle(HDSecondaryButtonStyle())
+                    Button("Verify Game Files", action: model.verifyGameFiles)
+                        .buttonStyle(HDSecondaryButtonStyle())
+                        .help("Asks Steam to check and repair the game files.")
+                }
+                HStack(spacing: 8) {
+                    Button("Show Crash File", action: model.revealCrashFile)
+                        .buttonStyle(HDSecondaryButtonStyle())
+                    Button("Dismiss") { model.crashReport = nil }
+                        .buttonStyle(HDSecondaryButtonStyle())
+                }
+                Text("Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory.")
+                    .font(.caption)
+                    .foregroundStyle(Color.hdMuted)
+            }
+        }
+    }
+
+    // MARK: Galactic War
+
+    @ViewBuilder
+    private var warPanel: some View {
+        if let war = model.war, !(war.majorOrders.isEmpty && war.planets.isEmpty) {
+            VStack(alignment: .leading, spacing: 10) {
+                HDSectionHeader(
+                    title: "Galactic War",
+                    trailing: war.playerCount.map { count in
+                        AnyView(
+                            Label { Text("\(count) Helldivers online") } icon: { Image(systemName: "person.3.fill") }
+                                .font(.hdLabel(11))
+                                .foregroundStyle(Color.hdSuccess)
+                        )
+                    }
+                )
+                HStack(alignment: .top, spacing: 12) {
+                    if let order = war.majorOrders.first {
+                        HDPanel(accent: .hdYellow) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Major Order")
+                                    .font(.hdLabel(11))
+                                    .tracking(2)
+                                    .textCase(.uppercase)
+                                    .foregroundStyle(Color.hdYellow)
+                                Text(verbatim: order.briefing.isEmpty ? order.title : order.briefing)
+                                    .foregroundStyle(Color.hdText)
+                                    .lineLimit(6)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                if let expiration = order.expiration, expiration > Date() {
+                                    Label {
+                                        Text("Ends \(expiration, style: .relative)")
+                                    } icon: {
+                                        Image(systemName: "timer")
+                                    }
+                                    .font(.hdLabel(11))
+                                    .foregroundStyle(Color.hdMuted)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: 360, alignment: .topLeading)
+                    }
+                    HDPanel {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ForEach(war.planets.prefix(5)) { planet in
+                                PlanetRow(planet: planet)
+                            }
+                        }
+                    }
+                }
+            }
+        } else if model.warUnavailable {
+            Text("Galactic War status is unavailable right now.")
+                .font(.caption)
+                .foregroundStyle(Color.hdMuted)
+        }
+    }
+
     private var gameUpdateBanner: some View {
         HDBanner(
             icon: "exclamationmark.triangle.fill",
@@ -209,6 +301,42 @@ struct CheckRow: View {
                 Button(action.0, action: action.1)
                     .buttonStyle(HDSecondaryButtonStyle())
             }
+        }
+    }
+}
+
+@MainActor
+struct PlanetRow: View {
+    let planet: WarStatus.Planet
+
+    private var color: Color {
+        switch planet.faction.lowercased() {
+        case let f where f.contains("terminid"): return .hdWarning
+        case let f where f.contains("automaton"): return .hdDanger
+        case let f where f.contains("illuminate"): return Color(red: 0.62, green: 0.45, blue: 1.0)
+        default: return .hdInfo
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(verbatim: planet.name).font(.system(size: 13, weight: .semibold)).foregroundStyle(Color.hdText)
+                Text(verbatim: planet.faction).font(.hdLabel(9)).foregroundStyle(color)
+                Spacer()
+                Text(verbatim: String(format: "%.1f%%", planet.liberation)).font(.hdLabel(11)).foregroundStyle(Color.hdText)
+                Label { Text(verbatim: "\(planet.players)") } icon: { Image(systemName: "person.fill") }
+                    .font(.hdLabel(10))
+                    .foregroundStyle(Color.hdMuted)
+                    .frame(width: 70, alignment: .trailing)
+            }
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Rectangle().fill(Color.white.opacity(0.08))
+                    Rectangle().fill(Color.hdYellow).frame(width: geo.size.width * planet.liberation / 100)
+                }
+            }
+            .frame(height: 5)
         }
     }
 }

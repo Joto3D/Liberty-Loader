@@ -5,7 +5,7 @@
   var english = new Map(nodes.map(function (el) { return [el, el.textContent]; }));
   var titles = {
     en: document.title,
-    de: "Liberty Loader – Helldivers 2 auf deinem Mac"
+    de: document.documentElement.getAttribute("data-title-de") || document.title
   };
 
   function storedLang() {
@@ -27,6 +27,7 @@
     document.querySelectorAll(".lang button").forEach(function (btn) {
       btn.setAttribute("aria-pressed", String(btn.getAttribute("data-lang") === lang));
     });
+    document.dispatchEvent(new CustomEvent("langchange", { detail: lang }));
   }
 
   var initial = storedLang() || ((navigator.language || "en").toLowerCase().indexOf("de") === 0 ? "de" : "en");
@@ -47,7 +48,8 @@
     .then(function (res) { return res.ok ? res.json() : null; })
     .then(function (release) {
       if (release && release.tag_name) {
-        document.getElementById("version").textContent = release.tag_name;
+        var el = document.getElementById("version");
+        if (el) el.textContent = release.tag_name;
       }
     })
     .catch(function () { /* keep the built-in version text */ });

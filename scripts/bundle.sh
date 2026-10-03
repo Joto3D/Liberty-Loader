@@ -14,6 +14,10 @@ BIN="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/Libert
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/LibertyLoader"
+# App icon, drawn by scripts/make_icon.swift.
+swift scripts/make_icon.swift build/icon
+iconutil -c icns build/icon/AppIcon.iconset -o "$APP/Contents/Resources/AppIcon.icns"
+
 # Translations (English + German); macOS picks one based on the system language.
 cp -R Localization/*.lproj "$APP/Contents/Resources/"
 
@@ -28,6 +32,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleDisplayName</key><string>Liberty Loader</string>
     <key>CFBundleIdentifier</key><string>com.joto3d.libertyloader</string>
     <key>CFBundleExecutable</key><string>LibertyLoader</string>
+    <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>${VERSION}</string>
     <key>CFBundleVersion</key><string>${VERSION}</string>

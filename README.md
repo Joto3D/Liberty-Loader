@@ -18,6 +18,11 @@ Also included:
 - **Menu bar icon** with launch, force quit and profile switching.
 - **Playtime tracking** and a **stuck-launch helper** that offers to force quit and retry.
 - **In-app updates** from GitHub Releases.
+- **Mod browser**: trending, new and updated Helldivers 2 mods from Nexus Mods, with search.
+- **Galactic War**: live Major Order and planet liberation from the community API (api.helldivers2.dev).
+- **Setup assistant** for first launch, a **crash helper** with one-click fixes, and a **Discord status**
+  (paste a Discord Application ID in Settings).
+- A custom app icon, drawn by `scripts/make_icon.swift` at build time.
 
 The interface uses a dark Helldivers-style theme and is available in **English and German**
 (it follows your Mac's language).
@@ -90,7 +95,9 @@ it reports). CI runs `scripts/check_strings.py` to catch missing translations.
 
 ### Website
 `site/` is a static page (HTML/CSS/JS, English + German) deployed to GitHub Pages by
-`.github/workflows/pages.yml` on every push to `main` that touches it. Preview locally with
+`.github/workflows/pages.yml` on every push to `main` that touches it. Pages: home, `mods.html`
+(gallery from `site/data/mods.json`, refreshed daily by `.github/workflows/mods-data.yml` when the
+`NEXUS_API_KEY` repository secret is set) and `news.html` (release notes from the GitHub API). Preview locally with
 `python3 -m http.server -d site`.
 
 ## Project layout

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-title-de="Neuigkeiten – Liberty Loader">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News – Liberty Loader</title>
+  <meta name="description" content="Release notes and changes for Liberty Loader, the Helldivers 2 launcher for macOS.">
+  <meta property="og:title" content="Liberty Loader – Helldivers 2 on your Mac">
+  <meta property="og:description" content="Launch, mod and tune Helldivers 2 on macOS with CrossOver.">
+  <meta name="theme-color" content="#0d0e10">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4 8 12v18c0 15 10 26 24 30 14-4 24-15 24-30V12z' fill='%23ffe81f'/%3E%3Cpath d='M32 4v56c14-4 24-15 24-30V12z' fill='%23000' opacity='.25'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="index.html" aria-label="Liberty Loader">
+        <svg class="shield" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 8 12v18c0 15 10 26 24 30 14-4 24-15 24-30V12z"/><path class="shade" d="M32 4v56c14-4 24-15 24-30V12z"/></svg>
+        <span><b>LIBERTY</b><i>LOADER</i></span>
+      </a>
+      <nav class="links" aria-label="Main">
+        <a href="index.html#features" data-i18n="nav.features">Features</a>
+        <a href="index.html#install" data-i18n="nav.install">Install</a>
+        <a href="mods.html" data-i18n="nav.mods">Mods</a>
+        <a href="news.html" data-i18n="nav.news">News</a>
+        <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="https://github.com/Joto3D/Liberty-Loader" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <div class="nav-actions">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en">EN</button>
+          <button type="button" data-lang="de">DE</button>
+        </div>
+        <a class="btn btn-primary btn-sm" href="index.html#download" data-i18n="nav.download">Download</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section page-top">
+      <div class="wrap narrow">
+        <header class="section-head">
+          <p class="eyebrow" data-i18n="news.eyebrow">Dispatches</p>
+          <h1 class="page-title" data-i18n="news.title">News &amp; updates</h1>
+          <p class="lead small" data-i18n="news.lead">Every Liberty Loader release and what changed. The app updates itself, so you always get the newest version.</p>
+        </header>
+        <div id="releases" class="releases" aria-live="polite">
+          <p class="muted" data-i18n="news.loading">Loading releases…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <p data-i18n="footer.disclaimer">Liberty Loader is an unofficial fan project. It is not affiliated with or endorsed by Arrowhead Game Studios, Sony Interactive Entertainment or CodeWeavers. Helldivers is a trademark of its respective owner.</p>
+      <p><a href="https://github.com/Joto3D/Liberty-Loader" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/Joto3D/Liberty-Loader/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="footer.license">License</a></p>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="main.js"></script>
+  <script src="news.js"></script>
+</body>
+</html>

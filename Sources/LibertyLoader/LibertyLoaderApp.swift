@@ -54,6 +54,12 @@ struct MenuBarContent: View {
     var body: some View {
         Text(model.isGameRunning ? "Helldivers 2 is running" : "Helldivers 2 is not running")
         Text("Playtime: \(PlaytimeRecord.format(model.playtime.total()))")
+        if let order = model.war?.majorOrders.first {
+            Text(verbatim: "MO: " + String((order.briefing.isEmpty ? order.title : order.briefing).prefix(60)))
+        }
+        if let count = model.war?.playerCount {
+            Text("\(count) Helldivers online")
+        }
         Divider()
         Button("Launch Helldivers 2", action: model.launch)
             .disabled(model.crossOver == nil || model.game == nil || model.isGameRunning)
