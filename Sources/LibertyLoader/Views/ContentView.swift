@@ -3,7 +3,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum SidebarItem: String, CaseIterable, Identifiable {
-    case play, mods, performance, settings
+    case play, mods, browse, performance, settings
 
     var id: String { rawValue }
 
@@ -11,6 +11,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         switch self {
         case .play: return "Play"
         case .mods: return "Mods"
+        case .browse: return "Browse"
         case .performance: return "Performance"
         case .settings: return "Settings"
         }
@@ -20,6 +21,7 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         switch self {
         case .play: return "play.fill"
         case .mods: return "shippingbox.fill"
+        case .browse: return "sparkle.magnifyingglass"
         case .performance: return "speedometer"
         case .settings: return "gearshape.fill"
         }
@@ -41,6 +43,7 @@ struct ContentView: View {
                 switch selection {
                 case .play: PlayView(selection: $selection)
                 case .mods: ModsView()
+                case .browse: BrowseView(selection: $selection)
                 case .performance: PerformanceView()
                 case .settings: SettingsView()
                 }
@@ -58,6 +61,10 @@ struct ContentView: View {
         ) { result in
             if case .success(let urls) = result { model.install(urls) }
         }
+        .sheet(isPresented: $model.showSetup) {
+            SetupWizardView().environment(model)
+        }
+        .task { model.showSetupIfNeeded() }
         .alert("Something went wrong", isPresented: Binding(
             get: { model.errorMessage != nil },
             set: { if !$0 { model.errorMessage = nil } }

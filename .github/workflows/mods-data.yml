@@ -1,0 +1,56 @@
+name: Mod gallery data
+
+# Refreshes site/data/mods.json from the Nexus Mods API once a day.
+# Needs a repository secret NEXUS_API_KEY (Settings → Secrets and variables → Actions).
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      NEXUS_API_KEY: ${{ secrets.NEXUS_API_KEY }}
+    steps:
+      - name: Skip without API key
+        if: env.NEXUS_API_KEY == ''
+        run: echo "NEXUS_API_KEY secret is not set; nothing to do."
+      - uses: actions/checkout@v4
+        if: env.NEXUS_API_KEY != ''
+        with:
+          ref: main
+      - name: Fetch mods
+        if: env.NEXUS_API_KEY != ''
+        run: |
+          set -euo pipefail
+          fetch() {
+            curl -fsS -H "apikey: $NEXUS_API_KEY" -H "Application-Name: LibertyLoader" \
+              "https://api.nexusmods.com/v1/games/helldivers2/mods/$1.json" |
+            jq '[.[] | select(.available != false and .contains_adult_content != true and .name != null)
+                 | {mod_id, name, summary, picture_url, endorsement_count, author, version}]'
+          }
+          jq -n --argjson trending "$(fetch trending)" --argjson latest "$(fetch latest_added)" \
+            --arg updated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{updated: $updated, trending: $trending, latest: $latest}' > site/data/mods.json
+      - name: Commit and redeploy
+        if: env.NEXUS_API_KEY != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Only the timestamp changed? Then there is nothing new to publish.
+          if git diff --quiet -I '"updated"' -- site/data/mods.json; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data/mods.json
+          git commit -m "Update mod gallery data"
+          git push
+          # Pushes made with GITHUB_TOKEN don't trigger workflows, so start the deploy explicitly.
+          gh workflow run pages.yml --ref main

@@ -36,6 +36,31 @@ final class AppModel {
     // Playtime
     var playtime = PlaytimeRecord()
 
+    // Galactic War
+    var war: WarStatus?
+    var warUnavailable = false
+    var lastWarUpdate: Date?
+
+    // Crash helper
+    var crashDetector = CrashDetector()
+    var crashReport: CrashReport?
+
+    // Setup assistant
+    var showSetup = false
+
+    // Discord
+    var discordEnabled: Bool {
+        didSet { UserDefaults.standard.set(discordEnabled, forKey: Keys.discordEnabled); updateDiscord() }
+    }
+    var discordAppID: String {
+        didSet { UserDefaults.standard.set(discordAppID, forKey: Keys.discordAppID); discord = nil; updateDiscord() }
+    }
+    var discord: DiscordRPC?
+    var gameStartedAt: Date?
+
+    // Nexus account (premium accounts can install from the browser directly)
+    var nexusUser: NexusUser?
+
     // Profiles & presets
     var profiles: [ModProfile] = []
     var customPresets: [PerformancePreset] = []
@@ -69,6 +94,9 @@ final class AppModel {
         static let buildID = "lastDeployedBuildID"
         static let autoUpdate = "autoCheckUpdates"
         static let nexusKeychain = "nexus-api-key"
+        static let discordEnabled = "discordEnabled"
+        static let discordAppID = "discordAppID"
+        static let setupSeen = "setupSeen"
     }
 
     init() {
@@ -80,10 +108,17 @@ final class AppModel {
         backups = try? BackupManager(directory: ModStore.defaultRoot.appendingPathComponent("Backups"))
         nexusAPIKey = Keychain.get(Keys.nexusKeychain) ?? ""
         autoCheckUpdates = UserDefaults.standard.object(forKey: Keys.autoUpdate) as? Bool ?? true
+        discordEnabled = UserDefaults.standard.object(forKey: Keys.discordEnabled) as? Bool ?? true
+        discordAppID = UserDefaults.standard.string(forKey: Keys.discordAppID) ?? DiscordRPC.bundledApplicationID
         mods = store?.mods ?? []
         profiles = profileStore.profiles
         customPresets = presetStore.custom
         playtime = playtimeStore.record
+    }
+
+    var setupSeen: Bool {
+        get { UserDefaults.standard.bool(forKey: Keys.setupSeen) }
+        set { UserDefaults.standard.set(newValue, forKey: Keys.setupSeen) }
     }
 
     /// Game or Steam is running in a bottle; bottle/registry files must not be edited then.
@@ -130,6 +165,7 @@ final class AppModel {
 
     func forceQuit() {
         guard let crossOver, let game else { return }
+        crashDetector.userWillStopGame()
         do {
             try GameLauncher.killBottle(crossOver: crossOver, game: game)
             isGameRunning = false
@@ -151,8 +187,14 @@ final class AppModel {
                 let (game, steam) = await Task.detached {
                     (GameLauncher.isGameRunning(), GameLauncher.isSteamRunning())
                 }.value
+                let wasRunning = isGameRunning
                 isGameRunning = game
                 isSteamRunning = steam
+                if game != wasRunning { gameRunningChanged(to: game) }
+                if lastWarUpdate.map({ Date().timeIntervalSince($0) > 300 }) ?? true {
+                    lastWarUpdate = Date()
+                    Task { await refreshWar() }
+                }
                 playtimeStore.update(isRunning: game)
                 playtime = playtimeStore.record
                 if watchdog.check(gameRunning: game) {

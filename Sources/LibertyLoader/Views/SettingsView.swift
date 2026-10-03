@@ -97,6 +97,37 @@ struct SettingsView: View {
                 }
             }
 
+            section("Discord") {
+                VStack(alignment: .leading, spacing: 10) {
+                    Toggle("Show “Playing Helldivers 2” in Discord", isOn: $model.discordEnabled)
+                        .toggleStyle(.switch)
+                        .tint(.hdYellow)
+                        .disabled(!model.discordAvailable)
+                    HStack {
+                        TextField("Discord Application ID", text: $model.discordAppID)
+                            .textFieldStyle(.roundedBorder)
+                            .frame(maxWidth: 260)
+                        Button("Developer Portal") {
+                            NSWorkspace.shared.open(URL(string: "https://discord.com/developers/applications")!)
+                        }
+                        .buttonStyle(HDSecondaryButtonStyle())
+                    }
+                    Text("Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.")
+                        .font(.caption).foregroundStyle(Color.hdMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
+            section("Setup assistant") {
+                HStack {
+                    Text("Walks you through CrossOver, Steam and Helldivers 2 again.")
+                        .foregroundStyle(Color.hdMuted)
+                    Spacer()
+                    Button("Run Setup Assistant") { model.showSetup = true }
+                        .buttonStyle(HDSecondaryButtonStyle())
+                }
+            }
+
             section("App updates") {
                 InfoRow(label: "Installed version", value: model.currentVersionText)
                 Toggle("Check for updates automatically", isOn: $model.autoCheckUpdates)
