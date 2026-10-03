@@ -58,6 +58,10 @@ final class AppModel {
     var discord: DiscordRPC?
     var gameStartedAt: Date?
 
+    // Caches filled by reloadMods so views never touch the disk while scrolling.
+    var manifestCache: [UUID: ModManifest] = [:]
+    var previewCache: [UUID: URL] = [:]
+
     // Automation
     var autoApplyMods: Bool {
         didSet { UserDefaults.standard.set(autoApplyMods, forKey: Keys.autoApply) }
@@ -210,17 +214,18 @@ final class AppModel {
                 let (game, steam) = await Task.detached {
                     (GameLauncher.isGameRunning(), GameLauncher.isSteamRunning())
                 }.value
-                let wasRunning = isGameRunning
-                isGameRunning = game
-                isSteamRunning = steam
-                if game != wasRunning { gameRunningChanged(to: game) }
+                // Only write observed state when it changes; every write re-renders the views using it.
+                if game != isGameRunning {
+                    isGameRunning = game
+                    gameRunningChanged(to: game)
+                }
+                if steam != isSteamRunning { isSteamRunning = steam }
                 if lastWarUpdate.map({ Date().timeIntervalSince($0) > 300 }) ?? true {
                     lastWarUpdate = Date()
                     Task { await refreshWar() }
                 }
-                playtimeStore.update(isRunning: game)
-                playtime = playtimeStore.record
-                if watchdog.check(gameRunning: game) {
+                if playtimeStore.update(isRunning: game) { playtime = playtimeStore.record }
+                if watchdog.launchedAt != nil, watchdog.check(gameRunning: game) {
                     showStuckPrompt = true
                     watchdog.reset()
                 }
@@ -241,6 +246,20 @@ final class AppModel {
 
     func reloadMods() {
         mods = store?.mods ?? []
+        // Disk lookups happen here once, never while views render.
+        if let store {
+            manifestCache = Dictionary(uniqueKeysWithValues: mods.compactMap { mod in store.manifest(for: mod).map { (mod.id, $0) } })
+            previewCache = Dictionary(uniqueKeysWithValues: mods.compactMap { mod in store.previewImageURL(for: mod).map { (mod.id, $0) } })
+            let pinned = store.takeRecentlyAutoPinned()
+            if pinned.count == 1, let name = pinned.first {
+                statusMessage = mods.first(where: { $0.name == name })?.loadOrderPin == .top
+                    ? String(localized: "“\(name)” is kept at the top of the list, as its description asks.")
+                    : String(localized: "“\(name)” is kept at the bottom of the list, as its description asks.")
+            } else if pinned.count > 1 {
+                let count = pinned.count
+                statusMessage = String(localized: "\(count) mods are pinned in the load order, as their descriptions ask.")
+            }
+        }
         profiles = profileStore.profiles
         customPresets = presetStore.custom
         if let store, let deployer {
@@ -283,6 +302,12 @@ final class AppModel {
 
     func setAllEnabled(_ enabled: Bool) {
         perform { try store?.setAllEnabled(enabled) }
+        autoApply()
+    }
+
+    /// Pins a mod to the top or bottom of the load order, or unpins it (nil). Overrides auto-detection.
+    func setPin(_ pin: LoadOrderPin?, for id: UUID) {
+        perform { try store?.setPin(pin, for: id) }
         autoApply()
     }
 

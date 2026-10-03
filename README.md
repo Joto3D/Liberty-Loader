@@ -106,6 +106,10 @@ files were never copied (start the game from Liberty Loader or press **Apply Now
 outdated (the game archive it patches no longer exists), if its variant is empty, if a later mod
 overrides it, or if it needs another Nexus mod (shown as **Needs …**, installable with one click).
 
+Mods whose description asks for a load-order position (e.g. *"place this loader LAST"*) are
+**pinned** automatically and stay at the bottom (or top) of the list; right-click a mod →
+**Load Order** to pin or unpin it yourself.
+
 By default (Settings → Automation) mods are **applied automatically** after every change, and
 **required Nexus mods are installed automatically**, including requirements of requirements.
 Premium Nexus accounts download directly; free accounts get each download page opened once,

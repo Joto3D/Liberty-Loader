@@ -294,13 +294,13 @@ struct ModDetailSheet: View {
 @MainActor
 struct RemoteImage: View {
     let url: URL?
+    @State private var image: NSImage?
 
     var body: some View {
-        AsyncImage(url: url) { phase in
-            switch phase {
-            case .success(let image):
-                image.resizable().scaledToFill()
-            default:
+        Group {
+            if let image = image ?? url.flatMap({ ImageCache.shared.cached($0) }) {
+                Image(nsImage: image).resizable().scaledToFill()
+            } else {
                 ZStack {
                     Color.hdPanelRaised
                     Image(systemName: "shippingbox.fill")
@@ -308,6 +308,10 @@ struct RemoteImage: View {
                         .foregroundStyle(Color.hdYellow.opacity(0.35))
                 }
             }
+        }
+        .task(id: url) {
+            guard let url else { image = nil; return }
+            image = await ImageCache.shared.load(url)
         }
     }
 }

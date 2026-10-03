@@ -4,6 +4,7 @@
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld file overlaps. Mods lower in the list win.";
 "%lld files are not in the game folder yet." = "%lld files are not in the game folder yet.";
+"%lld mods are pinned in the load order, as their descriptions ask." = "%lld mods are pinned in the load order, as their descriptions ask.";
 "%lld mods enabled" = "%lld mods enabled";
 "%lld patch files from another tool" = "%lld patch files from another tool";
 "API key" = "API key";
@@ -78,6 +79,7 @@
 "Dismiss" = "Dismiss";
 "Diving via Liberty Loader" = "Diving via Liberty Loader";
 "Diving with %lld mods" = "Diving with %lld mods";
+"Don't Pin" = "Don't Pin";
 "Done" = "Done";
 "Download Helldivers 2" = "Download Helldivers 2";
 "Downloading %@…" = "Downloading %@…";
@@ -148,6 +150,8 @@
 "Installing…" = "Installing…";
 "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS." = "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS.";
 "Keep Waiting" = "Keep Waiting";
+"Keep at Bottom" = "Keep at Bottom";
+"Keep at Top" = "Keep at Top";
 "Last session" = "Last session";
 "Later" = "Later";
 "Launch" = "Launch";
@@ -160,6 +164,7 @@
 "Liberty Loader can ask Steam in your bottle to install the game. The download runs in Steam." = "Liberty Loader can ask Steam in your bottle to install the game. The download runs in Steam.";
 "Liberty Loader found problems that can keep mods from showing up in game." = "Liberty Loader found problems that can keep mods from showing up in game.";
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.";
+"Load Order" = "Load Order";
 "Location" = "Location";
 "MSync" = "MSync";
 "Major Order" = "Major Order";
@@ -222,6 +227,8 @@
 "Performance" = "Performance";
 "Personal API key" = "Personal API key";
 "Pick a performance preset" = "Pick a performance preset";
+"Pinned first" = "Pinned first";
+"Pinned last" = "Pinned last";
 "Play" = "Play";
 "Play in fullscreen so macOS Game Mode turns on (more CPU/GPU priority)." = "Play in fullscreen so macOS Game Mode turns on (more CPU/GPU priority).";
 "Playtime" = "Playtime";
@@ -295,6 +302,7 @@
 "The first missions after an update stutter while shaders compile. This improves on its own." = "The first missions after an update stutter while shaders compile. This improves on its own.";
 "The game closed shortly after starting and wrote a crash file. Try one of these fixes:" = "The game closed shortly after starting and wrote a crash file. Try one of these fixes:";
 "The game closed shortly after starting. Try one of these fixes:" = "The game closed shortly after starting. Try one of these fixes:";
+"The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it." = "The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it.";
 "The selected variant contains no mod files. Pick another variant on the Mods page." = "The selected variant contains no mod files. Pick another variant on the Mods page.";
 "This happens when the game is started through Steam instead of Liberty Loader." = "This happens when the game is started through Steam instead of Liberty Loader.";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.";
@@ -324,6 +332,9 @@
 "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.";
 "WineD3D (compatibility)" = "WineD3D (compatibility)";
 "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain." = "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain.";
+"You pinned this mod. Right-click to change it." = "You pinned this mod. Right-click to change it.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
+"“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
+"“%@” is kept at the top of the list, as its description asks." = "“%@” is kept at the top of the list, as its description asks.";

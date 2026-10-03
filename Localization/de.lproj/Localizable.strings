@@ -4,6 +4,7 @@
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld Datei-Überschneidungen. Mods weiter unten in der Liste gewinnen.";
 "%lld files are not in the game folder yet." = "%lld Dateien sind noch nicht im Spielordner.";
+"%lld mods are pinned in the load order, as their descriptions ask." = "%lld Mods sind in der Reihenfolge festgesetzt, wie es ihre Beschreibungen verlangen.";
 "%lld mods enabled" = "%lld Mods aktiviert";
 "%lld patch files from another tool" = "%lld Patch-Dateien von einem anderen Programm";
 "API key" = "API-Schlüssel";
@@ -78,6 +79,7 @@
 "Dismiss" = "Ausblenden";
 "Diving via Liberty Loader" = "Taucht mit Liberty Loader ab";
 "Diving with %lld mods" = "Taucht mit %lld Mods ab";
+"Don't Pin" = "Nicht festsetzen";
 "Done" = "Fertig";
 "Download Helldivers 2" = "Helldivers 2 herunterladen";
 "Downloading %@…" = "Lade %@ herunter…";
@@ -148,6 +150,8 @@
 "Installing…" = "Wird installiert…";
 "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS." = "Lass den hochauflösenden Modus aus. Retina-Auflösung kostet viele FPS.";
 "Keep Waiting" = "Weiter warten";
+"Keep at Bottom" = "Immer ganz unten";
+"Keep at Top" = "Immer ganz oben";
 "Last session" = "Letzte Runde";
 "Later" = "Später";
 "Launch" = "Starten";
@@ -160,6 +164,7 @@
 "Liberty Loader can ask Steam in your bottle to install the game. The download runs in Steam." = "Liberty Loader kann Steam in deiner Bottle bitten, das Spiel zu installieren. Der Download läuft in Steam.";
 "Liberty Loader found problems that can keep mods from showing up in game." = "Liberty Loader hat Probleme gefunden, wegen denen Mods im Spiel fehlen können.";
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Die Discord-Anwendung von Liberty Loader ist schon eingetragen. Ändere die ID nur, wenn du eine eigene Anwendung nutzen willst. Discord muss auf diesem Mac laufen.";
+"Load Order" = "Reihenfolge";
 "Location" = "Ort";
 "MSync" = "MSync";
 "Major Order" = "Hauptbefehl";
@@ -222,6 +227,8 @@
 "Performance" = "Leistung";
 "Personal API key" = "Persönlicher API-Schlüssel";
 "Pick a performance preset" = "Leistungs-Preset wählen";
+"Pinned first" = "Fest oben";
+"Pinned last" = "Fest unten";
 "Play" = "Spielen";
 "Play in fullscreen so macOS Game Mode turns on (more CPU/GPU priority)." = "Spiel im Vollbild, damit der macOS-Spielmodus anspringt (mehr CPU-/GPU-Priorität).";
 "Playtime" = "Spielzeit";
@@ -295,6 +302,7 @@
 "The first missions after an update stutter while shaders compile. This improves on its own." = "Die ersten Einsätze nach einem Update ruckeln, während Shader kompiliert werden. Das wird von selbst besser.";
 "The game closed shortly after starting and wrote a crash file. Try one of these fixes:" = "Das Spiel hat sich kurz nach dem Start beendet und eine Absturzdatei geschrieben. Probier eine dieser Lösungen:";
 "The game closed shortly after starting. Try one of these fixes:" = "Das Spiel hat sich kurz nach dem Start beendet. Probier eine dieser Lösungen:";
+"The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it." = "Die Beschreibung der Mod verlangt diese Position, deshalb hält Liberty Loader sie dort. Rechtsklick zum Ändern.";
 "The selected variant contains no mod files. Pick another variant on the Mods page." = "Die gewählte Variante enthält keine Mod-Dateien. Wähl auf der Mods-Seite eine andere Variante.";
 "This happens when the game is started through Steam instead of Liberty Loader." = "Das passiert, wenn das Spiel über Steam statt über Liberty Loader gestartet wird.";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "Das ist ein Windows-Programm (z. B. ein Mod-Manager), keine Mod. Du brauchst es nicht: Liberty Loader übernimmt diese Aufgabe auf deinem Mac. Lade stattdessen die Mod selbst herunter.";
@@ -324,6 +332,9 @@
 "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "Braucht eine Nexus-Mod andere Mods, installiert Liberty Loader sie mit. Bei kostenlosen Nexus-Konten werden stattdessen die Download-Seiten geöffnet; klick dort auf „Mod Manager Download“.";
 "WineD3D (compatibility)" = "WineD3D (Kompatibilität)";
 "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain." = "Mit einem Schlüssel installiert der Button „Mod Manager Download“ auf Nexus Mods Mods direkt in Liberty Loader, und Mod-Updates lassen sich prüfen. Der Schlüssel wird in deinem Schlüsselbund gespeichert.";
+"You pinned this mod. Right-click to change it." = "Du hast diese Mod festgesetzt. Rechtsklick zum Ändern.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Deine Mod-Sammlung bleibt erhalten. Nur Dateien, die Liberty Loader in den Spielordner gelegt hat, werden entfernt.";
 "Your saved settings." = "Deine gespeicherten Einstellungen.";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config nicht gefunden. Starte Helldivers 2 einmal, damit sie erstellt wird.";
+"“%@” is kept at the bottom of the list, as its description asks." = "„%@“ bleibt ganz unten in der Liste, wie es ihre Beschreibung verlangt.";
+"“%@” is kept at the top of the list, as its description asks." = "„%@“ bleibt ganz oben in der Liste, wie es ihre Beschreibung verlangt.";
