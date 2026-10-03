@@ -1,10 +1,16 @@
 name: Release
 
-# Push a tag like v0.2.0 to publish a release with the .dmg (for new installs)
-# and .zip (for the app's built-in updater).
+# Publishes a release with the .dmg (for new installs) and .zip (for the app's
+# built-in updater). Start it either by pushing a tag like v0.2.0, or from the
+# Actions tab ("Run workflow") with a version number; the tag is then created.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, e.g. 0.2.0"
+        required: true
 
 permissions:
   contents: write
@@ -14,15 +20,23 @@ jobs:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+      - name: Determine version
+        run: |
+          RAW="${{ inputs.version }}"
+          [ -z "$RAW" ] && RAW="${GITHUB_REF_NAME}"
+          echo "VERSION=${RAW#v}" >> "$GITHUB_ENV"
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_15.4.app
       - name: Test
         run: swift test
       - name: Bundle app
-        run: VERSION="${GITHUB_REF_NAME#v}" scripts/bundle.sh --dmg
+        run: scripts/bundle.sh --dmg
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.VERSION }}
+          name: Liberty Loader ${{ env.VERSION }}
+          target_commitish: ${{ github.sha }}
           generate_release_notes: true
           files: |
             build/LibertyLoader.dmg
