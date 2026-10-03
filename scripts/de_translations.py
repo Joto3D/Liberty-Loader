@@ -317,4 +317,13 @@ DE = {
 "Overlaps with %@, which load later and win where both change the same thing.": "Überschneidet sich mit %@. Die laden später und gewinnen, wo beide dasselbe ändern.",
 "The selected variant contains no mod files. Pick another variant on the Mods page.": "Die gewählte Variante enthält keine Mod-Dateien. Wähl auf der Mods-Seite eine andere Variante.",
 "This mod is turned off.": "Diese Mod ist ausgeschaltet.",
+"Apply mods automatically": "Mods automatisch anwenden",
+"Automation": "Automatik",
+"Copies mods into the game right after you install, enable, reorder or remove them.": "Kopiert Mods sofort ins Spiel, wenn du sie installierst, einschaltest, umsortierst oder entfernst.",
+"Install All Missing": "Alle fehlenden installieren",
+"Install required mods automatically": "Benötigte Mods automatisch installieren",
+"Installing required mod “%@”…": "Installiere benötigte Mod „%@“…",
+"Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them.": "%lld benötigte Mods auf Nexus Mods geöffnet. Klick auf jeder Seite auf „Mod Manager Download“, dann installiert Liberty Loader sie.",
+"Switched to profile “%@”.": "Zu Profil „%@“ gewechselt.",
+"When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.": "Braucht eine Nexus-Mod andere Mods, installiert Liberty Loader sie mit. Bei kostenlosen Nexus-Konten werden stattdessen die Download-Seiten geöffnet; klick dort auf „Mod Manager Download“.",
 }

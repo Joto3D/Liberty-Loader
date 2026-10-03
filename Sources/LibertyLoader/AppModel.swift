@@ -58,6 +58,19 @@ final class AppModel {
     var discord: DiscordRPC?
     var gameStartedAt: Date?
 
+    // Automation
+    var autoApplyMods: Bool {
+        didSet { UserDefaults.standard.set(autoApplyMods, forKey: Keys.autoApply) }
+    }
+    var autoInstallRequirements: Bool {
+        didSet { UserDefaults.standard.set(autoInstallRequirements, forKey: Keys.autoRequirements) }
+    }
+    var isAutoInstalling = false
+    /// Requirements already tried this session, so a failing download isn't retried in a loop.
+    var attemptedRequirements: Set<Int> = []
+    /// Nexus pages already opened for free accounts, so they don't pop up again.
+    var openedRequirementPages: Set<Int> = []
+
     // Mod diagnosis
     var diagnostics: DiagnosticsReport?
     var showDiagnostics = false
@@ -103,6 +116,8 @@ final class AppModel {
         static let discordEnabled = "discordEnabled"
         static let discordAppID = "discordAppID"
         static let setupSeen = "setupSeen"
+        static let autoApply = "autoApplyMods"
+        static let autoRequirements = "autoInstallRequirements"
     }
 
     init() {
@@ -116,6 +131,8 @@ final class AppModel {
         autoCheckUpdates = UserDefaults.standard.object(forKey: Keys.autoUpdate) as? Bool ?? true
         discordEnabled = UserDefaults.standard.object(forKey: Keys.discordEnabled) as? Bool ?? true
         discordAppID = UserDefaults.standard.string(forKey: Keys.discordAppID) ?? DiscordRPC.bundledApplicationID
+        autoApplyMods = UserDefaults.standard.object(forKey: Keys.autoApply) as? Bool ?? true
+        autoInstallRequirements = UserDefaults.standard.object(forKey: Keys.autoRequirements) as? Bool ?? true
         mods = store?.mods ?? []
         profiles = profileStore.profiles
         customPresets = presetStore.custom
@@ -246,22 +263,33 @@ final class AppModel {
         }
         if installed > 0 { statusMessage = installed == 1 ? String(localized: "Installed 1 mod.") : String(localized: "Installed \(installed) mods.") }
         reloadMods()
+        if installed > 0 { autoApply() }
     }
 
     func update(_ mod: InstalledMod) {
         perform { try store?.update(mod) }
+        autoApply()
     }
 
     func uninstall(_ mod: InstalledMod) {
         perform { try store?.uninstall(mod.id) }
+        autoApply()
     }
 
     func move(from source: IndexSet, to destination: Int) {
         perform { try store?.move(fromOffsets: source, toOffset: destination) }
+        autoApply()
     }
 
     func setAllEnabled(_ enabled: Bool) {
         perform { try store?.setAllEnabled(enabled) }
+        autoApply()
+    }
+
+    /// Copies mods into the game right after a change, so "Apply Now" is rarely needed.
+    func autoApply() {
+        guard autoApplyMods, game != nil, !isGameRunning else { return }
+        do { try syncMods() } catch { fail(error) }
     }
 
     /// Returns false when nothing was applied.

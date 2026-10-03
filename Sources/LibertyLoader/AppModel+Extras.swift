@@ -224,5 +224,58 @@ extension AppModel {
         }
         reloadMods()
         runDiagnostics()
+        await autoInstallMissingRequirements()
+    }
+
+    // MARK: Automatic requirement installs
+
+    /// Missing Nexus requirements of all enabled mods, one entry per required mod.
+    func allMissingRequirements() -> [NexusRequirement] {
+        var seen: Set<Int> = []
+        var result: [NexusRequirement] = []
+        for mod in mods where mod.enabled {
+            for requirement in mod.missingRequirements(installed: mods) {
+                guard let id = requirement.modID, seen.insert(id).inserted else { continue }
+                result.append(requirement)
+            }
+        }
+        return result
+    }
+
+    /// Installs whatever enabled mods still need, including requirements of requirements.
+    /// Premium accounts download directly; free accounts get the Nexus pages opened once,
+    /// where "Mod Manager Download" hands the files back to Liberty Loader.
+    func autoInstallMissingRequirements(force: Bool = false) async {
+        guard autoInstallRequirements || force, !isAutoInstalling, !nexusAPIKey.isEmpty else { return }
+        isAutoInstalling = true
+        defer { isAutoInstalling = false }
+
+        for _ in 0..<4 { // a few levels of nested requirements
+            let missing = allMissingRequirements()
+            guard !missing.isEmpty else { return }
+            if nexusUser == nil { await refreshNexusUser() }
+
+            if nexusUser?.is_premium == true {
+                let pending = missing.filter { !attemptedRequirements.contains($0.modID ?? -1) }
+                guard !pending.isEmpty else { return }
+                for requirement in pending {
+                    if let id = requirement.modID { attemptedRequirements.insert(id) }
+                    statusMessage = String(localized: "Installing required mod “\(requirement.name)”…")
+                    await installRequirement(requirement)
+                }
+            } else {
+                let toOpen = missing.filter { !openedRequirementPages.contains($0.modID ?? -1) }.prefix(5)
+                guard !toOpen.isEmpty else { return }
+                for requirement in toOpen {
+                    guard let id = requirement.modID,
+                          let url = URL(string: "https://www.nexusmods.com/\(NexusClient.gameDomain)/mods/\(id)?tab=files") else { continue }
+                    openedRequirementPages.insert(id)
+                    NSWorkspace.shared.open(url)
+                }
+                let count = toOpen.count
+                statusMessage = String(localized: "Opened \(count) required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them.")
+                return
+            }
+        }
     }
 }

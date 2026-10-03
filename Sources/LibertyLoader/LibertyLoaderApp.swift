@@ -15,6 +15,10 @@ struct LibertyLoaderApp: App {
         if model.autoCheckUpdates {
             Task { await model.checkForUpdates(userInitiated: false) }
         }
+        // Learn the requirements of mods installed before this feature existed, and fetch missing ones.
+        if !model.nexusAPIKey.isEmpty && model.autoInstallRequirements {
+            Task { await model.refreshRequirements() }
+        }
     }
 
     var body: some Scene {
