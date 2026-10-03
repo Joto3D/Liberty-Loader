@@ -22,6 +22,8 @@ Also included:
 The interface uses a dark Helldivers-style theme and is available in **English and German**
 (it follows your Mac's language).
 
+**Website:** https://joto3d.github.io/Liberty-Loader/
+
 ## Requirements
 
 - macOS 14 Sonoma or newer (Apple Silicon recommended)
@@ -86,12 +88,18 @@ UI text lives in `Localization/{en,de}.lproj/Localizable.strings`. After changin
 code, run `scripts/gen_strings.py` (add German text to `scripts/de_translations.py` for anything
 it reports). CI runs `scripts/check_strings.py` to catch missing translations.
 
+### Website
+`site/` is a static page (HTML/CSS/JS, English + German) deployed to GitHub Pages by
+`.github/workflows/pages.yml` on every push to `main` that touches it. Preview locally with
+`python3 -m http.server -d site`.
+
 ## Project layout
 
 ```
 Sources/LibertyCore      platform-independent logic (bottles, launching, mods, configs, backups)
 Sources/LibertyLoader    SwiftUI app (Play, Mods, Performance, Settings; Theme/ holds the design system)
 Localization             English and German UI text
+site                     GitHub Pages website
 Tests/LibertyCoreTests   unit tests using fake bottle trees
 scripts/bundle.sh        .app / .dmg packaging
 ```
