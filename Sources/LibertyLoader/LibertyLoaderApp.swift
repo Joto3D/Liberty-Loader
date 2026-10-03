@@ -1,6 +1,7 @@
 import SwiftUI
 
 @main
+@MainActor
 struct LibertyLoaderApp: App {
     @State private var model = AppModel()
 
