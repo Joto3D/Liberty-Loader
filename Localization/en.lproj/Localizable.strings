@@ -62,7 +62,6 @@
 "Disable Mods and Retry" = "Disable Mods and Retry";
 "Discord" = "Discord";
 "Discord Application ID" = "Discord Application ID";
-"Discord needs an application ID to show a status. Create a free application named “Liberty Loader” in the Discord Developer Portal and paste its Application ID here. Discord must be running on this Mac." = "Discord needs an application ID to show a status. Create a free application named “Liberty Loader” in the Discord Developer Portal and paste its Application ID here. Discord must be running on this Mac.";
 "Dismiss" = "Dismiss";
 "Diving via Liberty Loader" = "Diving via Liberty Loader";
 "Diving with %lld mods" = "Diving with %lld mods";
@@ -138,6 +137,7 @@
 "Liberty Loader %@ is available" = "Liberty Loader %@ is available";
 "Liberty Loader %@ is up to date." = "Liberty Loader %@ is up to date.";
 "Liberty Loader can ask Steam in your bottle to install the game. The download runs in Steam." = "Liberty Loader can ask Steam in your bottle to install the game. The download runs in Steam.";
+"Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.";
 "Location" = "Location";
 "MSync" = "MSync";
 "Major Order" = "Major Order";

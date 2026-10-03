@@ -229,7 +229,7 @@ DE = {
 "Disable Mods and Retry": "Mods aus und neu versuchen",
 "Discord": "Discord",
 "Discord Application ID": "Discord Application ID",
-"Discord needs an application ID to show a status. Create a free application named “Liberty Loader” in the Discord Developer Portal and paste its Application ID here. Discord must be running on this Mac.": "Discord braucht eine Application ID, um einen Status anzuzeigen. Erstelle im Discord Developer Portal eine kostenlose Anwendung namens „Liberty Loader“ und füge hier ihre Application ID ein. Discord muss auf diesem Mac laufen.",
+"Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.": "Die Discord-Anwendung von Liberty Loader ist schon eingetragen. Ändere die ID nur, wenn du eine eigene Anwendung nutzen willst. Discord muss auf diesem Mac laufen.",
 "Dismiss": "Ausblenden",
 "Diving via Liberty Loader": "Taucht mit Liberty Loader ab",
 "Diving with %lld mods": "Taucht mit %lld Mods ab",

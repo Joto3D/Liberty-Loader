@@ -112,7 +112,7 @@ struct SettingsView: View {
                         }
                         .buttonStyle(HDSecondaryButtonStyle())
                     }
-                    Text("Discord needs an application ID to show a status. Create a free application named “Liberty Loader” in the Discord Developer Portal and paste its Application ID here. Discord must be running on this Mac.")
+                    Text("Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.")
                         .font(.caption).foregroundStyle(Color.hdMuted)
                         .fixedSize(horizontal: false, vertical: true)
                 }

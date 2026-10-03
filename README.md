@@ -21,7 +21,7 @@ Also included:
 - **Mod browser**: trending, new and updated Helldivers 2 mods from Nexus Mods, with search.
 - **Galactic War**: live Major Order and planet liberation from the community API (api.helldivers2.dev).
 - **Setup assistant** for first launch, a **crash helper** with one-click fixes, and a **Discord status**
-  (paste a Discord Application ID in Settings).
+  (Liberty Loader's Discord application is built in; it can be overridden in Settings).
 - A custom app icon, drawn by `scripts/make_icon.swift` at build time.
 
 The interface uses a dark Helldivers-style theme and is available in **English and German**

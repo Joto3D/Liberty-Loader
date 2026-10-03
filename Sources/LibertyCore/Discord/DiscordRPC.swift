@@ -28,8 +28,8 @@ public final class DiscordRPC {
         }
     }
 
-    /// Liberty Loader's own Discord application. Empty until one is registered; users can also set their own in Settings.
-    public static let bundledApplicationID = ""
+    /// Liberty Loader's own Discord application; users can override it in Settings.
+    public static let bundledApplicationID = "1556061305482379354"
 
     public let applicationID: String
     private var socket: Int32 = -1
