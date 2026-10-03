@@ -100,6 +100,12 @@ it reports). CI runs `scripts/check_strings.py` to catch missing translations.
 `NEXUS_API_KEY` repository secret is set) and `news.html` (release notes from the GitHub API). Preview locally with
 `python3 -m http.server -d site`.
 
+### Mods don't show up in game?
+Open **Mods → Diagnose**. It checks every mod against the game folder and explains, per mod, if
+files were never copied (start the game from Liberty Loader or press **Apply Now**), if the mod is
+outdated (the game archive it patches no longer exists), if its variant is empty, if a later mod
+overrides it, or if it needs another Nexus mod (shown as **Needs …**, installable with one click).
+
 ## Project layout
 
 ```

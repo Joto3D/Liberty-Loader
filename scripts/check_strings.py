@@ -16,7 +16,7 @@ SOURCES = [ROOT / "Sources/LibertyLoader", ROOT / "Sources/LibertyCore"]
 LANGS = ["en", "de"]
 
 # Calls whose first string literal argument is a localized key.
-POSITIONAL = r"(?:Text|Button|Label|Toggle|Picker|TextField|SecureField|Menu|LocalizedStringKey|HDSectionHeader|HDTag|section|\.help|\.navigationTitle|\.alert|\.confirmationDialog)"
+POSITIONAL = r"(?:Text|Button|Label|Toggle|Picker|TextField|SecureField|Menu|LocalizedStringKey|HDSectionHeader|HDTag|section|line|\.help|\.navigationTitle|\.alert|\.confirmationDialog)"
 # Labeled arguments that take a LocalizedStringKey.
 LABELED = r"(?:title|subtitle|label|text|detail|localized|name|summary)"
 LITERAL = r'"((?:[^"\\\n]|\\.)*)"'
