@@ -58,6 +58,12 @@ final class AppModel {
     var discord: DiscordRPC?
     var gameStartedAt: Date?
 
+    // Mod diagnosis
+    var diagnostics: DiagnosticsReport?
+    var showDiagnostics = false
+    /// Set after applying mods when some can't work; ModsView offers to open the diagnosis.
+    var diagnosticsHint = false
+
     // Nexus account (premium accounts can install from the browser directly)
     var nexusUser: NexusUser?
 
@@ -258,19 +264,29 @@ final class AppModel {
         perform { try store?.setAllEnabled(enabled) }
     }
 
-    func syncMods() throws {
-        guard let store, let deployer else { return }
-        guard !isGameRunning else { return }
+    /// Returns false when nothing was applied.
+    @discardableResult
+    func syncMods() throws -> Bool {
+        guard let store, let deployer else { return false }
+        guard !isGameRunning else {
+            statusMessage = String(localized: "Mods can't be applied while Helldivers 2 is running. Quit the game and press Apply Now.")
+            return false
+        }
         let plan = try deployer.sync(store.resolvedEnabledMods())
         conflicts = plan.conflicts
         UserDefaults.standard.set(game?.buildID, forKey: Keys.buildID)
         gameUpdatedSinceLastSync = false
+        if runDiagnostics()?.hasBlockingProblems == true {
+            diagnosticsHint = true
+        }
+        return true
     }
 
     func applyModsNow() {
         perform {
-            try syncMods()
-            statusMessage = String(localized: "Mods applied to the game folder.")
+            if try syncMods() {
+                statusMessage = String(localized: "Mods applied to the game folder.")
+            }
         }
     }
 

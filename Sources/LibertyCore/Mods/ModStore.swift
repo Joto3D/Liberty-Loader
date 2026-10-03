@@ -18,6 +18,16 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     public var version: String?
     /// Newest version seen on Nexus Mods during the last update check.
     public var latestVersion: String?
+    /// Mods this one needs, as listed on Nexus Mods (nil = unknown).
+    public var requirements: [NexusRequirement]?
+
+    /// Nexus requirements that aren't installed yet.
+    public func missingRequirements(installed: [InstalledMod]) -> [NexusRequirement] {
+        (requirements ?? []).filter { requirement in
+            guard let id = requirement.modID, !requirement.isExternal else { return false }
+            return !installed.contains { $0.nexusModID == id }
+        }
+    }
 
     public var hasUpdate: Bool {
         guard let version, let latestVersion else { return false }

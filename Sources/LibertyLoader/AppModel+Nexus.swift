@@ -37,6 +37,7 @@ extension AppModel {
             mod.latestVersion = mod.version
             if existing == nil, let name = info?.name { mod.name = name }
             if mod.description == nil { mod.description = info?.summary }
+            if let requirements = await client.requirements(modID: link.modID) { mod.requirements = requirements }
             try store.update(mod)
 
             if let picture = info?.picture_url.flatMap(URL.init(string:)), store.previewImageURL(for: mod) == nil {
@@ -71,6 +72,7 @@ extension AppModel {
             guard let modID = mod.nexusModID, let info = try? await client.mod(modID) else { continue }
             var updated = mod
             updated.latestVersion = info.version
+            if let requirements = await client.requirements(modID: modID) { updated.requirements = requirements }
             try? store.update(updated)
             if updated.hasUpdate { updates += 1 }
         }

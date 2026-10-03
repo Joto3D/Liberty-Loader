@@ -8,6 +8,9 @@ public struct PatchDeployer {
     public struct Copy: Equatable {
         public let source: URL
         public let destinationName: String
+        /// The mod this file belongs to, and the game archive it patches.
+        public var modID: UUID? = nil
+        public var hash: String = ""
     }
 
     public struct Plan: Equatable {
@@ -58,7 +61,12 @@ public struct PatchDeployer {
                 nextIndex[patch.hash] = index + 1
                 for suffix in PatchSet.suffixes {
                     guard let source = patch.files[suffix] else { continue }
-                    plan.copies.append(Copy(source: source, destinationName: "\(patch.hash).patch_\(index)\(suffix)"))
+                    plan.copies.append(Copy(
+                        source: source,
+                        destinationName: "\(patch.hash).patch_\(index)\(suffix)",
+                        modID: mod.id,
+                        hash: patch.hash
+                    ))
                 }
                 if touchedBy[patch.hash]?.last != mod.name {
                     touchedBy[patch.hash, default: []].append(mod.name)

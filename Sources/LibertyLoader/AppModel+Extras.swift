@@ -148,3 +148,81 @@ extension AppModel {
         mods.first { $0.nexusModID == nexusID }
     }
 }
+
+// MARK: - Mod diagnosis & requirements
+
+extension AppModel {
+    @discardableResult
+    func runDiagnostics() -> DiagnosticsReport? {
+        guard let store, let deployer else { diagnostics = nil; return nil }
+        let report = ModDiagnostics.run(
+            store: store,
+            deployer: deployer,
+            buildChanged: gameUpdatedSinceLastSync,
+            gameRunning: isGameRunning
+        )
+        diagnostics = report
+        return report
+    }
+
+    func openDiagnostics() {
+        diagnosticsHint = false
+        runDiagnostics()
+        showDiagnostics = true
+    }
+
+    func findMod(_ id: UUID) -> InstalledMod? {
+        mods.first { $0.id == id }
+    }
+
+    /// Moves a mod to the end of the load order so it wins over overlapping mods.
+    func moveToBottom(_ id: UUID) {
+        guard let index = mods.firstIndex(where: { $0.id == id }) else { return }
+        move(from: IndexSet(integer: index), to: mods.count)
+        runDiagnostics()
+    }
+
+    func disable(_ id: UUID) {
+        guard var mod = findMod(id) else { return }
+        mod.enabled = false
+        update(mod)
+        runDiagnostics()
+    }
+
+    func applyAndRediagnose() {
+        applyModsNow()
+        runDiagnostics()
+    }
+
+    func missingRequirements(for mod: InstalledMod) -> [NexusRequirement] {
+        mod.missingRequirements(installed: mods)
+    }
+
+    /// Installs a required Nexus mod, or opens its page for external tools.
+    func installRequirement(_ requirement: NexusRequirement) async {
+        guard !requirement.isExternal, let id = requirement.modID else {
+            if let url = requirement.pageURL { NSWorkspace.shared.open(url) }
+            return
+        }
+        let summary = NexusModSummary(
+            modID: id, name: requirement.name, summary: requirement.notes,
+            pictureURL: nil, endorsements: nil, author: nil, version: nil
+        )
+        await installFromBrowser(summary)
+        runDiagnostics()
+    }
+
+    /// Re-reads requirements from Nexus for every mod installed from there.
+    func refreshRequirements() async {
+        guard let store, !nexusAPIKey.isEmpty else { return }
+        let client = NexusClient(apiKey: nexusAPIKey)
+        for mod in store.mods {
+            guard let id = mod.nexusModID, let requirements = await client.requirements(modID: id) else { continue }
+            var updated = mod
+            updated.requirements = requirements
+            try? store.update(updated)
+        }
+        reloadMods()
+        runDiagnostics()
+    }
+}

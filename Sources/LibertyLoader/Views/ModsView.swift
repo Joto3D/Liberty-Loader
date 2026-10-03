@@ -60,6 +60,19 @@ struct ModsView: View {
             VStack(alignment: .leading, spacing: 16) {
                 HDPageTitle(title: "Mods", subtitle: "Drop mods here. Lower in the list wins when two mods change the same file.")
                 StatusBanner()
+                if model.diagnosticsHint {
+                    HDBanner(
+                        icon: "stethoscope",
+                        color: .hdWarning,
+                        title: Text("Some mods may not work"),
+                        message: Text("Liberty Loader found problems that can keep mods from showing up in game.")
+                    ) {
+                        Button("Diagnose", action: model.openDiagnostics)
+                            .buttonStyle(HDPrimaryButtonStyle())
+                        Button("Dismiss") { model.diagnosticsHint = false }
+                            .buttonStyle(HDSecondaryButtonStyle())
+                    }
+                }
                 ForEach(model.nexusDownloads, id: \.self) { label in
                     HDPanel(accent: .hdInfo, padding: 12) {
                         HStack {
@@ -117,6 +130,9 @@ struct ModsView: View {
         } isTargeted: { isDropTargeted = $0 }
         .navigationTitle("Mods")
         .toolbar { toolbarContent }
+        .sheet(isPresented: Binding(get: { model.showDiagnostics }, set: { model.showDiagnostics = $0 })) {
+            ModDiagnosisView().environment(model)
+        }
         .alert("Save Profile", isPresented: $showSaveProfile) {
             TextField("Name, e.g. Cosmetics only", text: $newProfileName)
             Button("Save") { model.saveProfile(named: newProfileName) }
@@ -230,6 +246,9 @@ struct ModsView: View {
             }
             .help("Checks Nexus Mods for newer versions of mods installed from there.")
             .disabled(model.isCheckingModUpdates || !model.mods.contains { $0.nexusModID != nil })
+            Button(action: model.openDiagnostics) { Label("Diagnose", systemImage: "stethoscope") }
+                .help("Checks why mods might not show up in game.")
+                .disabled(model.game == nil || model.mods.isEmpty)
             Button(action: model.applyModsNow) { Label("Apply Now", systemImage: "arrow.down.doc") }
                 .help("Copy enabled mods into the game folder (also done automatically on launch).")
                 .disabled(model.game == nil || model.isGameRunning)
@@ -282,6 +301,15 @@ struct ModRow: View {
                         }
                         .buttonStyle(.plain)
                         .help("Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here.")
+                    }
+                    ForEach(model.missingRequirements(for: mod), id: \.self) { requirement in
+                        Button {
+                            Task { await model.installRequirement(requirement) }
+                        } label: {
+                            HDTag(text: "Needs \(requirement.name)", color: .hdDanger)
+                        }
+                        .buttonStyle(.plain)
+                        .help("This mod needs another mod. Click to install it.")
                     }
                     if mod.enabled && isConflicting {
                         HDTag(text: "Overlaps", color: .hdWarning)
