@@ -3,15 +3,22 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum SidebarItem: String, CaseIterable, Identifiable {
-    case play = "Play"
-    case mods = "Mods"
-    case performance = "Performance"
-    case settings = "Settings"
+    case play, mods, performance, settings
 
     var id: String { rawValue }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .play: return "Play"
+        case .mods: return "Mods"
+        case .performance: return "Performance"
+        case .settings: return "Settings"
+        }
+    }
+
     var icon: String {
         switch self {
-        case .play: return "play.circle.fill"
+        case .play: return "play.fill"
         case .mods: return "shippingbox.fill"
         case .performance: return "speedometer"
         case .settings: return "gearshape.fill"
@@ -22,23 +29,28 @@ enum SidebarItem: String, CaseIterable, Identifiable {
 @MainActor
 struct ContentView: View {
     @Environment(AppModel.self) private var model
-    @State private var selection: SidebarItem? = .play
+    @State private var selection: SidebarItem = .play
 
     var body: some View {
         @Bindable var model = model
         NavigationSplitView {
-            List(SidebarItem.allCases, selection: $selection) { item in
-                Label(item.rawValue, systemImage: item.icon).tag(item)
-            }
-            .navigationSplitViewColumnWidth(min: 170, ideal: 190)
+            Sidebar(selection: $selection)
+                .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 260)
         } detail: {
-            switch selection ?? .play {
-            case .play: PlayView()
-            case .mods: ModsView()
-            case .performance: PerformanceView()
-            case .settings: SettingsView()
+            Group {
+                switch selection {
+                case .play: PlayView(selection: $selection)
+                case .mods: ModsView()
+                case .performance: PerformanceView()
+                case .settings: SettingsView()
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.hdBackground)
         }
+        .preferredColorScheme(.dark)
+        .tint(.hdYellow)
+        .toolbarBackground(Color.hdBackground, for: .windowToolbar)
         .fileImporter(
             isPresented: $model.showImporter,
             allowedContentTypes: [.zip, .folder, .data],
@@ -52,27 +64,135 @@ struct ContentView: View {
         )) {
             Button("OK") { model.errorMessage = nil }
         } message: {
-            Text(model.errorMessage ?? "")
+            Text(verbatim: model.errorMessage ?? "")
         }
     }
 }
 
-/// Small transient banner used by several screens.
+@MainActor
+struct Sidebar: View {
+    @Environment(AppModel.self) private var model
+    @Binding var selection: SidebarItem
+    @State private var hovered: SidebarItem?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            logo
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 20)
+
+            VStack(spacing: 4) {
+                ForEach(SidebarItem.allCases) { item in
+                    navButton(item)
+                }
+            }
+            .padding(.horizontal, 10)
+
+            Spacer()
+
+            footer
+                .padding(16)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(Color.hdBackground)
+    }
+
+    private var logo: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                Image(systemName: "shield.lefthalf.filled")
+                    .font(.system(size: 26, weight: .black))
+                    .foregroundStyle(Color.hdYellow)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(verbatim: "LIBERTY")
+                        .font(.hdDisplay(20))
+                        .foregroundStyle(Color.hdText)
+                    Text(verbatim: "LOADER")
+                        .font(.hdDisplay(20))
+                        .foregroundStyle(Color.hdYellow)
+                }
+            }
+            HazardStripe(stripeWidth: 6)
+                .frame(height: 5)
+                .clipShape(Rectangle())
+        }
+    }
+
+    private func navButton(_ item: SidebarItem) -> some View {
+        let isSelected = selection == item
+        return Button {
+            withAnimation(.easeOut(duration: 0.15)) { selection = item }
+        } label: {
+            HStack(spacing: 12) {
+                Rectangle()
+                    .fill(isSelected ? Color.hdYellow : Color.clear)
+                    .frame(width: 3, height: 20)
+                Image(systemName: item.icon)
+                    .font(.system(size: 14, weight: .semibold))
+                    .frame(width: 18)
+                Text(item.title)
+                    .font(.system(size: 14, weight: isSelected ? .bold : .medium))
+                Spacer()
+                if item == .mods, model.mods.contains(where: \.hasUpdate) {
+                    Circle().fill(Color.hdInfo).frame(width: 7, height: 7)
+                }
+                if item == .play, model.availableUpdate != nil {
+                    Circle().fill(Color.hdInfo).frame(width: 7, height: 7)
+                }
+            }
+            .foregroundStyle(isSelected ? Color.hdYellow : Color.hdText.opacity(hovered == item ? 1 : 0.75))
+            .padding(.vertical, 9)
+            .padding(.trailing, 10)
+            .background(
+                isSelected ? Color.hdYellow.opacity(0.10) : Color.white.opacity(hovered == item ? 0.04 : 0),
+                in: RoundedRectangle(cornerRadius: 4)
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .onHover { hovered = $0 ? item : (hovered == item ? nil : hovered) }
+    }
+
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if model.isGameRunning {
+                StatusPill(color: .hdSuccess, text: "Deployed")
+            } else if model.crossOver == nil || model.game == nil {
+                StatusPill(color: .hdDanger, text: "Setup needed")
+            } else {
+                StatusPill(color: .hdYellow, text: "Ready")
+            }
+            HStack(spacing: 6) {
+                Image(systemName: "clock")
+                Text(verbatim: PlaytimeRecord.format(model.playtime.total()))
+            }
+            .font(.hdLabel(11))
+            .foregroundStyle(Color.hdMuted)
+        }
+    }
+}
+
+/// Transient confirmation shown at the top of pages.
 @MainActor
 struct StatusBanner: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
         if let message = model.statusMessage {
-            HStack {
-                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                Text(message)
+            HStack(spacing: 10) {
+                Image(systemName: "checkmark.seal.fill").foregroundStyle(Color.hdSuccess)
+                Text(verbatim: message).foregroundStyle(Color.hdText)
                 Spacer()
-                Button { model.statusMessage = nil } label: { Image(systemName: "xmark") }
-                    .buttonStyle(.borderless)
+                Button { withAnimation { model.statusMessage = nil } } label: {
+                    Image(systemName: "xmark").foregroundStyle(Color.hdMuted)
+                }
+                .buttonStyle(.plain)
             }
-            .padding(10)
-            .background(.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
+            .padding(12)
+            .background(Color.hdSuccess.opacity(0.10), in: CutCornerShape(cut: 8))
+            .overlay(CutCornerShape(cut: 8).stroke(Color.hdSuccess.opacity(0.35), lineWidth: 1))
+            .transition(.move(edge: .top).combined(with: .opacity))
         }
     }
 }

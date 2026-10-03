@@ -29,11 +29,11 @@ public struct NexusClient {
 
         public var errorDescription: String? {
             switch self {
-            case .missingAPIKey: return "Add your Nexus Mods API key in Settings first."
-            case .http(401): return "Nexus Mods rejected the API key. Check it in Settings."
-            case .http(403): return "Nexus Mods refused the download. Free accounts must use the \"Mod Manager Download\" button on the website."
-            case .http(let code): return "Nexus Mods returned an error (\(code))."
-            case .noDownloadLink: return "Nexus Mods did not return a download link."
+            case .missingAPIKey: return String(localized: "Add your Nexus Mods API key in Settings first.")
+            case .http(401): return String(localized: "Nexus Mods rejected the API key. Check it in Settings.")
+            case .http(403): return String(localized: "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website.")
+            case .http(let code): return String(localized: "Nexus Mods returned an error (\(code)).")
+            case .noDownloadLink: return String(localized: "Nexus Mods did not return a download link.")
             }
         }
     }

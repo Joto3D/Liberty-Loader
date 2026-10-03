@@ -14,6 +14,8 @@ BIN="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/Libert
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/LibertyLoader"
+# Translations (English + German); macOS picks one based on the system language.
+cp -R Localization/*.lproj "$APP/Contents/Resources/"
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -21,6 +23,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key><string>Liberty Loader</string>
+    <key>CFBundleDevelopmentRegion</key><string>en</string>
+    <key>CFBundleLocalizations</key><array><string>en</string><string>de</string></array>
     <key>CFBundleDisplayName</key><string>Liberty Loader</string>
     <key>CFBundleIdentifier</key><string>com.joto3d.libertyloader</string>
     <key>CFBundleExecutable</key><string>LibertyLoader</string>

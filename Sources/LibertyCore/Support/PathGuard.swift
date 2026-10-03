@@ -33,14 +33,14 @@ public enum LibertyError: Error, LocalizedError, Equatable {
 
     public var errorDescription: String? {
         switch self {
-        case .pathNotAllowed(let path): return "Refusing to modify a file outside the bottle: \(path)"
-        case .crossOverNotFound: return "CrossOver was not found. Install it or choose its location in Settings."
-        case .gameNotFound: return "Helldivers 2 was not found in any CrossOver bottle."
-        case .archiveExtractionFailed(let msg): return "Could not extract the mod archive: \(msg)"
-        case .unsupportedArchive(let ext): return "Unsupported archive type: .\(ext)"
-        case .noPatchFiles: return "This mod does not contain any Helldivers 2 patch files."
-        case .configNotFound(let path): return "Config file not found: \(path)"
-        case .backupNotFound: return "No backup is available for this file."
+        case .pathNotAllowed(let path): return String(localized: "Refusing to modify a file outside the bottle: \(path)")
+        case .crossOverNotFound: return String(localized: "CrossOver was not found. Install it or choose its location in Settings.")
+        case .gameNotFound: return String(localized: "Helldivers 2 was not found in any CrossOver bottle.")
+        case .archiveExtractionFailed(let msg): return String(localized: "Could not extract the mod archive: \(msg)")
+        case .unsupportedArchive(let ext): return String(localized: "Unsupported archive type: .\(ext)")
+        case .noPatchFiles: return String(localized: "This mod does not contain any Helldivers 2 patch files.")
+        case .configNotFound(let path): return String(localized: "Config file not found: \(path)")
+        case .backupNotFound: return String(localized: "No backup is available for this file.")
         }
     }
 }

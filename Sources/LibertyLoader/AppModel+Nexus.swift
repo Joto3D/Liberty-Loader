@@ -13,11 +13,11 @@ extension AppModel {
     /// Handles the "Mod Manager Download" button on nexusmods.com.
     func installFromNexus(_ link: NXMLink) async {
         guard link.game == NexusClient.gameDomain else {
-            errorMessage = "That Nexus link is for “\(link.game)”, not Helldivers 2."
+            errorMessage = String(localized: "That Nexus link is for “\(link.game)”, not Helldivers 2.")
             return
         }
         let client = NexusClient(apiKey: nexusAPIKey)
-        let label = "Nexus mod \(link.modID)"
+        let label = String(localized: "Nexus mod \(link.modID)")
         nexusDownloads.append(label)
         defer { nexusDownloads.removeAll { $0 == label } }
         do {
@@ -42,7 +42,9 @@ extension AppModel {
             if let picture = info?.picture_url.flatMap(URL.init(string:)), store.previewImageURL(for: mod) == nil {
                 await savePreview(picture, into: store.folderURL(for: mod))
             }
-            statusMessage = existing == nil ? "Installed “\(mod.name)” from Nexus Mods." : "Updated “\(mod.name)”."
+            statusMessage = existing == nil
+                ? String(localized: "Installed “\(mod.name)” from Nexus Mods.")
+                : String(localized: "Updated “\(mod.name)”.")
         } catch {
             fail(error, context: label)
         }
@@ -72,7 +74,9 @@ extension AppModel {
             try? store.update(updated)
             if updated.hasUpdate { updates += 1 }
         }
-        statusMessage = updates == 0 ? "All Nexus mods are up to date." : "\(updates) mod update\(updates == 1 ? "" : "s") available."
+        statusMessage = updates == 0
+            ? String(localized: "All Nexus mods are up to date.")
+            : String(localized: "Mod updates available: \(updates)")
         reloadMods()
     }
 
@@ -89,14 +93,14 @@ extension AppModel {
         guard !trimmed.isEmpty else { return }
         perform {
             try profileStore.save(name: trimmed, from: store?.mods ?? [])
-            statusMessage = "Saved profile “\(trimmed)”."
+            statusMessage = String(localized: "Saved profile “\(trimmed)”.")
         }
     }
 
     func applyProfile(_ profile: ModProfile) {
         perform {
             try store?.apply(profile)
-            statusMessage = "Switched to profile “\(profile.name)”. Mods are applied on the next launch."
+            statusMessage = String(localized: "Switched to profile “\(profile.name)”. Mods are applied on the next launch.")
         }
     }
 

@@ -19,6 +19,9 @@ Also included:
 - **Playtime tracking** and a **stuck-launch helper** that offers to force quit and retry.
 - **In-app updates** from GitHub Releases.
 
+The interface uses a dark Helldivers-style theme and is available in **English and German**
+(it follows your Mac's language).
+
 ## Requirements
 
 - macOS 14 Sonoma or newer (Apple Silicon recommended)
@@ -78,11 +81,17 @@ Push a tag such as `v0.2.0`; the Release workflow builds and publishes `LibertyL
 `releases/latest` on launch and can replace itself and relaunch. Builds are ad-hoc signed, so
 macOS shows a Gatekeeper prompt on first launch (System Settings → Privacy & Security → Open Anyway).
 
+### Translations
+UI text lives in `Localization/{en,de}.lproj/Localizable.strings`. After changing text in the
+code, run `scripts/gen_strings.py` (add German text to `scripts/de_translations.py` for anything
+it reports). CI runs `scripts/check_strings.py` to catch missing translations.
+
 ## Project layout
 
 ```
 Sources/LibertyCore      platform-independent logic (bottles, launching, mods, configs, backups)
-Sources/LibertyLoader    SwiftUI app (Play, Mods, Performance, Settings)
+Sources/LibertyLoader    SwiftUI app (Play, Mods, Performance, Settings; Theme/ holds the design system)
+Localization             English and German UI text
 Tests/LibertyCoreTests   unit tests using fake bottle trees
 scripts/bundle.sh        .app / .dmg packaging
 ```

@@ -10,12 +10,12 @@ extension AppModel {
 
     func checkForUpdates(userInitiated: Bool) async {
         guard let current = currentVersion else {
-            if userInitiated { statusMessage = "Updates are only available in the packaged app." }
+            if userInitiated { statusMessage = String(localized: "Updates are only available in the packaged app.") }
             return
         }
         do {
             availableUpdate = try await UpdateChecker.checkForUpdate(current: current)
-            if userInitiated, availableUpdate == nil { statusMessage = "Liberty Loader \(current) is up to date." }
+            if userInitiated, availableUpdate == nil { statusMessage = String(localized: "Liberty Loader \(current.description) is up to date.") }
         } catch {
             if userInitiated { fail(error) }
         }
@@ -79,7 +79,7 @@ extension AppModel {
         guard !trimmed.isEmpty else { return }
         perform {
             try presetStore.add(PerformancePreset.custom(name: trimmed, config: config, bottle: bottle))
-            statusMessage = "Saved preset “\(trimmed)”."
+            statusMessage = String(localized: "Saved preset “\(trimmed)”.")
         }
     }
 

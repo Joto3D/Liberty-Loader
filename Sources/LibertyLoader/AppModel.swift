@@ -120,7 +120,7 @@ final class AppModel {
             let args = launchArguments.split(separator: " ").map(String.init)
             let command = try GameLauncher.command(crossOver: crossOver, game: game, launchArguments: args)
             try GameLauncher.launch(command)
-            statusMessage = "Launching Helldivers 2 via Steam in “\(game.bottleName)”…"
+            statusMessage = String(localized: "Launching Helldivers 2 via Steam in “\(game.bottleName)”…")
             watchdog.didLaunch()
             showStuckPrompt = false
         } catch {
@@ -136,7 +136,7 @@ final class AppModel {
             isSteamRunning = false
             watchdog.reset()
             showStuckPrompt = false
-            statusMessage = "Stopped all processes in “\(game.bottleName)”."
+            statusMessage = String(localized: "Stopped all processes in “\(game.bottleName)”.")
         } catch {
             fail(error)
         }
@@ -196,7 +196,7 @@ final class AppModel {
                 fail(error, context: url.lastPathComponent)
             }
         }
-        if installed > 0 { statusMessage = "Installed \(installed) mod\(installed == 1 ? "" : "s")." }
+        if installed > 0 { statusMessage = installed == 1 ? String(localized: "Installed 1 mod.") : String(localized: "Installed \(installed) mods.") }
         reloadMods()
     }
 
@@ -228,14 +228,14 @@ final class AppModel {
     func applyModsNow() {
         perform {
             try syncMods()
-            statusMessage = "Mods applied to the game folder."
+            statusMessage = String(localized: "Mods applied to the game folder.")
         }
     }
 
     func purgeMods() {
         perform {
             try deployer?.purge()
-            statusMessage = "Removed all mod files. The game folder is vanilla again."
+            statusMessage = String(localized: "Removed all mod files. The game folder is vanilla again.")
         }
     }
 
