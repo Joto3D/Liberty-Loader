@@ -16,8 +16,10 @@
 "App updates" = "App-Updates";
 "Apply %@" = "%@ anwenden";
 "Apply Now" = "Jetzt anwenden";
+"Apply mods automatically" = "Mods automatisch anwenden";
 "Asks Nexus Mods which other mods your mods need." = "Fragt bei Nexus Mods nach, welche anderen Mods deine Mods brauchen.";
 "Asks Steam to check and repair the game files." = "Lässt Steam die Spieldateien prüfen und reparieren.";
+"Automation" = "Automatik";
 "Backups" = "Backups";
 "Balanced" = "Ausgewogen";
 "Before %@" = "Vor %@";
@@ -46,6 +48,7 @@
 "Connect Nexus Mods" = "Nexus Mods verbinden";
 "Connect Nexus Mods (optional)" = "Nexus Mods verbinden (optional)";
 "Connected" = "Verbunden";
+"Copies mods into the game right after you install, enable, reorder or remove them." = "Kopiert Mods sofort ins Spiel, wenn du sie installierst, einschaltest, umsortierst oder entfernst.";
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Aktivierte Mods in den Spielordner kopieren (passiert beim Start auch automatisch).";
 "Could not extract the mod archive: %@" = "Das Mod-Archiv konnte nicht entpackt werden: %@";
 "Couldn't load mods" = "Mods konnten nicht geladen werden";
@@ -125,6 +128,7 @@
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "Wähl in CrossOver „Windows-Anwendung installieren“, such nach Steam und installier es. Melde dich danach bei Steam an.";
 "Install" = "Installieren";
 "Install %@" = "%@ installieren";
+"Install All Missing" = "Alle fehlenden installieren";
 "Install CrossOver" = "CrossOver installieren";
 "Install CrossOver or set its path in Settings." = "Installiere CrossOver oder gib den Pfad in den Einstellungen an.";
 "Install Mod" = "Mod installieren";
@@ -133,12 +137,14 @@
 "Install Steam in a bottle" = "Steam in einer Bottle installieren";
 "Install Update…" = "Update installieren…";
 "Install and Restart" = "Installieren und neu starten";
+"Install required mods automatically" = "Benötigte Mods automatisch installieren";
 "Install with Steam" = "Mit Steam installieren";
 "Installed" = "Installiert";
 "Installed %lld mods." = "%lld Mods installiert.";
 "Installed 1 mod." = "1 Mod installiert.";
 "Installed version" = "Installierte Version";
 "Installed “%@” from Nexus Mods." = "„%@“ von Nexus Mods installiert.";
+"Installing required mod “%@”…" = "Installiere benötigte Mod „%@“…";
 "Installing…" = "Wird installiert…";
 "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS." = "Lass den hochauflösenden Modus aus. Retina-Auflösung kostet viele FPS.";
 "Keep Waiting" = "Weiter warten";
@@ -204,6 +210,7 @@
 "Open Liberty Loader Folder" = "Liberty-Loader-Ordner öffnen";
 "Open Settings" = "Einstellungen öffnen";
 "Open on Nexus Mods" = "Auf Nexus Mods öffnen";
+"Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them." = "%lld benötigte Mods auf Nexus Mods geöffnet. Klick auf jeder Seite auf „Mod Manager Download“, dann installiert Liberty Loader sie.";
 "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here." = "Öffnet die Dateien der Mod auf Nexus Mods. Klick dort auf „Mod Manager Download“, um sie hier zu aktualisieren.";
 "Original" = "Original";
 "Original settings restored." = "Originaleinstellungen wiederhergestellt.";
@@ -281,6 +288,7 @@
 "Support" = "Hilfe";
 "Switch Graphics Backend" = "Grafik-Backend wechseln";
 "Switch between saved mod setups." = "Zwischen gespeicherten Mod-Setups wechseln.";
+"Switched to profile “%@”." = "Zu Profil „%@“ gewechselt.";
 "Switched to profile “%@”. Mods are applied on the next launch." = "Zu Profil „%@“ gewechselt. Die Mods werden beim nächsten Start übernommen.";
 "That Nexus link is for “%@”, not Helldivers 2." = "Dieser Nexus-Link ist für „%@“, nicht für Helldivers 2.";
 "That app doesn't look like CrossOver." = "Diese App sieht nicht nach CrossOver aus.";
@@ -312,6 +320,7 @@
 "Version 24 or newer is recommended for Helldivers 2." = "Für Helldivers 2 wird Version 24 oder neuer empfohlen.";
 "Walks you through CrossOver, Steam and Helldivers 2 again." = "Führt dich nochmal durch CrossOver, Steam und Helldivers 2.";
 "Welcome, Helldiver" = "Willkommen, Helldiver";
+"When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "Braucht eine Nexus-Mod andere Mods, installiert Liberty Loader sie mit. Bei kostenlosen Nexus-Konten werden stattdessen die Download-Seiten geöffnet; klick dort auf „Mod Manager Download“.";
 "WineD3D (compatibility)" = "WineD3D (Kompatibilität)";
 "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain." = "Mit einem Schlüssel installiert der Button „Mod Manager Download“ auf Nexus Mods Mods direkt in Liberty Loader, und Mod-Updates lassen sich prüfen. Der Schlüssel wird in deinem Schlüsselbund gespeichert.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Deine Mod-Sammlung bleibt erhalten. Nur Dateien, die Liberty Loader in den Spielordner gelegt hat, werden entfernt.";

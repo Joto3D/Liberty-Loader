@@ -97,6 +97,28 @@ struct SettingsView: View {
                 }
             }
 
+            section("Automation") {
+                VStack(alignment: .leading, spacing: 12) {
+                    Toggle(isOn: $model.autoApplyMods) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Apply mods automatically").foregroundStyle(Color.hdText)
+                            Text("Copies mods into the game right after you install, enable, reorder or remove them.")
+                                .font(.caption).foregroundStyle(Color.hdMuted)
+                        }
+                    }
+                    Toggle(isOn: $model.autoInstallRequirements) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Install required mods automatically").foregroundStyle(Color.hdText)
+                            Text("When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.")
+                                .font(.caption).foregroundStyle(Color.hdMuted)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+                .toggleStyle(.switch)
+                .tint(.hdYellow)
+            }
+
             section("Discord") {
                 VStack(alignment: .leading, spacing: 10) {
                     Toggle("Show “Playing Helldivers 2” in Discord", isOn: $model.discordEnabled)

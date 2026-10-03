@@ -50,6 +50,9 @@ extension AppModel {
             fail(error, context: label)
         }
         reloadMods()
+        autoApply()
+        // The new mod may need others; fetch them in the background.
+        Task { await autoInstallMissingRequirements() }
     }
 
     private func savePreview(_ url: URL, into folder: URL) async {
@@ -80,6 +83,7 @@ extension AppModel {
             ? String(localized: "All Nexus mods are up to date.")
             : String(localized: "Mod updates available: \(updates)")
         reloadMods()
+        await autoInstallMissingRequirements()
     }
 
     func openNexusPage(_ mod: InstalledMod) {
@@ -102,8 +106,11 @@ extension AppModel {
     func applyProfile(_ profile: ModProfile) {
         perform {
             try store?.apply(profile)
-            statusMessage = String(localized: "Switched to profile “\(profile.name)”. Mods are applied on the next launch.")
+            statusMessage = autoApplyMods
+                ? String(localized: "Switched to profile “\(profile.name)”.")
+                : String(localized: "Switched to profile “\(profile.name)”. Mods are applied on the next launch.")
         }
+        autoApply()
     }
 
     func deleteProfile(_ profile: ModProfile) {

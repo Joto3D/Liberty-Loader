@@ -16,8 +16,10 @@
 "App updates" = "App updates";
 "Apply %@" = "Apply %@";
 "Apply Now" = "Apply Now";
+"Apply mods automatically" = "Apply mods automatically";
 "Asks Nexus Mods which other mods your mods need." = "Asks Nexus Mods which other mods your mods need.";
 "Asks Steam to check and repair the game files." = "Asks Steam to check and repair the game files.";
+"Automation" = "Automation";
 "Backups" = "Backups";
 "Balanced" = "Balanced";
 "Before %@" = "Before %@";
@@ -46,6 +48,7 @@
 "Connect Nexus Mods" = "Connect Nexus Mods";
 "Connect Nexus Mods (optional)" = "Connect Nexus Mods (optional)";
 "Connected" = "Connected";
+"Copies mods into the game right after you install, enable, reorder or remove them." = "Copies mods into the game right after you install, enable, reorder or remove them.";
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Copy enabled mods into the game folder (also done automatically on launch).";
 "Could not extract the mod archive: %@" = "Could not extract the mod archive: %@";
 "Couldn't load mods" = "Couldn't load mods";
@@ -125,6 +128,7 @@
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam.";
 "Install" = "Install";
 "Install %@" = "Install %@";
+"Install All Missing" = "Install All Missing";
 "Install CrossOver" = "Install CrossOver";
 "Install CrossOver or set its path in Settings." = "Install CrossOver or set its path in Settings.";
 "Install Mod" = "Install Mod";
@@ -133,12 +137,14 @@
 "Install Steam in a bottle" = "Install Steam in a bottle";
 "Install Update…" = "Install Update…";
 "Install and Restart" = "Install and Restart";
+"Install required mods automatically" = "Install required mods automatically";
 "Install with Steam" = "Install with Steam";
 "Installed" = "Installed";
 "Installed %lld mods." = "Installed %lld mods.";
 "Installed 1 mod." = "Installed 1 mod.";
 "Installed version" = "Installed version";
 "Installed “%@” from Nexus Mods." = "Installed “%@” from Nexus Mods.";
+"Installing required mod “%@”…" = "Installing required mod “%@”…";
 "Installing…" = "Installing…";
 "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS." = "Keep High Resolution Mode off. Rendering at Retina resolution costs a lot of FPS.";
 "Keep Waiting" = "Keep Waiting";
@@ -204,6 +210,7 @@
 "Open Liberty Loader Folder" = "Open Liberty Loader Folder";
 "Open Settings" = "Open Settings";
 "Open on Nexus Mods" = "Open on Nexus Mods";
+"Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them." = "Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them.";
 "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here." = "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here.";
 "Original" = "Original";
 "Original settings restored." = "Original settings restored.";
@@ -281,6 +288,7 @@
 "Support" = "Support";
 "Switch Graphics Backend" = "Switch Graphics Backend";
 "Switch between saved mod setups." = "Switch between saved mod setups.";
+"Switched to profile “%@”." = "Switched to profile “%@”.";
 "Switched to profile “%@”. Mods are applied on the next launch." = "Switched to profile “%@”. Mods are applied on the next launch.";
 "That Nexus link is for “%@”, not Helldivers 2." = "That Nexus link is for “%@”, not Helldivers 2.";
 "That app doesn't look like CrossOver." = "That app doesn't look like CrossOver.";
@@ -312,6 +320,7 @@
 "Version 24 or newer is recommended for Helldivers 2." = "Version 24 or newer is recommended for Helldivers 2.";
 "Walks you through CrossOver, Steam and Helldivers 2 again." = "Walks you through CrossOver, Steam and Helldivers 2 again.";
 "Welcome, Helldiver" = "Welcome, Helldiver";
+"When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.";
 "WineD3D (compatibility)" = "WineD3D (compatibility)";
 "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain." = "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";

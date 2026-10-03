@@ -73,6 +73,15 @@ struct ModDiagnosisView: View {
                 }
             }
             Spacer()
+            if !model.allMissingRequirements().isEmpty {
+                Button {
+                    Task { await model.autoInstallMissingRequirements(force: true) }
+                } label: {
+                    Label("Install All Missing", systemImage: "arrow.down.circle.fill")
+                }
+                .buttonStyle(HDPrimaryButtonStyle())
+                .disabled(model.isAutoInstalling)
+            }
             if !model.nexusAPIKey.isEmpty {
                 Button {
                     Task { await model.refreshRequirements() }

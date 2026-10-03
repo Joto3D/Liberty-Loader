@@ -106,6 +106,11 @@ files were never copied (start the game from Liberty Loader or press **Apply Now
 outdated (the game archive it patches no longer exists), if its variant is empty, if a later mod
 overrides it, or if it needs another Nexus mod (shown as **Needs …**, installable with one click).
 
+By default (Settings → Automation) mods are **applied automatically** after every change, and
+**required Nexus mods are installed automatically**, including requirements of requirements.
+Premium Nexus accounts download directly; free accounts get each download page opened once,
+where "Mod Manager Download" hands the file back to Liberty Loader.
+
 ## Project layout
 
 ```
