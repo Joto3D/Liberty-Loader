@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      - name: Check translations
+        run: |
+          python3 scripts/check_strings.py
+          plutil -lint Localization/*.lproj/Localizable.strings
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test
+      - name: Bundle app
+        run: scripts/bundle.sh --dmg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LibertyLoader
+          path: |
+            build/LibertyLoader.dmg
+            build/LibertyLoader.zip
