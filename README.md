@@ -76,7 +76,7 @@ Helldivers 2 mods are patch files in `Helldivers 2/data`: `<hash>.patch_<n>` plu
   **Restore Original Settings** always returns to how things were before Liberty Loader.
 
 ### Releases & updates
-Push a tag such as `v0.2.0`; the Release workflow builds and publishes `LibertyLoader.dmg`
+Push a tag such as `v0.2.0` (or run the Release workflow from the Actions tab with a version); it builds and publishes `LibertyLoader.dmg`
 (new installs) and `LibertyLoader.zip` (used by the built-in updater). The app checks
 `releases/latest` on launch and can replace itself and relaunch. Builds are ad-hoc signed, so
 macOS shows a Gatekeeper prompt on first launch (System Settings → Privacy & Security → Open Anyway).
