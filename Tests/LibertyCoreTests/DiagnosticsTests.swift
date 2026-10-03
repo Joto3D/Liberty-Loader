@@ -117,3 +117,30 @@ final class DiagnosticsTests: TempDirTestCase {
         XCTAssertEqual(reopened.mods.first { $0.id == needy.id }?.requirements?.count, 3)
     }
 }
+
+final class ModManagerRequirementTests: TempDirTestCase {
+    func testModManagerRequirementsAreIgnored() throws {
+        let store = try ModStore(rootURL: tmp.appendingPathComponent("store"))
+        try write("src/Armor/9ba626afa44a3aa3.patch_0")
+        var mod = try store.install(from: tmp.appendingPathComponent("src/Armor"))
+        mod.requirements = [
+            NexusRequirement(modID: 109, name: "HD2ModManager", url: nil, isExternal: false, notes: nil),
+            NexusRequirement(modID: 500, name: "Helldivers 2 Mod Manager (Windows)", url: nil, isExternal: false, notes: nil),
+            NexusRequirement(modID: 42, name: "Base Armor Framework", url: nil, isExternal: false, notes: nil),
+        ]
+        XCTAssertEqual(mod.missingRequirements(installed: store.mods).map(\.modID), [42])
+    }
+
+    func testWindowsProgramIsRejectedWithClearError() throws {
+        let store = try ModStore(rootURL: tmp.appendingPathComponent("store"))
+        try write("src/HD2ModManager/HD2ModManager.exe")
+        try write("src/HD2ModManager/libs/runtime.dll")
+        XCTAssertThrowsError(try store.install(from: tmp.appendingPathComponent("src/HD2ModManager"))) {
+            XCTAssertEqual($0 as? LibertyError, .windowsProgram)
+        }
+        try write("src/Empty/readme.txt")
+        XCTAssertThrowsError(try store.install(from: tmp.appendingPathComponent("src/Empty"))) {
+            XCTAssertEqual($0 as? LibertyError, .noPatchFiles)
+        }
+    }
+}

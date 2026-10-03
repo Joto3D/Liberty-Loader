@@ -24,7 +24,7 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     /// Nexus requirements that aren't installed yet.
     public func missingRequirements(installed: [InstalledMod]) -> [NexusRequirement] {
         (requirements ?? []).filter { requirement in
-            guard let id = requirement.modID, !requirement.isExternal else { return false }
+            guard let id = requirement.modID, !requirement.isExternal, !requirement.isModManager else { return false }
             return !installed.contains { $0.nexusModID == id }
         }
     }
@@ -89,7 +89,9 @@ public final class ModStore {
         try ModArchive.extract(source, to: staging)
 
         let contentRoot = ModArchive.contentRoot(of: staging)
-        guard !PatchSet.collect(in: [contentRoot]).isEmpty else { throw LibertyError.noPatchFiles }
+        guard !PatchSet.collect(in: [contentRoot]).isEmpty else {
+            throw ModArchive.containsWindowsProgram(contentRoot) ? LibertyError.windowsProgram : LibertyError.noPatchFiles
+        }
 
         let folder = modsDirectory.appendingPathComponent(id.uuidString)
         try fm.moveItem(at: contentRoot, to: folder)

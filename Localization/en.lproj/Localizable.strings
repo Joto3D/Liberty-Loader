@@ -297,6 +297,7 @@
 "The game closed shortly after starting. Try one of these fixes:" = "The game closed shortly after starting. Try one of these fixes:";
 "The selected variant contains no mod files. Pick another variant on the Mods page." = "The selected variant contains no mod files. Pick another variant on the Mods page.";
 "This happens when the game is started through Steam instead of Liberty Loader." = "This happens when the game is started through Steam instead of Liberty Loader.";
+"This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.";
 "This mod does not contain any Helldivers 2 patch files." = "This mod does not contain any Helldivers 2 patch files.";
 "This mod is turned off." = "This mod is turned off.";
 "This mod needs another mod. Click to install it." = "This mod needs another mod. Click to install it.";

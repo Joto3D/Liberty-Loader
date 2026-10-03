@@ -326,4 +326,5 @@ DE = {
 "Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them.": "%lld benötigte Mods auf Nexus Mods geöffnet. Klick auf jeder Seite auf „Mod Manager Download“, dann installiert Liberty Loader sie.",
 "Switched to profile “%@”.": "Zu Profil „%@“ gewechselt.",
 "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.": "Braucht eine Nexus-Mod andere Mods, installiert Liberty Loader sie mit. Bei kostenlosen Nexus-Konten werden stattdessen die Download-Seiten geöffnet; klick dort auf „Mod Manager Download“.",
+"This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.": "Das ist ein Windows-Programm (z. B. ein Mod-Manager), keine Mod. Du brauchst es nicht: Liberty Loader übernimmt diese Aufgabe auf deinem Mac. Lade stattdessen die Mod selbst herunter.",
 }

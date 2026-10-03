@@ -16,6 +16,14 @@ public struct NexusRequirement: Codable, Equatable, Hashable, Sendable {
         self.notes = notes
     }
 
+    /// Windows mod managers (like "HD2 Mod Manager", Nexus mod 109) that many mods list as a requirement.
+    /// Liberty Loader does their job on the Mac, so they are never needed.
+    public var isModManager: Bool {
+        if modID == 109 { return true }
+        let lowered = name.lowercased()
+        return lowered.contains("mod manager") || lowered.contains("modmanager")
+    }
+
     public var pageURL: URL? {
         if let url, let parsed = URL(string: url) { return parsed }
         return modID.flatMap { URL(string: "https://www.nexusmods.com/\(NexusClient.gameDomain)/mods/\($0)") }

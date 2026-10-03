@@ -28,6 +28,7 @@ public enum LibertyError: Error, LocalizedError, Equatable {
     case archiveExtractionFailed(String)
     case unsupportedArchive(String)
     case noPatchFiles
+    case windowsProgram
     case configNotFound(String)
     case backupNotFound
 
@@ -39,6 +40,7 @@ public enum LibertyError: Error, LocalizedError, Equatable {
         case .archiveExtractionFailed(let msg): return String(localized: "Could not extract the mod archive: \(msg)")
         case .unsupportedArchive(let ext): return String(localized: "Unsupported archive type: .\(ext)")
         case .noPatchFiles: return String(localized: "This mod does not contain any Helldivers 2 patch files.")
+        case .windowsProgram: return String(localized: "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.")
         case .configNotFound(let path): return String(localized: "Config file not found: \(path)")
         case .backupNotFound: return String(localized: "No backup is available for this file.")
         }
