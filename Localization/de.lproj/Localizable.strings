@@ -165,6 +165,7 @@
 "Launch Helldivers 2" = "Helldivers 2 starten";
 "Launching Helldivers 2 via Steam in “%@”…" = "Starte Helldivers 2 über Steam in „%@“…";
 "Let's get Helldivers 2 running on your Mac. Steps tick off automatically." = "Lass uns Helldivers 2 auf deinem Mac zum Laufen bringen. Erledigte Schritte werden automatisch abgehakt.";
+"Lets the game's DLSS option use Apple's MetalFX. Then pick DLSS in the game's graphics settings and restart the game." = "Lässt die DLSS-Option des Spiels Apples MetalFX nutzen. Wähle danach DLSS in den Grafikeinstellungen des Spiels und starte das Spiel neu.";
 "Lets you browse and install mods inside Liberty Loader." = "Damit kannst du Mods direkt in Liberty Loader durchsuchen und installieren.";
 "Liberty Loader %@ is available" = "Liberty Loader %@ ist verfügbar";
 "Liberty Loader %@ is up to date." = "Liberty Loader %@ ist aktuell.";
@@ -179,6 +180,7 @@
 "Manual edit" = "Manuelle Änderung";
 "Max Performance" = "Maximale Leistung";
 "Metal FPS overlay" = "Metal-FPS-Anzeige";
+"MetalFX upscaling (DLSS)" = "MetalFX-Upscaling (DLSS)";
 "Missions" = "Einsätze";
 "Mod Diagnosis" = "Mod-Diagnose";
 "Mod Profile" = "Mod-Profil";
@@ -198,6 +200,7 @@
 "Name, e.g. Cosmetics only" = "Name, z. B. Nur Optik";
 "Name, e.g. My Settings" = "Name, z. B. Meine Einstellungen";
 "Needs %@" = "Braucht %@";
+"Needs the D3DMetal graphics backend." = "Braucht das Grafik-Backend D3DMetal.";
 "Needs “%@”, which isn't installed." = "Braucht „%@“, das nicht installiert ist.";
 "New" = "Neu";
 "Nexus Mods" = "Nexus Mods";

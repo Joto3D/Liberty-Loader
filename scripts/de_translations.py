@@ -359,4 +359,7 @@ DE = {
 "“%@” didn't run in your last game session": "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen",
 "Ultra Low": "Ultra niedrig",
 "Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS.": "Unter den niedrigsten Einstellungen des Spiels, wie die Ultimate-Performance-Mod. Halbe Auflösung und alle Effekte aus, für schwache Macs oder maximale FPS.",
+"MetalFX upscaling (DLSS)": "MetalFX-Upscaling (DLSS)",
+"Lets the game's DLSS option use Apple's MetalFX. Then pick DLSS in the game's graphics settings and restart the game.": "Lässt die DLSS-Option des Spiels Apples MetalFX nutzen. Wähle danach DLSS in den Grafikeinstellungen des Spiels und starte das Spiel neu.",
+"Needs the D3DMetal graphics backend.": "Braucht das Grafik-Backend D3DMetal.",
 }

@@ -15,6 +15,7 @@ extension PerformancePreset {
         )
         preset.esync = bottle?.esyncEnabled
         preset.metalHUD = bottle?.metalHUDEnabled
+        preset.metalFX = bottle?.metalFXEnabled
         return preset
     }
 }
