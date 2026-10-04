@@ -118,6 +118,7 @@
 "Galactic War" = "Galaktischer Krieg";
 "Galactic War status is unavailable right now." = "Der Status des Galaktischen Kriegs ist gerade nicht verfügbar.";
 "Game folder" = "Spielordner";
+"Game memory: %@" = "Spiel-Speicher: %@";
 "Game settings saved." = "Spieleinstellungen gespeichert.";
 "Game updates often break mods and can cause crashes. Disable mods until their authors publish updates." = "Spiel-Updates machen Mods oft kaputt und können Abstürze verursachen. Deaktiviere Mods, bis ihre Ersteller Updates veröffentlichen.";
 "Game updates often break mods. Mods marked “outdated” below need a new version from their author." = "Spiel-Updates machen Mods oft kaputt. Mods, die unten als „veraltet“ markiert sind, brauchen eine neue Version von ihrem Ersteller.";
@@ -131,6 +132,9 @@
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 gefunden in Bottle „%@“";
 "Helldivers 2 hasn't started" = "Helldivers 2 ist nicht gestartet";
 "Helldivers 2 is running" = "Helldivers 2 läuft";
+"Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 braucht %@. Starte das Spiel nach dieser Mission neu.";
+"Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 braucht %@. Das Spiel kann bald abstürzen: Beende die Mission und starte das Spiel neu.";
+"Helldivers 2 is using a lot of memory. Restart it after this mission." = "Helldivers 2 braucht viel Speicher. Starte es nach dieser Mission neu.";
 "Helldivers 2 may have crashed" = "Helldivers 2 ist vielleicht abgestürzt";
 "Helldivers 2 mods from Nexus Mods. Install with one click." = "Helldivers-2-Mods von Nexus Mods. Mit einem Klick installieren.";
 "Helldivers 2 not found" = "Helldivers 2 nicht gefunden";
@@ -188,6 +192,11 @@
 "Major Order" = "Hauptbefehl";
 "Manual edit" = "Manuelle Änderung";
 "Max Performance" = "Maximale Leistung";
+"Memory %@" = "Speicher %@";
+"Memory critical" = "Speicher kritisch";
+"Memory critical: finish the mission and restart Helldivers 2." = "Speicher kritisch: Beende die Mission und starte Helldivers 2 neu.";
+"Memory is getting high" = "Speicher wird knapp";
+"Memory used by Helldivers 2. Above 1.5× your Mac's memory it starts to stutter and may crash; restart the game between missions." = "Speicher, den Helldivers 2 gerade braucht. Ab dem 1,5-Fachen deines Mac-Speichers ruckelt es und kann abstürzen; starte das Spiel zwischen Missionen neu.";
 "Metal FPS overlay" = "Metal-FPS-Anzeige";
 "MetalFX upscaling (DLSS)" = "MetalFX-Upscaling (DLSS)";
 "Missions" = "Einsätze";
@@ -314,6 +323,7 @@
 "Show in Finder" = "Im Finder zeigen";
 "Show “Playing Helldivers 2” in Discord" = "„Spielt Helldivers 2“ in Discord zeigen";
 "Shows FPS and frame times in the game." = "Zeigt FPS und Bildzeiten im Spiel.";
+"Shows a notification when Helldivers 2 uses 1.5× or 2× your Mac's memory, before it crashes." = "Zeigt eine Mitteilung, wenn Helldivers 2 das 1,5- oder 2-Fache deines Mac-Speichers braucht, bevor es abstürzt.";
 "Skip for Now" = "Erstmal überspringen";
 "Some mods may not work" = "Manche Mods funktionieren vielleicht nicht";
 "Some settings were skipped" = "Einige Einstellungen wurden übersprungen";
@@ -365,6 +375,7 @@
 "Version" = "Version";
 "Version 24 or newer is recommended for Helldivers 2." = "Für Helldivers 2 wird Version 24 oder neuer empfohlen.";
 "Walks you through CrossOver, Steam and Helldivers 2 again." = "Führt dich nochmal durch CrossOver, Steam und Helldivers 2.";
+"Warn when the game uses too much memory" = "Warnen, wenn das Spiel zu viel Speicher braucht";
 "Welcome, Helldiver" = "Willkommen, Helldiver";
 "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "Braucht eine Nexus-Mod andere Mods, installiert Liberty Loader sie mit. Bei kostenlosen Nexus-Konten werden stattdessen die Download-Seiten geöffnet; klick dort auf „Mod Manager Download“.";
 "WineD3D (compatibility)" = "WineD3D (Kompatibilität)";

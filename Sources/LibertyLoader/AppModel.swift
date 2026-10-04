@@ -72,7 +72,17 @@ final class AppModel {
     var autoInstallRequirements: Bool {
         didSet { UserDefaults.standard.set(autoInstallRequirements, forKey: Keys.autoRequirements) }
     }
+    var memoryWarnings: Bool {
+        didSet { UserDefaults.standard.set(memoryWarnings, forKey: Keys.memoryWarnings) }
+    }
     var isAutoInstalling = false
+
+    // Memory watchdog
+    var gameMemory: UInt64?
+    var memoryAlert = MemoryAlertState()
+    var gameMemoryLevel: MemoryLevel {
+        gameMemory.map { MemoryLevel(footprint: $0, physical: SystemInfo.memoryBytes) } ?? .normal
+    }
     /// Requirements already tried this session, so a failing download isn't retried in a loop.
     var attemptedRequirements: Set<Int> = []
     /// Nexus pages already opened for free accounts, so they don't pop up again.
@@ -125,6 +135,7 @@ final class AppModel {
         static let setupSeen = "setupSeen"
         static let autoApply = "autoApplyMods"
         static let autoRequirements = "autoInstallRequirements"
+        static let memoryWarnings = "memoryWarnings"
     }
 
     init() {
@@ -140,6 +151,7 @@ final class AppModel {
         discordAppID = UserDefaults.standard.string(forKey: Keys.discordAppID) ?? DiscordRPC.bundledApplicationID
         autoApplyMods = UserDefaults.standard.object(forKey: Keys.autoApply) as? Bool ?? true
         autoInstallRequirements = UserDefaults.standard.object(forKey: Keys.autoRequirements) as? Bool ?? true
+        memoryWarnings = UserDefaults.standard.object(forKey: Keys.memoryWarnings) as? Bool ?? true
         mods = store?.mods ?? []
         profiles = profileStore.profiles
         customPresets = presetStore.custom
@@ -214,8 +226,9 @@ final class AppModel {
         monitoring = true
         Task {
             while true {
-                let (game, steam) = await Task.detached {
-                    (GameLauncher.isGameRunning(), GameLauncher.isSteamRunning())
+                let (game, steam, memory) = await Task.detached {
+                    let game = GameLauncher.isGameRunning()
+                    return (game, GameLauncher.isSteamRunning(), game ? GameMemory.footprint() : nil)
                 }.value
                 // Only write observed state when it changes; every write re-renders the views using it.
                 if game != isGameRunning {
@@ -223,6 +236,7 @@ final class AppModel {
                     gameRunningChanged(to: game)
                 }
                 if steam != isSteamRunning { isSteamRunning = steam }
+                updateGameMemory(memory)
                 if lastWarUpdate.map({ Date().timeIntervalSince($0) > 300 }) ?? true {
                     lastWarUpdate = Date()
                     Task { await refreshWar() }
@@ -232,7 +246,7 @@ final class AppModel {
                     showStuckPrompt = true
                     watchdog.reset()
                 }
-                try? await Task.sleep(for: .seconds(game ? 15 : 5))
+                try? await Task.sleep(for: .seconds(game ? 10 : 5))
             }
         }
     }

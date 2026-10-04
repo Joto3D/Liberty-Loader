@@ -106,6 +106,14 @@ struct SettingsView: View {
                                 .font(.caption).foregroundStyle(Color.hdMuted)
                         }
                     }
+                    Toggle(isOn: $model.memoryWarnings) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Warn when the game uses too much memory").foregroundStyle(Color.hdText)
+                            Text("Shows a notification when Helldivers 2 uses 1.5× or 2× your Mac's memory, before it crashes.")
+                                .font(.caption).foregroundStyle(Color.hdMuted)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
                     Toggle(isOn: $model.autoInstallRequirements) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Install required mods automatically").foregroundStyle(Color.hdText)

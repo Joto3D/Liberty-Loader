@@ -65,6 +65,9 @@ struct PlayView: View {
                     .buttonStyle(HDSecondaryButtonStyle(color: .hdDanger))
                     .disabled(model.crossOver == nil || model.game == nil)
                     .help("Stops the game, Steam and any stuck Wine processes in this bottle.")
+                    if let memory = model.gameMemory {
+                        MemoryChip(bytes: memory, level: model.gameMemoryLevel)
+                    }
                 }
                 .padding(.top, 8)
             }
@@ -338,5 +341,30 @@ struct PlanetRow: View {
             }
             .frame(height: 5)
         }
+    }
+}
+
+/// The game's live memory use; yellow when high, red when a crash is near.
+@MainActor
+struct MemoryChip: View {
+    let bytes: UInt64
+    let level: MemoryLevel
+
+    private var color: Color {
+        switch level {
+        case .normal: return .hdMuted
+        case .high: return .hdWarning
+        case .critical: return .hdDanger
+        }
+    }
+
+    var body: some View {
+        Label { Text("Memory \(GameMemory.format(bytes))") } icon: { Image(systemName: "memorychip") }
+            .font(.hdLabel(12))
+            .foregroundStyle(color)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(color.opacity(0.12), in: CutCornerShape(cut: 6))
+            .help("Memory used by Helldivers 2. Above 1.5× your Mac's memory it starts to stutter and may crash; restart the game between missions.")
     }
 }

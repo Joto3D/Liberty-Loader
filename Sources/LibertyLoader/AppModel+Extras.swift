@@ -17,6 +17,8 @@ extension AppModel {
             crashReport = nil
         } else {
             gameStartedAt = nil
+            gameMemory = nil
+            memoryAlert.reset()
             if crashDetector.gameStopped(), let game {
                 let since = Date().addingTimeInterval(-600)
                 crashReport = CrashReport(date: Date(), files: CrashDetector.recentCrashFiles(in: game.appDataDir, since: since))
@@ -24,6 +26,27 @@ extension AppModel {
             }
         }
         updateDiscord()
+    }
+
+    // MARK: Memory watchdog
+
+    /// Stores the game's memory use (only on real changes, to avoid re-renders) and warns once per level.
+    func updateGameMemory(_ footprint: UInt64?) {
+        let changed: Bool
+        switch (gameMemory, footprint) {
+        case let (old?, new?): changed = max(old, new) - min(old, new) >= 256 * 1_048_576
+        case (nil, nil): changed = false
+        default: changed = true
+        }
+        if changed { gameMemory = footprint }
+        guard memoryWarnings, let footprint else { return }
+        let level = MemoryLevel(footprint: footprint, physical: SystemInfo.memoryBytes)
+        guard let alert = memoryAlert.next(level) else { return }
+        LibertyLog.shared.info("Game memory \(GameMemory.format(footprint)) reached level \(alert)")
+        MemoryNotifier.notify(alert, footprint: footprint)
+        statusMessage = alert == .critical
+            ? String(localized: "Memory critical: finish the mission and restart Helldivers 2.")
+            : String(localized: "Helldivers 2 is using a lot of memory. Restart it after this mission.")
     }
 
     // MARK: Galactic War
