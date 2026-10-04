@@ -357,4 +357,6 @@ DE = {
 "No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then.": "Noch keine Mod-Protokolle gefunden. Starte einmal einen Einsatz mit aktivierten Mods; Mod-Loader wie Bingus Shared Loader schreiben dann ein Protokoll.",
 "Updated %@ ago": "Vor %@ aktualisiert",
 "“%@” didn't run in your last game session": "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen",
+"Ultra Low": "Ultra niedrig",
+"Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS.": "Unter den niedrigsten Einstellungen des Spiels, wie die Ultimate-Performance-Mod. Halbe Auflösung und alle Effekte aus, für schwache Macs oder maximale FPS.",
 }

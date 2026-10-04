@@ -332,6 +332,7 @@ struct PresetTile: View {
 
     private var icon: String {
         switch preset.id {
+        case PerformancePreset.ultraLow.id: return "bolt.fill"
         case PerformancePreset.maxPerformance.id: return "hare.fill"
         case PerformancePreset.balanced.id: return "scalemass.fill"
         case PerformancePreset.quality.id: return "sparkles"

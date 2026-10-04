@@ -4,6 +4,15 @@ import XCTest
 final class FeatureTests: TempDirTestCase {
     // MARK: Updates
 
+    func testUltraLowPresetIsLowest() {
+        XCTAssertEqual(PerformancePreset.all.first?.id, PerformancePreset.ultraLow.id)
+        XCTAssertTrue(PerformancePreset.ultraLow.isBuiltIn)
+        let ultra = Double(PerformancePreset.ultraLow.gameSettings["render_resolution_scale"]!)!
+        let max = Double(PerformancePreset.maxPerformance.gameSettings["render_resolution_scale"]!)!
+        XCTAssertLessThan(ultra, max)
+        XCTAssertEqual(Set(PerformancePreset.ultraLow.gameSettings.keys), Set(PerformancePreset.maxPerformance.gameSettings.keys))
+    }
+
     func testVersionComparison() {
         XCTAssertTrue(AppVersion("v0.2.0")! > AppVersion("0.1.9")!)
         XCTAssertTrue(AppVersion("1.10")! > AppVersion("1.9.9")!)
