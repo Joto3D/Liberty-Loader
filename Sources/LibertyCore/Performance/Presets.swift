@@ -13,6 +13,33 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
     public var esync: Bool? = nil
     public var metalHUD: Bool? = nil
 
+    public static let ultraLow = PerformancePreset(
+        id: "ultra-low",
+        name: "Ultra Low",
+        summary: "Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS.",
+        gameSettings: [
+            "render_resolution_scale": "0.5",
+            "upscaling_quality": "0",
+            "shadow_quality": "0",
+            "particle_quality": "0",
+            "ambient_occlusion": "false",
+            "screen_space_global_illumination": "false",
+            "volumetric_clouds_quality": "0",
+            "volumetric_fog_quality": "0",
+            "reflection_quality": "0",
+            "lighting_quality": "0",
+            "terrain_quality": "0",
+            "texture_quality": "0",
+            "depth_of_field": "false",
+            "motion_blur": "false",
+            "bloom": "false",
+            "vsync": "false",
+            "max_fps": "60",
+        ],
+        graphicsBackend: .d3dmetal,
+        msync: true
+    )
+
     public static let maxPerformance = PerformancePreset(
         id: "max-performance",
         name: "Max Performance",
@@ -94,7 +121,7 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
         msync: true
     )
 
-    public static let all = [maxPerformance, balanced, quality]
+    public static let all = [ultraLow, maxPerformance, balanced, quality]
 
     /// Suggests a preset from the chip name (e.g. "Apple M2 Pro") and installed memory.
     public static func recommended(cpuBrand: String, memoryBytes: UInt64) -> PerformancePreset {

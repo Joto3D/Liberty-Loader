@@ -24,6 +24,7 @@
 "Backups" = "Backups";
 "Balanced" = "Balanced";
 "Before %@" = "Before %@";
+"Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS." = "Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS.";
 "Bottle" = "Bottle";
 "Bottle settings" = "Bottle settings";
 "Browse" = "Browse";
@@ -330,6 +331,7 @@
 "Try Again" = "Try Again";
 "Turn Off" = "Turn Off";
 "Turn On" = "Turn On";
+"Ultra Low" = "Ultra Low";
 "Uninstall" = "Uninstall";
 "Unsupported archive type: .%@" = "Unsupported archive type: .%@";
 "Update" = "Update";
