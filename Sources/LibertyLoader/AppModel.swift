@@ -331,6 +331,7 @@ final class AppModel {
         let plan = try deployer.sync(store.resolvedEnabledMods())
         conflicts = plan.conflicts
         UserDefaults.standard.set(game?.buildID, forKey: Keys.buildID)
+        UserDefaults.standard.set(Date(), forKey: "lastDeployDate")
         gameUpdatedSinceLastSync = false
         if runDiagnostics()?.hasBlockingProblems == true {
             diagnosticsHint = true

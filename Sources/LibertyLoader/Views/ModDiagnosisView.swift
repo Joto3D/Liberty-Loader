@@ -25,6 +25,7 @@ struct ModDiagnosisView: View {
                         ForEach(report.mods) { diagnosis in
                             DiagnosisRow(diagnosis: diagnosis)
                         }
+                        ModLogsSection(logs: report.logs)
                         HDPanel {
                             Label {
                                 Text("Everything looks right but mods still don't show? Start the game from Liberty Loader, or press Apply Now after starting it through Steam.")
@@ -120,6 +121,14 @@ struct ModDiagnosisView: View {
             HDBanner(icon: "tray.and.arrow.down.fill", color: .hdDanger,
                      title: Text("Mods were never copied into the game"),
                      message: Text("This happens when the game is started through Steam instead of Liberty Loader.")) {
+                Button("Apply Now", action: model.applyAndRediagnose)
+                    .buttonStyle(HDPrimaryButtonStyle())
+                    .disabled(model.isGameRunning)
+            }
+        case .loaderDidNotRun(let name):
+            HDBanner(icon: "bolt.slash.fill", color: .hdDanger,
+                     title: Text("“\(name)” didn't run in your last game session"),
+                     message: Text("Mods that need it (menus, keybinds, scripts) can't work then. Check that it is enabled and at the very bottom, start the game from Liberty Loader, and make sure the loader supports your current game version.")) {
                 Button("Apply Now", action: model.applyAndRediagnose)
                     .buttonStyle(HDPrimaryButtonStyle())
                     .disabled(model.isGameRunning)
@@ -228,5 +237,95 @@ struct DiagnosisRow: View {
             HStack(spacing: 6) { actions() }
                 .buttonStyle(HDSecondaryButtonStyle())
         }
+    }
+}
+
+/// Logs written by mod loaders (e.g. Bingus Shared Loader) inside the bottle.
+@MainActor
+struct ModLogsSection: View {
+    let logs: [ModLogFile]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HDSectionHeader(title: "Mod logs")
+            if logs.isEmpty {
+                HDPanel {
+                    Text("No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then.")
+                        .foregroundStyle(Color.hdMuted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            ForEach(logs) { log in
+                ModLogCard(log: log)
+            }
+        }
+    }
+}
+
+@MainActor
+struct ModLogCard: View {
+    let log: ModLogFile
+    @State private var text = ""
+    @State private var expanded = false
+
+    private var problems: [String] { ModLogs.problemLines(in: text) }
+    private var found: [String] { ModLogs.foundMods(in: text) }
+
+    var body: some View {
+        HDPanel(accent: problems.isEmpty ? .hdSuccess : .hdDanger, padding: 14) {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Image(systemName: "doc.text.fill").foregroundStyle(Color.hdYellow)
+                    Text(verbatim: log.source).font(.headline).foregroundStyle(Color.hdText)
+                    Text(verbatim: log.url.lastPathComponent).font(.hdLabel(10)).foregroundStyle(Color.hdMuted)
+                    Spacer()
+                    Text("Updated \(log.modified, style: .relative) ago").font(.caption).foregroundStyle(Color.hdMuted)
+                }
+                if problems.isEmpty {
+                    Label("No errors in the log", systemImage: "checkmark.circle.fill")
+                        .font(.callout).foregroundStyle(Color.hdSuccess)
+                } else {
+                    ForEach(problems, id: \.self) { line in
+                        Text(verbatim: line)
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(Color.hdDanger)
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                if !found.isEmpty {
+                    Text("Mods the loader mentions:").font(.caption).foregroundStyle(Color.hdMuted)
+                    Text(verbatim: found.joined(separator: " · "))
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(Color.hdText.opacity(0.8))
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                HStack(spacing: 8) {
+                    Button(expanded ? LocalizedStringKey("Hide Log") : LocalizedStringKey("Show Log")) {
+                        withAnimation(.easeOut(duration: 0.15)) { expanded.toggle() }
+                    }
+                    Button("Copy Log") {
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(text, forType: .string)
+                    }
+                    Button("Show in Finder") { NSWorkspace.shared.activateFileViewerSelecting([log.url]) }
+                }
+                .buttonStyle(HDSecondaryButtonStyle())
+                if expanded {
+                    ScrollView {
+                        Text(verbatim: text.isEmpty ? "–" : text)
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(Color.hdText.opacity(0.85))
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxHeight: 220)
+                    .padding(8)
+                    .background(Color.black.opacity(0.35))
+                }
+            }
+        }
+        .task(id: log.url) { text = ModLogs.tail(log.url) }
     }
 }

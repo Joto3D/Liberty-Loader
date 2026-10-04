@@ -348,4 +348,13 @@ DE = {
 "Show Guide": "Anleitung zeigen",
 "This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader.": "Diese Mod beschreibt keine besondere Steuerung. Die meisten Mods wirken automatisch, sobald sie angewendet sind: Starte das Spiel einfach über Liberty Loader.",
 "Variants": "Varianten",
+"Copy Log": "Protokoll kopieren",
+"Hide Log": "Protokoll ausblenden",
+"Mod logs": "Mod-Protokolle",
+"Mods that need it (menus, keybinds, scripts) can't work then. Check that it is enabled and at the very bottom, start the game from Liberty Loader, and make sure the loader supports your current game version.": "Mods, die ihn brauchen (Menüs, Tastenbelegung, Skripte), können dann nicht funktionieren. Prüf, ob er eingeschaltet ist und ganz unten steht, starte das Spiel über Liberty Loader und schau, ob der Loader deine aktuelle Spielversion unterstützt.",
+"Mods the loader mentions:": "Mods, die der Loader erwähnt:",
+"No errors in the log": "Keine Fehler im Protokoll",
+"No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then.": "Noch keine Mod-Protokolle gefunden. Starte einmal einen Einsatz mit aktivierten Mods; Mod-Loader wie Bingus Shared Loader schreiben dann ein Protokoll.",
+"Updated %@ ago": "Vor %@ aktualisiert",
+"“%@” didn't run in your last game session": "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen",
 }

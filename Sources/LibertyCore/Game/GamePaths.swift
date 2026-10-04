@@ -47,6 +47,20 @@ public struct GamePaths: Equatable, Sendable {
         return usersDir.appendingPathComponent("crossover").appendingPathComponent(relative)
     }
 
+    /// `drive_c/users/<name>` folders of the bottle's Windows users (without "Public").
+    public var windowsUserDirs: [URL] {
+        let usersDir = driveC.appendingPathComponent("users")
+        return ((try? FileManager.default.contentsOfDirectory(atPath: usersDir.path)) ?? [])
+            .filter { $0 != "Public" && !$0.hasPrefix(".") }
+            .sorted()
+            .map { usersDir.appendingPathComponent($0) }
+    }
+
+    /// `%LOCALAPPDATA%` of every Windows user in the bottle.
+    public var localAppDataDirs: [URL] {
+        windowsUserDirs.map { $0.appendingPathComponent("AppData/Local") }
+    }
+
     /// Current Steam build id of the game, used to warn about updates that break mods.
     public var buildID: String? {
         guard let text = try? String(contentsOf: appManifestURL, encoding: .utf8) else { return nil }
