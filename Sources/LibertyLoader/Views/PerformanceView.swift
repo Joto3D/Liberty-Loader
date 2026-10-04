@@ -16,6 +16,7 @@ struct PerformanceView: View {
     @State private var showSavePreset = false
     @State private var newPresetName = ""
     @State private var showAdvanced = false
+    @State private var steamLaunchOptions: String?
 
     private var allPresets: [PerformancePreset] { PerformancePreset.all + model.customPresets }
 
@@ -34,6 +35,7 @@ struct PerformanceView: View {
                 subtitle: "Detected \(SystemInfo.cpuBrand), \(Int(SystemInfo.memoryBytes / 1_073_741_824)) GB memory. A backup is taken before every change."
             )
             StatusBanner()
+            diagnosisSection
             presetsSection
             bottleSection
             tipsSection
@@ -116,6 +118,66 @@ struct PerformanceView: View {
 
     static func summary(of preset: PerformancePreset) -> Text {
         preset.isBuiltIn ? Text(LocalizedStringKey(preset.summary)) : Text("Your saved settings.")
+    }
+
+    // MARK: Diagnosis
+
+    private var diagnosisSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HDSectionHeader(title: "Diagnosis")
+            HDPanel {
+                VStack(alignment: .leading, spacing: 14) {
+                    directXRow
+                    if MemoryAdvice.isLowMemory(bytes: SystemInfo.memoryBytes) {
+                        Divider().overlay(Color.hdBorder)
+                        SettingRow(
+                            icon: "memorychip",
+                            title: "Only \(Int(SystemInfo.memoryBytes / 1_073_741_824)) GB memory",
+                            detail: "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing."
+                        ) {
+                            Button("Apply Low-Memory Textures", action: applyLowMemorySettings)
+                                .buttonStyle(HDSecondaryButtonStyle())
+                                .disabled(config == nil || model.isGameRunning)
+                        }
+                    }
+                    Divider().overlay(Color.hdBorder)
+                    SettingRow(
+                        icon: "cpu",
+                        title: "CPU or GPU limit?",
+                        detail: "Turn on the Metal FPS overlay. If GPU time is much lower than Frame Interval, your CPU is the limit: lower resolution and upscaling won't help much, an FPS cap of 30–40 plays smoother."
+                    ) { EmptyView() }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var directXRow: some View {
+        switch DirectXMode.dx11Source(libertyArgs: model.launchArguments, steamArgs: steamLaunchOptions) {
+        case .liberty:
+            SettingRow(
+                icon: "square.stack.3d.up",
+                title: "DirectX 11 forced by Liberty Loader",
+                detail: "Your extra launch options contain a DirectX 11 flag. DLSS/MetalFX only appears under DirectX 12. DX11 can be faster on some Macs, so compare both with the FPS overlay."
+            ) {
+                Button("Use DirectX 12") {
+                    model.launchArguments = DirectXMode.removingDX11(from: model.launchArguments)
+                }
+                .buttonStyle(HDSecondaryButtonStyle())
+            }
+        case .steam:
+            SettingRow(
+                icon: "square.stack.3d.up",
+                title: "DirectX 11 forced by Steam",
+                detail: "To use DirectX 12 (needed for DLSS/MetalFX): in Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. DX11 can be faster on some Macs, so compare both."
+            ) { EmptyView() }
+        case nil:
+            SettingRow(
+                icon: "square.stack.3d.up",
+                title: "DirectX 12 (game default)",
+                detail: "No DirectX 11 flag found. If the FPS overlay still shows D3D11, the game fell back on its own."
+            ) { EmptyView() }
+        }
     }
 
     // MARK: Bottle
@@ -269,6 +331,19 @@ struct PerformanceView: View {
         config = try? UserSettingsConfig.load(from: game.userSettingsURL)
         bottleConfig = (try? BottleConfig.load(from: game.bottleConfigURL)) ?? BottleConfig(text: "")
         retinaEnabled = (try? WineRegistryFile.load(from: game.userRegistryURL)).map { RetinaMode.isEnabled(in: $0) }
+        steamLaunchOptions = SteamLaunchOptions.read(steamRoot: game.steamRootURL)
+    }
+
+    private func applyLowMemorySettings() {
+        guard let game = model.game else { return }
+        model.perform {
+            guard var config = try? UserSettingsConfig.load(from: game.userSettingsURL) else { return }
+            try model.backups?.backup(game.userSettingsURL, label: "Before low-memory textures")
+            skippedKeys = config.apply(MemoryAdvice.lowMemorySettings)
+            try config.write(to: game.userSettingsURL)
+            model.statusMessage = String(localized: "Low-memory textures applied. Restart the game if it is running.")
+        }
+        load()
     }
 
     private func apply(_ preset: PerformancePreset) {
