@@ -1,3 +1,4 @@
+import AppKit
 import LibertyCore
 import SwiftUI
 
@@ -17,6 +18,8 @@ struct PerformanceView: View {
     @State private var newPresetName = ""
     @State private var showAdvanced = false
     @State private var steamLaunchOptions: String?
+    @State private var dxReport: DirectXReport?
+    @State private var showDXReport = false
 
     private var allPresets: [PerformancePreset] { PerformancePreset.all + model.customPresets }
 
@@ -44,6 +47,7 @@ struct PerformanceView: View {
         .navigationTitle("Performance")
         .onAppear(perform: load)
         .onChange(of: model.game) { load() }
+        .onChange(of: model.directX) { load() }
         .alert("Save Preset", isPresented: $showSavePreset) {
             TextField("Name, e.g. My Settings", text: $newPresetName)
             Button("Save") {
@@ -177,6 +181,54 @@ struct PerformanceView: View {
             Text("Takes effect the next time you launch the game from Liberty Loader.")
                 .font(.caption)
                 .foregroundStyle(Color.hdMuted)
+            if model.directX == .dx12, let dxReport {
+                DisclosureGroup(isExpanded: $showDXReport) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        ForEach(Array(dxReport.findings.enumerated()), id: \.offset) { _, finding in
+                            Label { Self.describe(finding) } icon: {
+                                Image(systemName: finding == .noCauseFound ? "questionmark.circle.fill" : "exclamationmark.triangle.fill")
+                            }
+                            .font(.callout)
+                            .foregroundStyle(finding == .noCauseFound ? Color.hdMuted : Color.hdWarning)
+                            .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Text(verbatim: dxReport.text)
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundStyle(Color.hdText)
+                            .textSelection(.enabled)
+                            .padding(8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.black.opacity(0.25), in: CutCornerShape(cut: 6))
+                        Button {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(dxReport.text, forType: .string)
+                            model.statusMessage = String(localized: "DirectX report copied.")
+                        } label: {
+                            Label("Copy Report", systemImage: "doc.on.doc")
+                        }
+                        .buttonStyle(HDSecondaryButtonStyle())
+                    }
+                    .padding(.top, 6)
+                } label: {
+                    Text("Game still on DirectX 11? Find out why")
+                        .foregroundStyle(Color.hdYellow)
+                }
+            }
+        }
+    }
+
+    static func describe(_ finding: DirectXReport.Finding) -> Text {
+        switch finding {
+        case .launchArgumentsForceDX11:
+            return Text("Liberty Loader's launch options force DirectX 11.")
+        case .steamForcesDX11(let user):
+            return Text("Steam's launch options force DirectX 11 (Steam user \(user)). Remove --use-d3d11 in Steam → Helldivers 2 → Properties.")
+        case .dllDisabled(let name, let source):
+            return Text("\(name) is disabled in \(source). DirectX 12 can't start, so the game falls back to DirectX 11.")
+        case .backendWithoutDX12(let backend):
+            return Text("The graphics backend \(backend) has no DirectX 12 on the Mac. Choose D3DMetal.")
+        case .noCauseFound:
+            return Text("No cause found in the bottle. The game may fall back to DirectX 11 on its own. Copy the report and send it.")
         }
     }
 
@@ -332,6 +384,7 @@ struct PerformanceView: View {
         bottleConfig = (try? BottleConfig.load(from: game.bottleConfigURL)) ?? BottleConfig(text: "")
         retinaEnabled = (try? WineRegistryFile.load(from: game.userRegistryURL)).map { RetinaMode.isEnabled(in: $0) }
         steamLaunchOptions = SteamLaunchOptions.read(steamRoot: game.steamRootURL)
+        dxReport = DirectXReport.collect(game: game, extraArguments: model.launchArguments, choice: model.directX)
     }
 
     private func applyLowMemorySettings() {

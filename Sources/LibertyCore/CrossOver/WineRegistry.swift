@@ -32,6 +32,20 @@ public struct WineRegistryFile: Equatable {
         return nil
     }
 
+    /// All string values in a key, e.g. `["d3d12": "native,builtin"]`. Names keep any `*` prefix.
+    public func values(in key: String) -> [String: String] {
+        guard let range = sectionRange(key) else { return [:] }
+        var result: [String: String] = [:]
+        for i in range {
+            let line = lines[i]
+            guard line.hasPrefix("\""), let split = line.range(of: "\"=") else { continue }
+            let name = String(line[line.index(after: line.startIndex)..<split.lowerBound])
+            let value = String(line[split.upperBound...]).trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+            result[name] = value
+        }
+        return result
+    }
+
     public mutating func setString(_ value: String?, for name: String, in key: String, now: Date = Date()) {
         let prefix = "\"\(name)\"="
         let newLine = value.map { "\(prefix)\"\($0)\"" }
