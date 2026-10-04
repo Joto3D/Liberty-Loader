@@ -46,6 +46,13 @@ final class LaunchOptionsTests: TempDirTestCase {
         XCTAssertEqual(DirectXMode.removingDX11(from: "-windowed --use-d3d11  -novid"), "-windowed -novid")
     }
 
+    func testDirectXVersionArguments() {
+        XCTAssertEqual(DirectXVersion.dx11.launchArguments(extra: "-windowed"), ["-windowed", "--use-d3d11"])
+        XCTAssertEqual(DirectXVersion.dx12.launchArguments(extra: "-dx11 -windowed"), ["-windowed"])
+        XCTAssertEqual(DirectXVersion.dx11.launchArguments(extra: "--use-d3d11"), ["--use-d3d11"])
+        XCTAssertEqual(DirectXVersion.dx12.launchArguments(extra: ""), [])
+    }
+
     func testLowMemoryThreshold() {
         let gb: UInt64 = 1_073_741_824
         XCTAssertTrue(MemoryAdvice.isLowMemory(bytes: 16 * gb))

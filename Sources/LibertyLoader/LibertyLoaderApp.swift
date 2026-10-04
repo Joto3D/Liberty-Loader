@@ -72,6 +72,10 @@ struct MenuBarContent: View {
             .disabled(model.crossOver == nil || model.game == nil || model.isGameRunning)
         Button("Force Quit Bottle", action: model.forceQuit)
             .disabled(model.game == nil)
+        Picker("DirectX", selection: Binding(get: { model.directX }, set: { model.directX = $0 })) {
+            Text(verbatim: "DirectX 12").tag(DirectXVersion.dx12)
+            Text(verbatim: "DirectX 11").tag(DirectXVersion.dx11)
+        }
         if !model.profiles.isEmpty {
             Menu("Mod Profile") {
                 ForEach(model.profiles) { profile in

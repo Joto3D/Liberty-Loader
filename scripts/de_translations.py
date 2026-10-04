@@ -388,4 +388,10 @@ DE = {
 "Memory used by Helldivers 2. Above 1.5× your Mac's memory it starts to stutter and may crash; restart the game between missions.": "Speicher, den Helldivers 2 gerade braucht. Ab dem 1,5-Fachen deines Mac-Speichers ruckelt es und kann abstürzen; starte das Spiel zwischen Missionen neu.",
 "Shows a notification when Helldivers 2 uses 1.5× or 2× your Mac's memory, before it crashes.": "Zeigt eine Mitteilung, wenn Helldivers 2 das 1,5- oder 2-Fache deines Mac-Speichers braucht, bevor es abstürzt.",
 "Warn when the game uses too much memory": "Warnen, wenn das Spiel zu viel Speicher braucht",
+"DirectX": "DirectX",
+"DirectX 12 is the game's default and needed for DLSS/MetalFX. DirectX 11 is often steadier under CrossOver. Compare both with the FPS overlay.": "DirectX 12 ist der Standard des Spiels und nötig für DLSS/MetalFX. DirectX 11 läuft unter CrossOver oft stabiler. Vergleiche beides mit dem FPS-Overlay.",
+"DirectX version": "DirectX-Version",
+"In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11.": "In Steam Rechtsklick auf Helldivers 2 → Eigenschaften und --use-d3d11 aus den Startoptionen löschen. Sonst bleibt das Spiel bei DirectX 11.",
+"Steam still forces DirectX 11": "Steam erzwingt noch DirectX 11",
+"Takes effect the next time you launch the game from Liberty Loader.": "Gilt ab dem nächsten Spielstart über Liberty Loader.",
 }

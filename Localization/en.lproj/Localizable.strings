@@ -79,9 +79,9 @@
 "Developer Portal" = "Developer Portal";
 "Diagnose" = "Diagnose";
 "Diagnosis" = "Diagnosis";
-"DirectX 11 forced by Liberty Loader" = "DirectX 11 forced by Liberty Loader";
-"DirectX 11 forced by Steam" = "DirectX 11 forced by Steam";
-"DirectX 12 (game default)" = "DirectX 12 (game default)";
+"DirectX" = "DirectX";
+"DirectX 12 is the game's default and needed for DLSS/MetalFX. DirectX 11 is often steadier under CrossOver. Compare both with the FPS overlay." = "DirectX 12 is the game's default and needed for DLSS/MetalFX. DirectX 11 is often steadier under CrossOver. Compare both with the FPS overlay.";
+"DirectX version" = "DirectX version";
 "Disable All" = "Disable All";
 "Disable All Mods" = "Disable All Mods";
 "Disable Mods and Retry" = "Disable Mods and Retry";
@@ -147,6 +147,7 @@
 "High Resolution Mode turned on." = "High Resolution Mode turned on.";
 "How to use" = "How to use";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam.";
+"In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11." = "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11.";
 "Install" = "Install";
 "Install %@" = "Install %@";
 "Install All Missing" = "Install All Missing";
@@ -228,7 +229,6 @@
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods rejected the API key. Check it in Settings.";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods returned an error (%lld).";
 "Nexus mod %lld" = "Nexus mod %lld";
-"No DirectX 11 flag found. If the FPS overlay still shows D3D11, the game fell back on its own." = "No DirectX 11 flag found. If the FPS overlay still shows D3D11, the game fell back on its own.";
 "No backup is available for this file." = "No backup is available for this file.";
 "No backups yet." = "No backups yet.";
 "No bottle selected." = "No bottle selected.";
@@ -329,6 +329,7 @@
 "Some settings were skipped" = "Some settings were skipped";
 "Something went wrong" = "Something went wrong";
 "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again." = "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again.";
+"Steam still forces DirectX 11" = "Steam still forces DirectX 11";
 "Stopped all processes in “%@”." = "Stopped all processes in “%@”.";
 "Stops the game, Steam and any stuck Wine processes in this bottle." = "Stops the game, Steam and any stuck Wine processes in this bottle.";
 "Style" = "Style";
@@ -337,6 +338,7 @@
 "Switch between saved mod setups." = "Switch between saved mod setups.";
 "Switched to profile “%@”." = "Switched to profile “%@”.";
 "Switched to profile “%@”. Mods are applied on the next launch." = "Switched to profile “%@”. Mods are applied on the next launch.";
+"Takes effect the next time you launch the game from Liberty Loader." = "Takes effect the next time you launch the game from Liberty Loader.";
 "That Nexus link is for “%@”, not Helldivers 2." = "That Nexus link is for “%@”, not Helldivers 2.";
 "That app doesn't look like CrossOver." = "That app doesn't look like CrossOver.";
 "The first missions after an update stutter while shaders compile. This improves on its own." = "The first missions after an update stutter while shaders compile. This improves on its own.";
@@ -351,7 +353,6 @@
 "This mod is turned off." = "This mod is turned off.";
 "This mod needs another mod. Click to install it." = "This mod needs another mod. Click to install it.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory.";
-"To use DirectX 12 (needed for DLSS/MetalFX): in Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. DX11 can be faster on some Macs, so compare both." = "To use DirectX 12 (needed for DLSS/MetalFX): in Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. DX11 can be faster on some Macs, so compare both.";
 "Trending" = "Trending";
 "Try Again" = "Try Again";
 "Turn Off" = "Turn Off";
@@ -367,7 +368,6 @@
 "Updated “%@”." = "Updated “%@”.";
 "Updates" = "Updates";
 "Updates are only available in the packaged app." = "Updates are only available in the packaged app.";
-"Use DirectX 12" = "Use DirectX 12";
 "Use Recommended" = "Use Recommended";
 "Variant" = "Variant";
 "Variants" = "Variants";
@@ -381,7 +381,6 @@
 "WineD3D (compatibility)" = "WineD3D (compatibility)";
 "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain." = "With a key, the “Mod Manager Download” button on Nexus Mods installs mods straight into Liberty Loader, and mod updates can be checked. The key is stored in your Keychain.";
 "You pinned this mod. Right-click to change it." = "You pinned this mod. Right-click to change it.";
-"Your extra launch options contain a DirectX 11 flag. DLSS/MetalFX only appears under DirectX 12. DX11 can be faster on some Macs, so compare both with the FPS overlay." = "Your extra launch options contain a DirectX 11 flag. DLSS/MetalFX only appears under DirectX 12. DX11 can be faster on some Macs, so compare both with the FPS overlay.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
