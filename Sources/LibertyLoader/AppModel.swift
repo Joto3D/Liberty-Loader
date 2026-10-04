@@ -18,6 +18,9 @@ final class AppModel {
     var launchArguments: String {
         didSet { UserDefaults.standard.set(launchArguments, forKey: Keys.launchArgs) }
     }
+    var directX: DirectXVersion {
+        didSet { UserDefaults.standard.set(directX.rawValue, forKey: Keys.directX) }
+    }
 
     // MARK: State
     var mods: [InstalledMod] = []
@@ -127,6 +130,7 @@ final class AppModel {
         static let bottle = "selectedBottlePath"
         static let crossOver = "crossOverPath"
         static let launchArgs = "launchArguments"
+        static let directX = "directXVersion"
         static let buildID = "lastDeployedBuildID"
         static let autoUpdate = "autoCheckUpdates"
         static let nexusKeychain = "nexus-api-key"
@@ -142,7 +146,11 @@ final class AppModel {
         LibertyLog.shared.configure(fileURL: ModStore.defaultRoot.appendingPathComponent("Logs/liberty-loader.log"))
         selectedBottlePath = UserDefaults.standard.string(forKey: Keys.bottle)
         crossOverPath = UserDefaults.standard.string(forKey: Keys.crossOver)
-        launchArguments = UserDefaults.standard.string(forKey: Keys.launchArgs) ?? ""
+        let savedArgs = UserDefaults.standard.string(forKey: Keys.launchArgs) ?? ""
+        // A DirectX 11 flag typed into the launch options becomes the DirectX choice.
+        directX = UserDefaults.standard.string(forKey: Keys.directX).flatMap(DirectXVersion.init(rawValue:))
+            ?? (DirectXMode.forcesDX11(savedArgs) ? .dx11 : .dx12)
+        launchArguments = DirectXMode.removingDX11(from: savedArgs)
         store = try? ModStore()
         backups = try? BackupManager(directory: ModStore.defaultRoot.appendingPathComponent("Backups"))
         nexusAPIKey = Keychain.get(Keys.nexusKeychain) ?? ""
@@ -194,7 +202,7 @@ final class AppModel {
         guard let game else { return fail(LibertyError.gameNotFound) }
         do {
             try syncMods()
-            let args = launchArguments.split(separator: " ").map(String.init)
+            let args = directX.launchArguments(extra: launchArguments)
             let command = try GameLauncher.command(crossOver: crossOver, game: game, launchArguments: args)
             try GameLauncher.launch(command)
             statusMessage = String(localized: "Launching Helldivers 2 via Steam in “\(game.bottleName)”…")

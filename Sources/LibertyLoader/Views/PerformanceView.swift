@@ -151,32 +151,32 @@ struct PerformanceView: View {
         }
     }
 
-    @ViewBuilder
     private var directXRow: some View {
-        switch DirectXMode.dx11Source(libertyArgs: model.launchArguments, steamArgs: steamLaunchOptions) {
-        case .liberty:
+        VStack(alignment: .leading, spacing: 8) {
             SettingRow(
                 icon: "square.stack.3d.up",
-                title: "DirectX 11 forced by Liberty Loader",
-                detail: "Your extra launch options contain a DirectX 11 flag. DLSS/MetalFX only appears under DirectX 12. DX11 can be faster on some Macs, so compare both with the FPS overlay."
+                title: "DirectX version",
+                detail: "DirectX 12 is the game's default and needed for DLSS/MetalFX. DirectX 11 is often steadier under CrossOver. Compare both with the FPS overlay."
             ) {
-                Button("Use DirectX 12") {
-                    model.launchArguments = DirectXMode.removingDX11(from: model.launchArguments)
+                Picker("", selection: Binding(get: { model.directX }, set: { model.directX = $0 })) {
+                    Text(verbatim: "DirectX 12").tag(DirectXVersion.dx12)
+                    Text(verbatim: "DirectX 11").tag(DirectXVersion.dx11)
                 }
-                .buttonStyle(HDSecondaryButtonStyle())
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .frame(width: 220)
             }
-        case .steam:
-            SettingRow(
-                icon: "square.stack.3d.up",
-                title: "DirectX 11 forced by Steam",
-                detail: "To use DirectX 12 (needed for DLSS/MetalFX): in Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. DX11 can be faster on some Macs, so compare both."
-            ) { EmptyView() }
-        case nil:
-            SettingRow(
-                icon: "square.stack.3d.up",
-                title: "DirectX 12 (game default)",
-                detail: "No DirectX 11 flag found. If the FPS overlay still shows D3D11, the game fell back on its own."
-            ) { EmptyView() }
+            if model.directX == .dx12, let steamLaunchOptions, DirectXMode.forcesDX11(steamLaunchOptions) {
+                HDBanner(
+                    icon: "exclamationmark.triangle.fill",
+                    color: .hdWarning,
+                    title: Text("Steam still forces DirectX 11"),
+                    message: Text("In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11.")
+                )
+            }
+            Text("Takes effect the next time you launch the game from Liberty Loader.")
+                .font(.caption)
+                .foregroundStyle(Color.hdMuted)
         }
     }
 

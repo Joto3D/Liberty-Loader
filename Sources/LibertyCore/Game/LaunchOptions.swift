@@ -91,3 +91,19 @@ public enum DirectXMode {
             .joined(separator: " ")
     }
 }
+
+/// The DirectX version Liberty Loader starts the game with.
+public enum DirectXVersion: String, CaseIterable, Identifiable, Sendable {
+    /// The game's default; needed for DLSS/MetalFX.
+    case dx12
+    /// Often steadier under CrossOver; passes `--use-d3d11`.
+    case dx11
+
+    public var id: String { rawValue }
+
+    /// The user's extra launch options with any DirectX 11 flag replaced by this choice.
+    public func launchArguments(extra: String) -> [String] {
+        let base = DirectXMode.removingDX11(from: extra).split(separator: " ").map(String.init)
+        return self == .dx11 ? base + ["--use-d3d11"] : base
+    }
+}
