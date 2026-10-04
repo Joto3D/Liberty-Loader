@@ -8,6 +8,9 @@ public struct PlaytimeRecord: Codable, Equatable, Sendable {
     public var sessionStart: Date?
     /// Last time the game was seen running; closes a session if Liberty Loader quit mid-game.
     public var lastSeenRunning: Date?
+    /// Start and end of the most recent finished session (used to check mod loader logs).
+    public var lastSessionStart: Date?
+    public var lastSessionEnd: Date?
 
     public init() {}
 
@@ -24,6 +27,8 @@ public struct PlaytimeRecord: Codable, Equatable, Sendable {
         }
         guard let start = sessionStart else { return false }
         let end = lastSeenRunning ?? start
+        lastSessionStart = start
+        lastSessionEnd = end
         lastSessionSeconds = max(0, end.timeIntervalSince(start))
         totalSeconds += lastSessionSeconds
         sessionStart = nil

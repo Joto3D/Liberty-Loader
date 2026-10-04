@@ -51,6 +51,7 @@
 "Connect Nexus Mods (optional)" = "Connect Nexus Mods (optional)";
 "Connected" = "Connected";
 "Copies mods into the game right after you install, enable, reorder or remove them." = "Copies mods into the game right after you install, enable, reorder or remove them.";
+"Copy Log" = "Copy Log";
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Copy enabled mods into the game folder (also done automatically on launch).";
 "Could not extract the mod archive: %@" = "Could not extract the mod archive: %@";
 "Couldn't load mods" = "Couldn't load mods";
@@ -127,6 +128,7 @@
 "Helldivers 2 was not found in any CrossOver bottle." = "Helldivers 2 was not found in any CrossOver bottle.";
 "Helldivers 2 was not found, so mods can't be checked." = "Helldivers 2 was not found, so mods can't be checked.";
 "Helldivers 2 was updated" = "Helldivers 2 was updated";
+"Hide Log" = "Hide Log";
 "High Resolution (Retina) Mode" = "High Resolution (Retina) Mode";
 "High Resolution Mode turned off." = "High Resolution Mode turned off.";
 "High Resolution Mode turned on." = "High Resolution Mode turned on.";
@@ -179,12 +181,15 @@
 "Missions" = "Missions";
 "Mod Diagnosis" = "Mod Diagnosis";
 "Mod Profile" = "Mod Profile";
+"Mod logs" = "Mod logs";
 "Mod updates available: %lld" = "Mod updates available: %lld";
 "Mods" = "Mods";
 "Mods active" = "Mods active";
 "Mods applied to the game folder." = "Mods applied to the game folder.";
 "Mods are copied into the game when it starts. Quit the game, press Apply Now, then start it again from Liberty Loader." = "Mods are copied into the game when it starts. Quit the game, press Apply Now, then start it again from Liberty Loader.";
 "Mods can't be applied while Helldivers 2 is running. Quit the game and press Apply Now." = "Mods can't be applied while Helldivers 2 is running. Quit the game and press Apply Now.";
+"Mods that need it (menus, keybinds, scripts) can't work then. Check that it is enabled and at the very bottom, start the game from Liberty Loader, and make sure the loader supports your current game version." = "Mods that need it (menus, keybinds, scripts) can't work then. Check that it is enabled and at the very bottom, start the game from Liberty Loader, and make sure the loader supports your current game version.";
+"Mods the loader mentions:" = "Mods the loader mentions:";
 "Mods were never copied into the game" = "Mods were never copied into the game";
 "Mods, performance and launch, managed for your Mac." = "Mods, performance and launch, managed for your Mac.";
 "More" = "More";
@@ -205,6 +210,8 @@
 "No backups yet." = "No backups yet.";
 "No bottle selected." = "No bottle selected.";
 "No bottle with Helldivers 2 found in %@." = "No bottle with Helldivers 2 found in %@.";
+"No errors in the log" = "No errors in the log";
+"No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then." = "No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then.";
 "No mods deployed yet" = "No mods deployed yet";
 "No mods found." = "No mods found.";
 "No mods installed." = "No mods installed.";
@@ -328,6 +335,7 @@
 "Update" = "Update";
 "Update available" = "Update available";
 "Updated" = "Updated";
+"Updated %@ ago" = "Updated %@ ago";
 "Updated “%@”." = "Updated “%@”.";
 "Updates" = "Updates";
 "Updates are only available in the packaged app." = "Updates are only available in the packaged app.";
@@ -346,5 +354,6 @@
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
+"“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
 "“%@” is kept at the top of the list, as its description asks." = "“%@” is kept at the top of the list, as its description asks.";

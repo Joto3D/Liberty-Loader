@@ -155,12 +155,29 @@ extension AppModel {
     @discardableResult
     func runDiagnostics() -> DiagnosticsReport? {
         guard let store, let deployer else { diagnostics = nil; return nil }
-        let report = ModDiagnostics.run(
+        var report = ModDiagnostics.run(
             store: store,
             deployer: deployer,
             buildChanged: gameUpdatedSinceLastSync,
             gameRunning: isGameRunning
         )
+        if let game {
+            report.logs = ModLogs.find(game: game)
+            // A shared loader (pinned last, "loader" in its name or text) should log every game session.
+            let loader = mods.first { mod in
+                mod.enabled && mod.loadOrderPin == .bottom
+                    && (mod.name + " " + (mod.description ?? "")).localizedCaseInsensitiveContains("loader")
+            }
+            if let loader, ModLogs.loaderDidNotRun(
+                logs: report.logs,
+                source: nil,
+                sessionStart: playtime.lastSessionStart,
+                sessionEnd: playtime.lastSessionEnd,
+                lastDeploy: UserDefaults.standard.object(forKey: "lastDeployDate") as? Date
+            ) {
+                report.global.append(.loaderDidNotRun(name: loader.name))
+            }
+        }
         diagnostics = report
         return report
     }

@@ -30,10 +30,14 @@ public struct DiagnosticsReport: Equatable, Sendable {
         case nothingDeployed
         /// Patch files in the data folder that Liberty Loader didn't put there.
         case foreignPatchFiles(count: Int)
+        /// A shared mod loader is enabled, but it wrote no log during the last game session.
+        case loaderDidNotRun(name: String)
     }
 
     public var mods: [ModDiagnosis]
     public var global: [GlobalIssue]
+    /// Logs written by mod loaders in the bottle, newest first.
+    public var logs: [ModLogFile] = []
 
     /// Problems that mean "the game won't see this mod", worth surfacing right after applying.
     public var hasBlockingProblems: Bool {
