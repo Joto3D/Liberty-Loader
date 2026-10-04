@@ -279,3 +279,25 @@ extension AppModel {
         }
     }
 }
+
+// MARK: - Mod guide
+
+extension AppModel {
+    func showGuide(for mod: InstalledMod) {
+        guideModID = mod.id
+    }
+
+    /// Fetches the full Nexus page description once and stores it with the mod.
+    @discardableResult
+    func loadNexusDescription(for id: UUID) async -> Bool {
+        guard let store, let mod = findMod(id), let nexusID = mod.nexusModID,
+              mod.nexusDescription == nil, !nexusAPIKey.isEmpty,
+              let info = try? await NexusClient(apiKey: nexusAPIKey).mod(nexusID),
+              let full = info.description, !full.isEmpty else { return false }
+        var updated = mod
+        updated.nexusDescription = full
+        try? store.update(updated)
+        reloadMods()
+        return true
+    }
+}

@@ -30,6 +30,7 @@
 "Browse Helldivers 2 Mods" = "Browse Helldivers 2 Mods";
 "Browse Nexus Mods" = "Browse Nexus Mods";
 "Cancel" = "Cancel";
+"Change the variant in the mod list on the Mods page." = "Change the variant in the mod list on the Mods page.";
 "Changes the same game files as: %@" = "Changes the same game files as: %@";
 "Check Again" = "Check Again";
 "Check Now" = "Check Now";
@@ -68,6 +69,7 @@
 "Delete" = "Delete";
 "Delete Profile" = "Delete Profile";
 "Deployed" = "Deployed";
+"Description" = "Description";
 "Detected %@, %lld GB memory. A backup is taken before every change." = "Detected %@, %lld GB memory. A backup is taken before every change.";
 "Developer Portal" = "Developer Portal";
 "Diagnose" = "Diagnose";
@@ -114,6 +116,7 @@
 "Get My API Key" = "Get My API Key";
 "Graphics backend" = "Graphics backend";
 "Graphics backend switched to %@. Try launching again." = "Graphics backend switched to %@. Try launching again.";
+"Guide: how to use this mod" = "Guide: how to use this mod";
 "Helldivers 2 bottle" = "Helldivers 2 bottle";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 found in bottle “%@”";
 "Helldivers 2 hasn't started" = "Helldivers 2 hasn't started";
@@ -127,6 +130,7 @@
 "High Resolution (Retina) Mode" = "High Resolution (Retina) Mode";
 "High Resolution Mode turned off." = "High Resolution Mode turned off.";
 "High Resolution Mode turned on." = "High Resolution Mode turned on.";
+"How to use" = "How to use";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam.";
 "Install" = "Install";
 "Install %@" = "Install %@";
@@ -165,6 +169,7 @@
 "Liberty Loader found problems that can keep mods from showing up in game." = "Liberty Loader found problems that can keep mods from showing up in game.";
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.";
 "Load Order" = "Load Order";
+"Loading the description from Nexus Mods…" = "Loading the description from Nexus Mods…";
 "Location" = "Location";
 "MSync" = "MSync";
 "Major Order" = "Major Order";
@@ -208,6 +213,7 @@
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Not in your config: %@. Launch the game once and change a graphics option to create a complete config.";
 "Not set" = "Not set";
 "OK" = "OK";
+"Off" = "Off";
 "Off gives much higher FPS. On looks sharper but renders 4× the pixels." = "Off gives much higher FPS. On looks sharper but renders 4× the pixels.";
 "Open" = "Open";
 "Open CrossOver" = "Open CrossOver";
@@ -242,6 +248,7 @@
 "Quit" = "Quit";
 "Quit browsers and other heavy apps. Helldivers 2 benefits from free unified memory." = "Quit browsers and other heavy apps. Helldivers 2 benefits from free unified memory.";
 "Quit the game and Steam (or use Force Quit Bottle) to change this." = "Quit the game and Steam (or use Force Quit Bottle) to change this.";
+"Readme" = "Readme";
 "Ready" = "Ready";
 "Ready to dive" = "Ready to dive";
 "Recommended" = "Recommended";
@@ -278,6 +285,7 @@
 "Setup needed" = "Setup needed";
 "Show Crash File" = "Show Crash File";
 "Show Game Folder" = "Show Game Folder";
+"Show Guide" = "Show Guide";
 "Show Log" = "Show Log";
 "Show all %lld backups" = "Show all %lld backups";
 "Show fewer" = "Show fewer";
@@ -307,6 +315,7 @@
 "This happens when the game is started through Steam instead of Liberty Loader." = "This happens when the game is started through Steam instead of Liberty Loader.";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.";
 "This mod does not contain any Helldivers 2 patch files." = "This mod does not contain any Helldivers 2 patch files.";
+"This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader." = "This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader.";
 "This mod is turned off." = "This mod is turned off.";
 "This mod needs another mod. Click to install it." = "This mod needs another mod. Click to install it.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory.";
@@ -324,6 +333,7 @@
 "Updates are only available in the packaged app." = "Updates are only available in the packaged app.";
 "Use Recommended" = "Use Recommended";
 "Variant" = "Variant";
+"Variants" = "Variants";
 "Verify Game Files" = "Verify Game Files";
 "Version" = "Version";
 "Version 24 or newer is recommended for Helldivers 2." = "Version 24 or newer is recommended for Helldivers 2.";

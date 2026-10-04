@@ -130,6 +130,12 @@ struct ModsView: View {
         } isTargeted: { isDropTargeted = $0 }
         .navigationTitle("Mods")
         .toolbar { toolbarContent }
+        .sheet(item: Binding(
+            get: { model.guideModID.map(GuideID.init) },
+            set: { model.guideModID = $0?.id }
+        )) { item in
+            ModGuideSheet(modID: item.id).environment(model)
+        }
         .sheet(isPresented: Binding(get: { model.showDiagnostics }, set: { model.showDiagnostics = $0 })) {
             ModDiagnosisView().environment(model)
         }
@@ -339,6 +345,15 @@ struct ModRow: View {
 
             Spacer(minLength: 8)
 
+            Button { model.showGuide(for: mod) } label: {
+                Image(systemName: "book.fill")
+                    .foregroundStyle(Color.hdYellow.opacity(isHovered ? 1 : 0.6))
+                    .padding(6)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .help("Guide: how to use this mod")
+
             Toggle("", isOn: Binding(
                 get: { mod.enabled },
                 set: { value in
@@ -358,7 +373,9 @@ struct ModRow: View {
                 .stroke(mod.enabled ? Color.hdYellow.opacity(isHovered ? 0.6 : 0.3) : Color.hdBorder, lineWidth: 1)
         )
         .onHover { isHovered = $0 }
+        .onTapGesture(count: 2) { model.showGuide(for: mod) }
         .contextMenu {
+            Button("Show Guide") { model.showGuide(for: mod) }
             Button("Show in Finder") { model.revealModFolder(mod) }
             Menu("Load Order") {
                 Button("Keep at Bottom") { model.setPin(.bottom, for: mod.id) }
@@ -423,4 +440,9 @@ struct ModPreview: View {
         .background(Color.black.opacity(0.35))
         .clipShape(CutCornerShape(cut: 8))
     }
+}
+
+/// Identifiable wrapper so the guide sheet can use `.sheet(item:)`.
+struct GuideID: Identifiable {
+    let id: UUID
 }

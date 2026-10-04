@@ -37,6 +37,7 @@ extension AppModel {
             mod.latestVersion = mod.version
             if existing == nil, let name = info?.name { mod.name = name }
             if mod.description == nil { mod.description = info?.summary }
+            if let full = info?.description, !full.isEmpty { mod.nexusDescription = full }
             if let requirements = await client.requirements(modID: link.modID) { mod.requirements = requirements }
             try store.update(mod)
             try store.refreshPins()
@@ -76,6 +77,7 @@ extension AppModel {
             guard let modID = mod.nexusModID, let info = try? await client.mod(modID) else { continue }
             var updated = mod
             updated.latestVersion = info.version
+            if let full = info.description, !full.isEmpty { updated.nexusDescription = full }
             if let requirements = await client.requirements(modID: modID) { updated.requirements = requirements }
             try? store.update(updated)
             if updated.hasUpdate { updates += 1 }
