@@ -118,6 +118,7 @@
 "Galactic War" = "Galactic War";
 "Galactic War status is unavailable right now." = "Galactic War status is unavailable right now.";
 "Game folder" = "Game folder";
+"Game memory: %@" = "Game memory: %@";
 "Game settings saved." = "Game settings saved.";
 "Game updates often break mods and can cause crashes. Disable mods until their authors publish updates." = "Game updates often break mods and can cause crashes. Disable mods until their authors publish updates.";
 "Game updates often break mods. Mods marked “outdated” below need a new version from their author." = "Game updates often break mods. Mods marked “outdated” below need a new version from their author.";
@@ -131,6 +132,9 @@
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 found in bottle “%@”";
 "Helldivers 2 hasn't started" = "Helldivers 2 hasn't started";
 "Helldivers 2 is running" = "Helldivers 2 is running";
+"Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 is using %@. Restart the game after this mission.";
+"Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game.";
+"Helldivers 2 is using a lot of memory. Restart it after this mission." = "Helldivers 2 is using a lot of memory. Restart it after this mission.";
 "Helldivers 2 may have crashed" = "Helldivers 2 may have crashed";
 "Helldivers 2 mods from Nexus Mods. Install with one click." = "Helldivers 2 mods from Nexus Mods. Install with one click.";
 "Helldivers 2 not found" = "Helldivers 2 not found";
@@ -188,6 +192,11 @@
 "Major Order" = "Major Order";
 "Manual edit" = "Manual edit";
 "Max Performance" = "Max Performance";
+"Memory %@" = "Memory %@";
+"Memory critical" = "Memory critical";
+"Memory critical: finish the mission and restart Helldivers 2." = "Memory critical: finish the mission and restart Helldivers 2.";
+"Memory is getting high" = "Memory is getting high";
+"Memory used by Helldivers 2. Above 1.5× your Mac's memory it starts to stutter and may crash; restart the game between missions." = "Memory used by Helldivers 2. Above 1.5× your Mac's memory it starts to stutter and may crash; restart the game between missions.";
 "Metal FPS overlay" = "Metal FPS overlay";
 "MetalFX upscaling (DLSS)" = "MetalFX upscaling (DLSS)";
 "Missions" = "Missions";
@@ -314,6 +323,7 @@
 "Show in Finder" = "Show in Finder";
 "Show “Playing Helldivers 2” in Discord" = "Show “Playing Helldivers 2” in Discord";
 "Shows FPS and frame times in the game." = "Shows FPS and frame times in the game.";
+"Shows a notification when Helldivers 2 uses 1.5× or 2× your Mac's memory, before it crashes." = "Shows a notification when Helldivers 2 uses 1.5× or 2× your Mac's memory, before it crashes.";
 "Skip for Now" = "Skip for Now";
 "Some mods may not work" = "Some mods may not work";
 "Some settings were skipped" = "Some settings were skipped";
@@ -365,6 +375,7 @@
 "Version" = "Version";
 "Version 24 or newer is recommended for Helldivers 2." = "Version 24 or newer is recommended for Helldivers 2.";
 "Walks you through CrossOver, Steam and Helldivers 2 again." = "Walks you through CrossOver, Steam and Helldivers 2 again.";
+"Warn when the game uses too much memory" = "Warn when the game uses too much memory";
 "Welcome, Helldiver" = "Welcome, Helldiver";
 "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there." = "When a Nexus mod needs other mods, Liberty Loader installs them too. Free Nexus accounts get the download pages opened instead; click “Mod Manager Download” there.";
 "WineD3D (compatibility)" = "WineD3D (compatibility)";

@@ -57,6 +57,9 @@ struct MenuBarContent: View {
 
     var body: some View {
         Text(model.isGameRunning ? "Helldivers 2 is running" : "Helldivers 2 is not running")
+        if let memory = model.gameMemory {
+            Text("Game memory: \(GameMemory.format(memory))")
+        }
         Text("Playtime: \(PlaytimeRecord.format(model.playtime.total()))")
         if let order = model.war?.majorOrders.first {
             Text(verbatim: "MO: " + String((order.briefing.isEmpty ? order.title : order.briefing).prefix(60)))
