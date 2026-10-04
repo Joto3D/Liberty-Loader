@@ -64,6 +64,24 @@ final class PerformanceTests: TempDirTestCase {
         XCTAssertEqual(config.text, "[Bottle]\n\"Template\" = \"win10_64\"\n\n[EnvironmentVariables]\n\"MTL_HUD_ENABLED\" = \"1\"")
     }
 
+    func testMetalFXToggle() {
+        var config = BottleConfig(text: "[EnvironmentVariables]")
+        XCTAssertFalse(config.metalFXEnabled)
+        config.metalFXEnabled = true
+        XCTAssertTrue(config.text.contains("\"D3DM_ENABLE_METALFX\" = \"1\""))
+        XCTAssertTrue(config.text.contains("\"DXMT_ENABLE_NVEXT\" = \"1\""))
+        config.metalFXEnabled = false
+        XCTAssertFalse(config.text.contains("METALFX"))
+        XCTAssertFalse(config.text.contains("NVEXT"))
+        XCTAssertTrue(BottleConfig(text: "[EnvironmentVariables]\n\"DXMT_ENABLE_NVEXT\" = \"1\"").metalFXEnabled)
+    }
+
+    func testPresetWithoutMetalFXStillDecodes() throws {
+        let json = #"{"id":"x","name":"Old","summary":"s","gameSettings":{},"graphicsBackend":"d3dmetal","msync":true}"#
+        let preset = try JSONDecoder().decode(PerformancePreset.self, from: Data(json.utf8))
+        XCTAssertNil(preset.metalFX)
+    }
+
     func testPresetRecommendation() {
         let gb: UInt64 = 1_073_741_824
         XCTAssertEqual(PerformancePreset.recommended(cpuBrand: "Apple M1", memoryBytes: 8 * gb).id, "max-performance")

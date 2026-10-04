@@ -12,6 +12,7 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
     /// Only set by custom presets; nil leaves the bottle setting unchanged.
     public var esync: Bool? = nil
     public var metalHUD: Bool? = nil
+    public var metalFX: Bool? = nil
 
     public static let ultraLow = PerformancePreset(
         id: "ultra-low",

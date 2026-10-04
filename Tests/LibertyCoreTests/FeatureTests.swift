@@ -160,6 +160,7 @@ final class FeatureTests: TempDirTestCase {
         var bottle = BottleConfig(text: "")
         bottle.graphicsBackend = .dxvk
         bottle.metalHUDEnabled = true
+        bottle.metalFXEnabled = true
         let preset = PerformancePreset.custom(name: "Mine", config: config, bottle: bottle)
         XCTAssertFalse(preset.isBuiltIn)
         XCTAssertEqual(preset.gameSettings, ["shadow_quality": "1", "vsync": "false"])
@@ -170,6 +171,7 @@ final class FeatureTests: TempDirTestCase {
         XCTAssertEqual(reloaded.custom, [preset])
         XCTAssertEqual(reloaded.custom.first?.graphicsBackend, .dxvk)
         XCTAssertEqual(reloaded.custom.first?.metalHUD, true)
+        XCTAssertEqual(reloaded.custom.first?.metalFX, true)
         XCTAssertEqual(reloaded.all.count, PerformancePreset.all.count + 1)
         try reloaded.delete(id: preset.id)
         XCTAssertTrue(PresetStore(rootURL: tmp).custom.isEmpty)

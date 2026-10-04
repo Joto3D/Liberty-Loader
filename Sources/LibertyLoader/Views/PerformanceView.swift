@@ -148,6 +148,17 @@ struct PerformanceView: View {
                         SettingRow(icon: "gauge.with.dots.needle.67percent", title: "Metal FPS overlay", detail: "Shows FPS and frame times in the game.") {
                             toggle(bottleConfig.metalHUDEnabled) { value in editBottle { $0.metalHUDEnabled = value } }
                         }
+                        Divider().overlay(Color.hdBorder)
+                        SettingRow(
+                            icon: "wand.and.stars",
+                            title: "MetalFX upscaling (DLSS)",
+                            detail: supportsMetalFX(bottleConfig)
+                                ? "Lets the game's DLSS option use Apple's MetalFX. Then pick DLSS in the game's graphics settings and restart the game."
+                                : "Needs the D3DMetal graphics backend."
+                        ) {
+                            toggle(bottleConfig.metalFXEnabled) { value in editBottle { $0.metalFXEnabled = value } }
+                                .disabled(!supportsMetalFX(bottleConfig))
+                        }
                         if let retinaEnabled {
                             Divider().overlay(Color.hdBorder)
                             SettingRow(
@@ -167,6 +178,11 @@ struct PerformanceView: View {
                 }
             }
         }
+    }
+
+    /// DXVK and WineD3D can't translate DLSS; D3DMetal (and DXMT, shown as unset) can.
+    private func supportsMetalFX(_ config: BottleConfig) -> Bool {
+        config.graphicsBackend != .dxvk && config.graphicsBackend != .wined3d
     }
 
     private func toggle(_ value: Bool, action: @escaping (Bool) -> Void) -> some View {
@@ -268,6 +284,7 @@ struct PerformanceView: View {
                 $0.msyncEnabled = preset.msync
                 if let esync = preset.esync { $0.esyncEnabled = esync }
                 if let metalHUD = preset.metalHUD { $0.metalHUDEnabled = metalHUD }
+                if let metalFX = preset.metalFX { $0.metalFXEnabled = metalFX }
             }
             let name = preset.isBuiltIn ? String(localized: String.LocalizationValue(preset.name)) : preset.name
             model.statusMessage = String(localized: "\(name) applied. Restart the game if it is running.")

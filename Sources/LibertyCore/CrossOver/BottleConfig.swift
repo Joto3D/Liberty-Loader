@@ -57,6 +57,19 @@ public struct BottleConfig: Equatable {
         set { setValue(newValue ? "1" : nil, for: "MTL_HUD_ENABLED", in: Self.environmentSection) }
     }
 
+    /// Lets the game's DLSS option run on Apple's MetalFX upscaler.
+    /// D3DMetal and DXMT each read their own key, so both are written.
+    public var metalFXEnabled: Bool {
+        get {
+            value("D3DM_ENABLE_METALFX", in: Self.environmentSection) == "1"
+                || value("DXMT_ENABLE_NVEXT", in: Self.environmentSection) == "1"
+        }
+        set {
+            setValue(newValue ? "1" : nil, for: "D3DM_ENABLE_METALFX", in: Self.environmentSection)
+            setValue(newValue ? "1" : nil, for: "DXMT_ENABLE_NVEXT", in: Self.environmentSection)
+        }
+    }
+
     // MARK: Generic access
 
     public func value(_ key: String, in section: String) -> String? {
