@@ -10,6 +10,8 @@ public struct NexusClient {
         public let summary: String?
         public let version: String?
         public let picture_url: String?
+        /// Full mod page description (BBCode).
+        public let description: String?
     }
 
     public struct FileInfo: Decodable, Equatable, Sendable {

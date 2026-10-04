@@ -23,6 +23,9 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     /// True when the user chose the pin (or chose "Don't Pin"); auto-detection then leaves it alone.
     public var pinIsManual: Bool?
 
+    /// Full description from the Nexus Mods page (BBCode), shown in the mod guide.
+    public var nexusDescription: String?
+
     /// Mods this one needs, as listed on Nexus Mods (nil = unknown).
     public var requirements: [NexusRequirement]?
 

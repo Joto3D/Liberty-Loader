@@ -30,6 +30,7 @@
 "Browse Helldivers 2 Mods" = "Helldivers-2-Mods ansehen";
 "Browse Nexus Mods" = "Nexus Mods durchsuchen";
 "Cancel" = "Abbrechen";
+"Change the variant in the mod list on the Mods page." = "Die Variante änderst du in der Mod-Liste auf der Mods-Seite.";
 "Changes the same game files as: %@" = "Ändert dieselben Spieldateien wie: %@";
 "Check Again" = "Nochmal prüfen";
 "Check Now" = "Jetzt prüfen";
@@ -68,6 +69,7 @@
 "Delete" = "Löschen";
 "Delete Profile" = "Profil löschen";
 "Deployed" = "Im Einsatz";
+"Description" = "Beschreibung";
 "Detected %@, %lld GB memory. A backup is taken before every change." = "Erkannt: %@, %lld GB Arbeitsspeicher. Vor jeder Änderung wird ein Backup erstellt.";
 "Developer Portal" = "Developer Portal";
 "Diagnose" = "Diagnose";
@@ -114,6 +116,7 @@
 "Get My API Key" = "Meinen API-Schlüssel holen";
 "Graphics backend" = "Grafik-Backend";
 "Graphics backend switched to %@. Try launching again." = "Grafik-Backend auf %@ umgestellt. Versuch es nochmal zu starten.";
+"Guide: how to use this mod" = "Anleitung: So benutzt du diese Mod";
 "Helldivers 2 bottle" = "Helldivers-2-Bottle";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 gefunden in Bottle „%@“";
 "Helldivers 2 hasn't started" = "Helldivers 2 ist nicht gestartet";
@@ -127,6 +130,7 @@
 "High Resolution (Retina) Mode" = "Hochauflösender Modus (Retina)";
 "High Resolution Mode turned off." = "Hochauflösender Modus ausgeschaltet.";
 "High Resolution Mode turned on." = "Hochauflösender Modus eingeschaltet.";
+"How to use" = "So geht's";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "Wähl in CrossOver „Windows-Anwendung installieren“, such nach Steam und installier es. Melde dich danach bei Steam an.";
 "Install" = "Installieren";
 "Install %@" = "%@ installieren";
@@ -165,6 +169,7 @@
 "Liberty Loader found problems that can keep mods from showing up in game." = "Liberty Loader hat Probleme gefunden, wegen denen Mods im Spiel fehlen können.";
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Die Discord-Anwendung von Liberty Loader ist schon eingetragen. Ändere die ID nur, wenn du eine eigene Anwendung nutzen willst. Discord muss auf diesem Mac laufen.";
 "Load Order" = "Reihenfolge";
+"Loading the description from Nexus Mods…" = "Lade die Beschreibung von Nexus Mods…";
 "Location" = "Ort";
 "MSync" = "MSync";
 "Major Order" = "Hauptbefehl";
@@ -208,6 +213,7 @@
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Nicht in deiner Konfiguration: %@. Starte das Spiel einmal und ändere eine Grafikoption, damit eine vollständige Konfiguration entsteht.";
 "Not set" = "Nicht gesetzt";
 "OK" = "OK";
+"Off" = "Aus";
 "Off gives much higher FPS. On looks sharper but renders 4× the pixels." = "Aus bringt deutlich mehr FPS. An sieht schärfer aus, berechnet aber 4× so viele Pixel.";
 "Open" = "Öffnen";
 "Open CrossOver" = "CrossOver öffnen";
@@ -242,6 +248,7 @@
 "Quit" = "Beenden";
 "Quit browsers and other heavy apps. Helldivers 2 benefits from free unified memory." = "Beende Browser und andere schwere Apps. Helldivers 2 profitiert von freiem Arbeitsspeicher.";
 "Quit the game and Steam (or use Force Quit Bottle) to change this." = "Beende Spiel und Steam (oder nutze „Bottle beenden“), um das zu ändern.";
+"Readme" = "Readme";
 "Ready" = "Bereit";
 "Ready to dive" = "Bereit zum Abwurf";
 "Recommended" = "Empfohlen";
@@ -278,6 +285,7 @@
 "Setup needed" = "Einrichtung nötig";
 "Show Crash File" = "Absturzdatei zeigen";
 "Show Game Folder" = "Spielordner zeigen";
+"Show Guide" = "Anleitung zeigen";
 "Show Log" = "Protokoll zeigen";
 "Show all %lld backups" = "Alle %lld Backups zeigen";
 "Show fewer" = "Weniger zeigen";
@@ -307,6 +315,7 @@
 "This happens when the game is started through Steam instead of Liberty Loader." = "Das passiert, wenn das Spiel über Steam statt über Liberty Loader gestartet wird.";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "Das ist ein Windows-Programm (z. B. ein Mod-Manager), keine Mod. Du brauchst es nicht: Liberty Loader übernimmt diese Aufgabe auf deinem Mac. Lade stattdessen die Mod selbst herunter.";
 "This mod does not contain any Helldivers 2 patch files." = "Diese Mod enthält keine Patch-Dateien für Helldivers 2.";
+"This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader." = "Diese Mod beschreibt keine besondere Steuerung. Die meisten Mods wirken automatisch, sobald sie angewendet sind: Starte das Spiel einfach über Liberty Loader.";
 "This mod is turned off." = "Diese Mod ist ausgeschaltet.";
 "This mod needs another mod. Click to install it." = "Diese Mod braucht eine andere Mod. Klick, um sie zu installieren.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tipp: Den hochauflösenden Modus (Retina) auf der Leistung-Seite auszuschalten hilft auch bei Abstürzen wegen wenig Arbeitsspeicher.";
@@ -324,6 +333,7 @@
 "Updates are only available in the packaged app." = "Updates gibt es nur in der fertig gepackten App.";
 "Use Recommended" = "Empfohlenes nutzen";
 "Variant" = "Variante";
+"Variants" = "Varianten";
 "Verify Game Files" = "Spieldateien prüfen";
 "Version" = "Version";
 "Version 24 or newer is recommended for Helldivers 2." = "Für Helldivers 2 wird Version 24 oder neuer empfohlen.";

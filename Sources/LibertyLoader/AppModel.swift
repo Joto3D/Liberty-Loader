@@ -58,6 +58,9 @@ final class AppModel {
     var discord: DiscordRPC?
     var gameStartedAt: Date?
 
+    // Mod guide sheet
+    var guideModID: UUID?
+
     // Caches filled by reloadMods so views never touch the disk while scrolling.
     var manifestCache: [UUID: ModManifest] = [:]
     var previewCache: [UUID: URL] = [:]
