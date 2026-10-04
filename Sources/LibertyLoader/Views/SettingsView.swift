@@ -53,7 +53,7 @@ struct SettingsView: View {
 
             section("Launch") {
                 VStack(alignment: .leading, spacing: 6) {
-                    TextField("Extra launch options", text: $model.launchArguments, prompt: Text(verbatim: "--use-d3d11"))
+                    TextField("Extra launch options", text: $model.launchArguments, prompt: Text(verbatim: "-windowed"))
                         .textFieldStyle(.roundedBorder)
                     Text("Passed to the game the same way as Steam's launch options.")
                         .font(.caption).foregroundStyle(Color.hdMuted)
