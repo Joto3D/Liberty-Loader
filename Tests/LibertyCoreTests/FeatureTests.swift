@@ -7,10 +7,8 @@ final class FeatureTests: TempDirTestCase {
     func testUltraLowPresetIsLowest() {
         XCTAssertEqual(PerformancePreset.all.first?.id, PerformancePreset.ultraLow.id)
         XCTAssertTrue(PerformancePreset.ultraLow.isBuiltIn)
-        let ultra = Double(PerformancePreset.ultraLow.gameSettings["render_resolution_scale"]!)!
-        let max = Double(PerformancePreset.maxPerformance.gameSettings["render_resolution_scale"]!)!
-        XCTAssertLessThan(ultra, max)
-        XCTAssertEqual(Set(PerformancePreset.ultraLow.gameSettings.keys), Set(PerformancePreset.maxPerformance.gameSettings.keys))
+        XCTAssertEqual(PerformancePreset.ultraLow.gameSettings["sun_shadows"], "false")
+        XCTAssertTrue(Set(PerformancePreset.ultraLow.gameSettings.keys).isSuperset(of: PerformancePreset.maxPerformance.gameSettings.keys))
     }
 
     func testVersionComparison() {

@@ -27,7 +27,7 @@
 "Balanced" = "Balanced";
 "Before %@" = "Before %@";
 "Before low-memory textures" = "Before low-memory textures";
-"Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS." = "Below the game's lowest settings, like the Ultimate Performance mod. Half resolution and every effect off, for weak Macs or the highest FPS.";
+"Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS." = "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS.";
 "Bottle" = "Bottle";
 "Bottle settings" = "Bottle settings";
 "Browse" = "Browse";
@@ -113,10 +113,10 @@
 "Field manual" = "Field manual";
 "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them." = "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them.";
 "Filter" = "Filter";
-"For Max/Ultra chips. High settings with native-ish resolution." = "For Max/Ultra chips. High settings with native-ish resolution.";
-"For Pro chips with 16–32 GB. Medium shadows, light upscaling, 60 FPS cap." = "For Pro chips with 16–32 GB. Medium shadows, light upscaling, 60 FPS cap.";
+"For Max/Ultra chips. High shadows, reflections and effects." = "For Max/Ultra chips. High shadows, reflections and effects.";
+"For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap." = "For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap.";
 "For Super Earth" = "For Super Earth";
-"For base M1/M2/M3 chips and 8–16 GB Macs. Lowest shadows and particles, heavy FSR upscaling, 30 FPS cap for stable frame times." = "For base M1/M2/M3 chips and 8–16 GB Macs. Lowest shadows and particles, heavy FSR upscaling, 30 FPS cap for stable frame times.";
+"For base M1–M4 chips and 8–16 GB Macs. Lowest shadows, particles and view distance, 30 FPS cap for stable frame times." = "For base M1–M4 chips and 8–16 GB Macs. Lowest shadows, particles and view distance, 30 FPS cap for stable frame times.";
 "Force Quit Bottle" = "Force Quit Bottle";
 "Force Quit and Retry" = "Force Quit and Retry";
 "Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over." = "Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over.";
