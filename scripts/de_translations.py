@@ -404,4 +404,8 @@ DE = {
 "The graphics backend %@ has no DirectX 12 on the Mac. Choose D3DMetal.": "Das Grafik-Backend %@ hat auf dem Mac kein DirectX 12. Wähle D3DMetal.",
 "launch arguments force DX11": "launch arguments force DX11",
 "no cause found": "no cause found",
+"Copies your whole user_settings.config, to send when asking for help with settings.": "Kopiert deine ganze user_settings.config, um sie zu schicken, wenn du Hilfe bei den Einstellungen brauchst.",
+"Copy Config": "Config kopieren",
+"Game config": "Spiel-Config",
+"Game config copied.": "Spiel-Config kopiert.",
 }

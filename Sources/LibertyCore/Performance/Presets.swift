@@ -35,7 +35,8 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
             "motion_blur": "false",
             "bloom": "false",
             "vsync": "false",
-            "max_fps": "60",
+            "framerate_limit_enabled": "true",
+            "framerate_limit": "60",
         ],
         graphicsBackend: .d3dmetal,
         msync: true
@@ -62,7 +63,8 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
             "motion_blur": "false",
             "bloom": "false",
             "vsync": "false",
-            "max_fps": "30",
+            "framerate_limit_enabled": "true",
+            "framerate_limit": "30",
         ],
         graphicsBackend: .d3dmetal,
         msync: true
@@ -89,7 +91,8 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
             "motion_blur": "false",
             "bloom": "true",
             "vsync": "false",
-            "max_fps": "60",
+            "framerate_limit_enabled": "true",
+            "framerate_limit": "60",
         ],
         graphicsBackend: .d3dmetal,
         msync: true
@@ -116,11 +119,27 @@ public struct PerformancePreset: Codable, Identifiable, Equatable, Sendable {
             "motion_blur": "false",
             "bloom": "true",
             "vsync": "false",
-            "max_fps": "60",
+            "framerate_limit_enabled": "true",
+            "framerate_limit": "60",
         ],
         graphicsBackend: .d3dmetal,
         msync: true
     )
+
+    /// Settings from the real HD2 config that only cost performance on a Mac: the Nvidia/AMD latency
+    /// features, a resource debug option, and the "GPU drivers are out of date" prompt that CrossOver's
+    /// emulated Nvidia GPU triggers.
+    public static let macFriendlySettings: [String: String] = [
+        "IGNORE_APPROVED_DRIVER_WARNING": "true",
+        "enable_resource_lock_debug": "false",
+        "reflex_mode": "0",
+        "anti_lag": "false",
+    ]
+
+    /// What a preset writes: built-ins also get the Mac-friendly settings.
+    public var settingsToApply: [String: String] {
+        isBuiltIn ? gameSettings.merging(Self.macFriendlySettings) { preset, _ in preset } : gameSettings
+    }
 
     public static let all = [ultraLow, maxPerformance, balanced, quality]
 

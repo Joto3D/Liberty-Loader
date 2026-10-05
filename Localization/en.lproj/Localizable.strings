@@ -56,6 +56,8 @@
 "Connect Nexus Mods (optional)" = "Connect Nexus Mods (optional)";
 "Connected" = "Connected";
 "Copies mods into the game right after you install, enable, reorder or remove them." = "Copies mods into the game right after you install, enable, reorder or remove them.";
+"Copies your whole user_settings.config, to send when asking for help with settings." = "Copies your whole user_settings.config, to send when asking for help with settings.";
+"Copy Config" = "Copy Config";
 "Copy Log" = "Copy Log";
 "Copy Report" = "Copy Report";
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Copy enabled mods into the game folder (also done automatically on launch).";
@@ -120,6 +122,8 @@
 "Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over." = "Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over.";
 "Galactic War" = "Galactic War";
 "Galactic War status is unavailable right now." = "Galactic War status is unavailable right now.";
+"Game config" = "Game config";
+"Game config copied." = "Game config copied.";
 "Game folder" = "Game folder";
 "Game memory: %@" = "Game memory: %@";
 "Game settings saved." = "Game settings saved.";

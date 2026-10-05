@@ -146,6 +146,16 @@ struct PerformanceView: View {
                     }
                     Divider().overlay(Color.hdBorder)
                     SettingRow(
+                        icon: "doc.on.clipboard",
+                        title: "Game config",
+                        detail: "Copies your whole user_settings.config, to send when asking for help with settings."
+                    ) {
+                        Button("Copy Config", action: copyConfig)
+                            .buttonStyle(HDSecondaryButtonStyle())
+                            .disabled(model.game == nil)
+                    }
+                    Divider().overlay(Color.hdBorder)
+                    SettingRow(
                         icon: "cpu",
                         title: "CPU or GPU limit?",
                         detail: "Turn on the Metal FPS overlay. If GPU time is much lower than Frame Interval, your CPU is the limit: lower resolution and upscaling won't help much, an FPS cap of 30–40 plays smoother."
@@ -361,10 +371,14 @@ struct PerformanceView: View {
                                     .multilineTextAlignment(.trailing)
                                 }
                             }
-                            Button("Save Settings", action: saveAdvanced)
-                                .buttonStyle(HDPrimaryButtonStyle())
-                                .disabled(model.isGameRunning)
-                                .padding(.top, 6)
+                            HStack {
+                                Button("Save Settings", action: saveAdvanced)
+                                    .buttonStyle(HDPrimaryButtonStyle())
+                                    .disabled(model.isGameRunning)
+                                Button("Copy Config", action: copyConfig)
+                                    .buttonStyle(HDSecondaryButtonStyle())
+                            }
+                            .padding(.top, 6)
                         }
                     } else {
                         Text("user_settings.config not found. Launch Helldivers 2 once to create it.")
@@ -387,6 +401,17 @@ struct PerformanceView: View {
         dxReport = DirectXReport.collect(game: game, extraArguments: model.launchArguments, choice: model.directX)
     }
 
+    private func copyConfig() {
+        guard let game = model.game,
+              let text = try? String(contentsOf: game.userSettingsURL, encoding: .utf8) else {
+            model.statusMessage = String(localized: "user_settings.config not found. Launch Helldivers 2 once to create it.")
+            return
+        }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        model.statusMessage = String(localized: "Game config copied.")
+    }
+
     private func applyLowMemorySettings() {
         guard let game = model.game else { return }
         model.perform {
@@ -404,7 +429,7 @@ struct PerformanceView: View {
         model.perform {
             if var config = try? UserSettingsConfig.load(from: game.userSettingsURL) {
                 try model.backups?.backup(game.userSettingsURL, label: "Before \(preset.name)")
-                skippedKeys = config.apply(preset.gameSettings)
+                skippedKeys = config.apply(preset.settingsToApply)
                 try config.write(to: game.userSettingsURL)
             }
             editBottle {
