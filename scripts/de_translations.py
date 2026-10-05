@@ -408,4 +408,8 @@ DE = {
 "Copy Config": "Config kopieren",
 "Game config": "Spiel-Config",
 "Game config copied.": "Spiel-Config kopiert.",
+"Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS.": "Unter den niedrigsten Einstellungen des Spiels, wie die Ultimate-Performance-Mod. Alle Effekte aus, sogar Sonnenschatten, für schwache Macs oder maximale FPS.",
+"For Max/Ultra chips. High shadows, reflections and effects.": "Für Max/Ultra-Chips. Hohe Schatten, Spiegelungen und Effekte.",
+"For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap.": "Für Pro-Chips mit 16–32 GB. Mittlere Schatten und Effekte, 60-FPS-Limit.",
+"For base M1–M4 chips and 8–16 GB Macs. Lowest shadows, particles and view distance, 30 FPS cap for stable frame times.": "Für M1–M4-Basischips und Macs mit 8–16 GB. Niedrigste Schatten, Partikel und Sichtweite, 30-FPS-Limit für gleichmäßige Bildzeiten.",
 }

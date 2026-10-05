@@ -65,6 +65,24 @@ final class PerformanceTests: TempDirTestCase {
         XCTAssertEqual(UserSettingsConfig(text: config.text).entries.count, 4)
     }
 
+    /// Key names taken from a real Helldivers 2 user_settings.config (October 2026).
+    let realConfig = "anti_lag = true\nIGNORE_APPROVED_DRIVER_WARNING = false\nenable_resource_lock_debug = true\n"
+        + "render_settings = {\n\tshadows = 1\n\tparticle_quality = 1\n\tterrain_quality = 1\n\ttexture_quality = 1\n\tvolumetric_clouds_quality = 1\n\tvolumetric_fog_quality = 1\n\treflection_quality = 1\n\tlighting_and_material_quality = 1\n\tupscaling_quality = 1\n\tssao_enabled = 1\n\tssr_enabled = 1\n\tdof_enabled = 1\n\tmotion_blur_enabled = 1\n\tbloom_enabled = 1\n\tobject_lod_quality = 1\n\tspace_quality = 1\n\tparticles_tessellation = 1\n\theathaze_enabled = 1\n\tsun_shadows = 1\n\tfar_scatter_enabled = 1\n\tparticles_receive_shadows = 1\n\tparticles_local_lighting = 1\n\twind_enabled = 1\n\tview_distance = \"medium\"\n\trender_resolution = [\n\t\t800\n\t\t456\n\t]\n}\n"
+        + "vsync = true\nreflex_mode = 2\nframerate_limit_enabled = false\nframerate_limit = 144\n"
+
+    func testBuiltInPresetsMatchRealConfigKeys() {
+        for preset in PerformancePreset.all {
+            var config = UserSettingsConfig(text: realConfig)
+            XCTAssertEqual(config.apply(preset.settingsToApply), [], preset.id)
+        }
+        var config = UserSettingsConfig(text: realConfig)
+        _ = config.apply(PerformancePreset.ultraLow.settingsToApply)
+        XCTAssertTrue(config.text.contains("\tview_distance = \"low\"\n"))
+        XCTAssertTrue(config.text.contains("\tsun_shadows = false\n"))
+        XCTAssertTrue(config.text.contains("reflex_mode = 0"))
+        XCTAssertTrue(config.text.contains("\t\t456\n"))
+    }
+
     func testBuiltInPresetsAddMacFriendlySettings() {
         let settings = PerformancePreset.balanced.settingsToApply
         XCTAssertEqual(settings["IGNORE_APPROVED_DRIVER_WARNING"], "true")
