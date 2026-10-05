@@ -17,9 +17,9 @@ final class PerformanceTests: TempDirTestCase {
     player_name = "Diver = 1"
     """
 
-    func testParsesOnlyTopLevelEntries() {
+    func testParsesTopLevelAndNestedEntries() {
         let config = UserSettingsConfig(text: sample)
-        XCTAssertEqual(config.entries.map(\.key), ["shadow_quality", "vsync", "render_resolution_scale", "player_name"])
+        XCTAssertEqual(config.entries.map(\.key), ["shadow_quality", "vsync", "render_resolution_scale", "controls.shadow_quality", "player_name"])
         XCTAssertEqual(config.value(for: "player_name"), "\"Diver = 1\"")
     }
 
@@ -32,6 +32,45 @@ final class PerformanceTests: TempDirTestCase {
             .replacingOccurrences(of: "vsync = true", with: "vsync = false")
         XCTAssertEqual(config.text, expected)
         XCTAssertTrue(config.text.contains("shadow_quality = 99"))
+    }
+
+    let hd2Sample = """
+    framerate_limit = 30
+    render_settings = {
+        shadows = 2
+        texture_quality = 3
+        sizes = [
+            depth = 1
+        ]
+    }
+    other =
+    {
+        texture_quality = 1
+    }
+    """
+
+    func testNestedRenderSettings() {
+        var config = UserSettingsConfig(text: hd2Sample)
+        XCTAssertEqual(config.entries.map(\.key), [
+            "framerate_limit", "render_settings.shadows", "render_settings.texture_quality", "other.texture_quality",
+        ])
+        let missing = config.apply(["shadows": "0", "framerate_limit": "40", "texture_quality": "0"])
+        // texture_quality exists in two blocks, so it's ambiguous and left alone.
+        XCTAssertEqual(missing, ["texture_quality"])
+        XCTAssertTrue(config.text.contains("framerate_limit = 40"))
+        XCTAssertTrue(config.text.contains("\n    shadows = 0\n"))
+        XCTAssertTrue(config.text.contains("texture_quality = 3"))
+        XCTAssertTrue(config.set("render_settings.texture_quality", to: "1"))
+        XCTAssertTrue(config.text.contains("\n    texture_quality = 1\n    sizes"))
+        XCTAssertEqual(UserSettingsConfig(text: config.text).entries.count, 4)
+    }
+
+    func testBuiltInPresetsAddMacFriendlySettings() {
+        let settings = PerformancePreset.balanced.settingsToApply
+        XCTAssertEqual(settings["IGNORE_APPROVED_DRIVER_WARNING"], "true")
+        XCTAssertEqual(settings["framerate_limit"], "60")
+        let custom = PerformancePreset.custom(name: "x", config: UserSettingsConfig(text: "a = 1"), bottle: nil)
+        XCTAssertEqual(custom.settingsToApply, ["a": "1"])
     }
 
     func testBottleConfigEditing() {

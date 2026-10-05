@@ -56,6 +56,8 @@
 "Connect Nexus Mods (optional)" = "Nexus Mods verbinden (optional)";
 "Connected" = "Verbunden";
 "Copies mods into the game right after you install, enable, reorder or remove them." = "Kopiert Mods sofort ins Spiel, wenn du sie installierst, einschaltest, umsortierst oder entfernst.";
+"Copies your whole user_settings.config, to send when asking for help with settings." = "Kopiert deine ganze user_settings.config, um sie zu schicken, wenn du Hilfe bei den Einstellungen brauchst.";
+"Copy Config" = "Config kopieren";
 "Copy Log" = "Protokoll kopieren";
 "Copy Report" = "Bericht kopieren";
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Aktivierte Mods in den Spielordner kopieren (passiert beim Start auch automatisch).";
@@ -120,6 +122,8 @@
 "Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over." = "Kostenloses Nexus-Konto: „Installieren“ öffnet die Mod-Seite. Klick dort auf „Mod Manager Download“, dann übernimmt Liberty Loader.";
 "Galactic War" = "Galaktischer Krieg";
 "Galactic War status is unavailable right now." = "Der Status des Galaktischen Kriegs ist gerade nicht verfügbar.";
+"Game config" = "Spiel-Config";
+"Game config copied." = "Spiel-Config kopiert.";
 "Game folder" = "Spielordner";
 "Game memory: %@" = "Spiel-Speicher: %@";
 "Game settings saved." = "Spieleinstellungen gespeichert.";
