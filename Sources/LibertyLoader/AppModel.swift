@@ -36,6 +36,9 @@ final class AppModel {
     var statusMessage: String?
     var errorMessage: String?
     var showImporter = false
+    /// Set when a free Nexus account needs to finish an install on Nexus's own
+    /// page. ContentView presents it; see NexusWebSheet for why.
+    var nexusWebInstall: NexusModSummary?
     var isSteamRunning = false
 
     // Launch watchdog: set when a launch never produced a running game.

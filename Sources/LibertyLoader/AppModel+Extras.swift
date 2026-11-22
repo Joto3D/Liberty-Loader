@@ -150,8 +150,10 @@ extension AppModel {
     func installFromBrowser(_ mod: NexusModSummary) async {
         if nexusUser == nil { await refreshNexusUser() }
         guard nexusUser?.is_premium == true else {
-            NSWorkspace.shared.open(URL(string: "https://www.nexusmods.com/\(NexusClient.gameDomain)/mods/\(mod.id)?tab=files")!)
-            statusMessage = String(localized: "Click “Mod Manager Download” on Nexus Mods to finish installing.")
+            // Free accounts cannot get a download link from the API; only
+            // Nexus's own page mints the token. Show that page in the app
+            // instead of handing the user off to a browser.
+            nexusWebInstall = mod
             return
         }
         do {
