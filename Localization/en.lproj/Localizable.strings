@@ -4,6 +4,7 @@
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11.";
 "%@ mods" = "%@ mods";
 "%@ of %@ mods" = "%@ of %@ mods";
+"%@ results" = "%@ results";
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld file overlaps. Mods lower in the list win.";
 "%lld files are not in the game folder yet." = "%lld files are not in the game folder yet.";
@@ -234,6 +235,7 @@
 "Mods were never copied into the game" = "Mods were never copied into the game";
 "Mods, performance and launch, managed for your Mac." = "Mods, performance and launch, managed for your Mac.";
 "More" = "More";
+"Most downloaded" = "Most downloaded";
 "Most endorsed" = "Most endorsed";
 "Move to Bottom" = "Move to Bottom";
 "Name" = "Name";
@@ -250,7 +252,9 @@
 "Nexus Mods did not return this mod's requirements." = "Nexus Mods did not return this mod's requirements.";
 "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website." = "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website.";
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods rejected the API key. Check it in Settings.";
+"Nexus Mods rejected the browse query: %@" = "Nexus Mods rejected the browse query: %@";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods returned an error (%lld).";
+"Nexus Mods returned an unexpected browse response." = "Nexus Mods returned an unexpected browse response.";
 "Nexus mod %lld" = "Nexus mod %lld";
 "Nexus order" = "Nexus order";
 "No Helldivers 2 install found. Looked in %@ and %@." = "No Helldivers 2 install found. Looked in %@ and %@.";
@@ -387,6 +391,7 @@
 "This mod is turned off." = "This mod is turned off.";
 "This mod needs another mod. Click to install it." = "This mod needs another mod. Click to install it.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory.";
+"Top rated" = "Top rated";
 "Trending" = "Trending";
 "Try Again" = "Try Again";
 "Turn Off" = "Turn Off";

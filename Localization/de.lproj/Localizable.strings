@@ -4,6 +4,7 @@
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ ist in %@ deaktiviert. DirectX 12 kann nicht starten, deshalb weicht das Spiel auf DirectX 11 aus.";
 "%@ mods" = "%@ Mods";
 "%@ of %@ mods" = "%@ von %@ Mods";
+"%@ results" = "%@ Ergebnisse";
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld Datei-Überschneidungen. Mods weiter unten in der Liste gewinnen.";
 "%lld files are not in the game folder yet." = "%lld Dateien sind noch nicht im Spielordner.";
@@ -234,6 +235,7 @@
 "Mods were never copied into the game" = "Die Mods wurden nie ins Spiel kopiert";
 "Mods, performance and launch, managed for your Mac." = "Mods, Leistung und Start, alles für deinen Mac.";
 "More" = "Mehr";
+"Most downloaded" = "Meiste Downloads";
 "Most endorsed" = "Meiste Empfehlungen";
 "Move to Bottom" = "Nach unten schieben";
 "Name" = "Name";
@@ -250,7 +252,9 @@
 "Nexus Mods did not return this mod's requirements." = "Nexus Mods hat die Voraussetzungen dieser Mod nicht geliefert.";
 "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website." = "Nexus Mods hat den Download abgelehnt. Mit einem kostenlosen Konto musst du den Button „Mod Manager Download“ auf der Website nutzen.";
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods hat den API-Schlüssel abgelehnt. Prüf ihn in den Einstellungen.";
+"Nexus Mods rejected the browse query: %@" = "Nexus Mods hat die Browse-Abfrage abgelehnt: %@";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods hat einen Fehler gemeldet (%lld).";
+"Nexus Mods returned an unexpected browse response." = "Nexus Mods hat eine unerwartete Browse-Antwort geliefert.";
 "Nexus mod %lld" = "Nexus-Mod %lld";
 "Nexus order" = "Nexus-Reihenfolge";
 "No Helldivers 2 install found. Looked in %@ and %@." = "Keine Helldivers 2-Installation gefunden. Gesucht in %@ und %@.";
@@ -387,6 +391,7 @@
 "This mod is turned off." = "Diese Mod ist ausgeschaltet.";
 "This mod needs another mod. Click to install it." = "Diese Mod braucht eine andere Mod. Klick, um sie zu installieren.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tipp: Den hochauflösenden Modus (Retina) auf der Leistung-Seite auszuschalten hilft auch bei Abstürzen wegen wenig Arbeitsspeicher.";
+"Top rated" = "Bestbewertet";
 "Trending" = "Angesagt";
 "Try Again" = "Nochmal versuchen";
 "Turn Off" = "Ausschalten";
