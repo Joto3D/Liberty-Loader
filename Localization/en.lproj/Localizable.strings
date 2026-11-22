@@ -399,8 +399,12 @@
 "You pinned this mod. Right-click to change it." = "You pinned this mod. Right-click to change it.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
+"file has the executable bit set" = "file has the executable bit set";
 "launch arguments force DX11" = "launch arguments force DX11";
+"native code (.%@)" = "native code (.%@)";
 "no cause found" = "no cause found";
+"script (.%@)" = "script (.%@)";
+"ships a top-level \"%@\" folder with files in it" = "ships a top-level \"%@\" folder with files in it";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
 "“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
