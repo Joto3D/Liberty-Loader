@@ -9,7 +9,7 @@ public struct Bottle: Identifiable, Equatable, Sendable {
 }
 
 /// Finds CrossOver bottles and the Helldivers 2 install inside them.
-public struct BottleScanner {
+public struct BottleScanner: Sendable {
     public static var defaultBottlesDirectory: URL {
         FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/CrossOver/Bottles")

@@ -56,7 +56,10 @@ struct PlayView: View {
                         Label(model.isGameRunning ? LocalizedStringKey("Deployed") : LocalizedStringKey("Launch"), systemImage: model.isGameRunning ? "checkmark" : "play.fill")
                     }
                     .buttonStyle(HDPrimaryButtonStyle(large: true))
-                    .disabled(model.crossOver == nil || model.game == nil || model.isGameRunning)
+                    // Obelisk starts the game itself; launching it through
+                    // CrossOver's wine would run the wrong stack entirely.
+                    .disabled(!model.canLaunch || model.crossOver == nil || model.game == nil || model.isGameRunning)
+                    .help(model.canLaunch ? "" : "This install is managed by \(model.game?.source.displayName ?? "another launcher"). Start the game from there.")
                     .keyboardShortcut(.return, modifiers: .command)
 
                     Button(action: model.forceQuit) {

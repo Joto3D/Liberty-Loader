@@ -6,11 +6,9 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
       - name: Check translations
         run: |
           python3 scripts/check_strings.py
@@ -19,6 +17,11 @@ jobs:
         run: swift build
       - name: Test
         run: swift test
+      # liberty-check mirrors the same assertions without XCTest, so work can be
+      # verified on a machine with no Xcode. Running it here too means the two
+      # copies cannot drift apart unnoticed.
+      - name: Test without XCTest
+        run: swift run liberty-check
       - name: Bundle app
         run: scripts/bundle.sh --dmg
       - uses: actions/upload-artifact@v4

@@ -8,7 +8,9 @@ cd "$(dirname "$0")/.."
 VERSION="${VERSION:-0.1.0}"
 APP="build/Liberty Loader.app"
 
-swift build -c release --arch arm64 --arch x86_64
+# Only the app. liberty-check uses @testable, which needs a debug build, and
+# the test runner has no business in a release bundle anyway.
+swift build -c release --arch arm64 --arch x86_64 --product LibertyLoader
 BIN="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/LibertyLoader"
 
 rm -rf "$APP"

@@ -139,6 +139,7 @@
 "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing." = "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing.";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 found in bottle “%@”";
 "Helldivers 2 hasn't started" = "Helldivers 2 hasn't started";
+"Helldivers 2 install" = "Helldivers 2 install";
 "Helldivers 2 is running" = "Helldivers 2 is running";
 "Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 is using %@. Restart the game after this mission.";
 "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game.";
@@ -200,6 +201,7 @@
 "Low-memory textures applied. Restart the game if it is running." = "Low-memory textures applied. Restart the game if it is running.";
 "MSync" = "MSync";
 "Major Order" = "Major Order";
+"Managed by" = "Managed by";
 "Manual edit" = "Manual edit";
 "Max Performance" = "Max Performance";
 "Memory %@" = "Memory %@";
@@ -238,6 +240,7 @@
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods rejected the API key. Check it in Settings.";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods returned an error (%lld).";
 "Nexus mod %lld" = "Nexus mod %lld";
+"No Helldivers 2 install found. Looked in %@ and %@." = "No Helldivers 2 install found. Looked in %@ and %@.";
 "No backup is available for this file." = "No backup is available for this file.";
 "No backups yet." = "No backups yet.";
 "No bottle selected." = "No bottle selected.";
@@ -253,6 +256,7 @@
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Not in your config: %@. Launch the game once and change a graphics option to create a complete config.";
 "Not set" = "Not set";
 "OK" = "OK";
+"Obelisk" = "Obelisk";
 "Off" = "Off";
 "Off gives much higher FPS. On looks sharper but renders 4× the pixels." = "Off gives much higher FPS. On looks sharper but renders 4× the pixels.";
 "Only %lld GB memory" = "Only %lld GB memory";
@@ -395,8 +399,12 @@
 "You pinned this mod. Right-click to change it." = "You pinned this mod. Right-click to change it.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
+"file has the executable bit set" = "file has the executable bit set";
 "launch arguments force DX11" = "launch arguments force DX11";
+"native code (.%@)" = "native code (.%@)";
 "no cause found" = "no cause found";
+"script (.%@)" = "script (.%@)";
+"ships a top-level \"%@\" folder with files in it" = "ships a top-level \"%@\" folder with files in it";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
 "“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
