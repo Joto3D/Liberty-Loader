@@ -2,6 +2,8 @@
 
 "%@ applied. Restart the game if it is running." = "%@ applied. Restart the game if it is running.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11.";
+"%@ mods" = "%@ mods";
+"%@ of %@ mods" = "%@ of %@ mods";
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld file overlaps. Mods lower in the list win.";
 "%lld files are not in the game folder yet." = "%lld files are not in the game folder yet.";
@@ -11,6 +13,7 @@
 "API key" = "API key";
 "Add your Nexus Mods API key in Settings first." = "Add your Nexus Mods API key in Settings first.";
 "Add your free Nexus Mods API key in Settings to browse and install mods here." = "Add your free Nexus Mods API key in Settings to browse and install mods here.";
+"Adult mods are hidden unless you ask for them." = "Adult mods are hidden unless you ask for them.";
 "All" = "All";
 "All Nexus mods are up to date." = "All Nexus mods are up to date.";
 "All game settings" = "All game settings";
@@ -48,6 +51,7 @@
 "Checks every mod against your game folder and explains what's wrong." = "Checks every mod against your game folder and explains what's wrong.";
 "Checks why mods might not show up in game." = "Checks why mods might not show up in game.";
 "Choose CrossOver.app…" = "Choose CrossOver.app…";
+"Clear filters" = "Clear filters";
 "Clear filters to reorder" = "Clear filters to reorder";
 "Click “Mod Manager Download” on Nexus Mods to finish installing." = "Click “Mod Manager Download” on Nexus Mods to finish installing.";
 "Close" = "Close";
@@ -113,6 +117,7 @@
 "Field manual" = "Field manual";
 "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them." = "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them.";
 "Filter" = "Filter";
+"Filters as you type; press Return to search all of Nexus Mods." = "Filters as you type; press Return to search all of Nexus Mods.";
 "For Max/Ultra chips. High shadows, reflections and effects." = "For Max/Ultra chips. High shadows, reflections and effects.";
 "For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap." = "For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap.";
 "For Super Earth" = "For Super Earth";
@@ -151,6 +156,7 @@
 "Helldivers 2 was not found, so mods can't be checked." = "Helldivers 2 was not found, so mods can't be checked.";
 "Helldivers 2 was updated" = "Helldivers 2 was updated";
 "Hide Log" = "Hide Log";
+"Hide installed" = "Hide installed";
 "High Resolution (Retina) Mode" = "High Resolution (Retina) Mode";
 "High Resolution Mode turned off." = "High Resolution Mode turned off.";
 "High Resolution Mode turned on." = "High Resolution Mode turned on.";
@@ -196,7 +202,9 @@
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac.";
 "Liberty Loader's launch options force DirectX 11." = "Liberty Loader's launch options force DirectX 11.";
 "Load Order" = "Load Order";
+"Load more" = "Load more";
 "Loading the description from Nexus Mods…" = "Loading the description from Nexus Mods…";
+"Loading…" = "Loading…";
 "Location" = "Location";
 "Low-memory textures applied. Restart the game if it is running." = "Low-memory textures applied. Restart the game if it is running.";
 "MSync" = "MSync";
@@ -226,20 +234,25 @@
 "Mods were never copied into the game" = "Mods were never copied into the game";
 "Mods, performance and launch, managed for your Mac." = "Mods, performance and launch, managed for your Mac.";
 "More" = "More";
+"Most endorsed" = "Most endorsed";
 "Move to Bottom" = "Move to Bottom";
+"Name" = "Name";
 "Name, e.g. Cosmetics only" = "Name, e.g. Cosmetics only";
 "Name, e.g. My Settings" = "Name, e.g. My Settings";
 "Needs %@" = "Needs %@";
+"Needs a mod runtime that patches the game while it runs." = "Needs a mod runtime that patches the game while it runs.";
 "Needs the D3DMetal graphics backend." = "Needs the D3DMetal graphics backend.";
 "Needs “%@”, which isn't installed." = "Needs “%@”, which isn't installed.";
 "New" = "New";
 "Nexus Mods" = "Nexus Mods";
 "Nexus Mods API key saved." = "Nexus Mods API key saved.";
 "Nexus Mods did not return a download link." = "Nexus Mods did not return a download link.";
+"Nexus Mods did not return this mod's requirements." = "Nexus Mods did not return this mod's requirements.";
 "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website." = "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website.";
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods rejected the API key. Check it in Settings.";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods returned an error (%lld).";
 "Nexus mod %lld" = "Nexus mod %lld";
+"Nexus order" = "Nexus order";
 "No Helldivers 2 install found. Looked in %@ and %@." = "No Helldivers 2 install found. Looked in %@ and %@.";
 "No backup is available for this file." = "No backup is available for this file.";
 "No backups yet." = "No backups yet.";
@@ -252,6 +265,7 @@
 "No mods found." = "No mods found.";
 "No mods installed." = "No mods installed.";
 "No mods match." = "No mods match.";
+"No required mods listed." = "No required mods listed.";
 "Not found" = "Not found";
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Not in your config: %@. Launch the game once and change a graphics option to create a complete config.";
 "Not set" = "Not set";
@@ -305,6 +319,7 @@
 "Remove All Mod Files From Game…" = "Remove All Mod Files From Game…";
 "Remove all mod files from the game folder?" = "Remove all mod files from the game folder?";
 "Removed all mod files. The game folder is vanilla again." = "Removed all mod files. The game folder is vanilla again.";
+"Requires: %@" = "Requires: %@";
 "Rescan" = "Rescan";
 "Restore" = "Restore";
 "Restore Original Settings" = "Restore Original Settings";
@@ -333,6 +348,7 @@
 "Show Game Folder" = "Show Game Folder";
 "Show Guide" = "Show Guide";
 "Show Log" = "Show Log";
+"Show adult" = "Show adult";
 "Show all %lld backups" = "Show all %lld backups";
 "Show fewer" = "Show fewer";
 "Show in Finder" = "Show in Finder";
@@ -343,6 +359,7 @@
 "Some mods may not work" = "Some mods may not work";
 "Some settings were skipped" = "Some settings were skipped";
 "Something went wrong" = "Something went wrong";
+"Sort" = "Sort";
 "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again." = "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again.";
 "Steam still forces DirectX 11" = "Steam still forces DirectX 11";
 "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties." = "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties.";
@@ -410,3 +427,4 @@
 "“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
 "“%@” is kept at the top of the list, as its description asks." = "“%@” is kept at the top of the list, as its description asks.";
+"“Nexus order” keeps the ranking Nexus returned for this tab." = "“Nexus order” keeps the ranking Nexus returned for this tab.";

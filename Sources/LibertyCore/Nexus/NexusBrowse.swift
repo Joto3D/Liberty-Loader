@@ -18,7 +18,8 @@ public struct NexusModSummary: Decodable, Identifiable, Equatable, Sendable {
         URL(string: "https://www.nexusmods.com/\(NexusClient.gameDomain)/mods/\(mod_id)")!
     }
 
-    public init(modID: Int, name: String?, summary: String?, pictureURL: String?, endorsements: Int?, author: String?, version: String?) {
+    public init(modID: Int, name: String?, summary: String?, pictureURL: String?, endorsements: Int?, author: String?, version: String?,
+                available: Bool? = true, containsAdultContent: Bool? = false) {
         mod_id = modID
         self.name = name
         self.summary = summary
@@ -26,8 +27,8 @@ public struct NexusModSummary: Decodable, Identifiable, Equatable, Sendable {
         endorsement_count = endorsements
         self.author = author
         self.version = version
-        available = true
-        contains_adult_content = false
+        self.available = available
+        contains_adult_content = containsAdultContent
     }
 
     /// Hidden or adult mods are never shown.
@@ -52,6 +53,26 @@ public struct NexusUser: Decodable, Equatable, Sendable {
     public let is_premium: Bool?
 }
 
+/// One page of a browse list. `hasMore` comes from the list itself, never from a count guess.
+public struct NexusPage: Equatable, Sendable {
+    public let mods: [NexusModSummary]
+    public let hasMore: Bool
+
+    public init(mods: [NexusModSummary], hasMore: Bool) {
+        self.mods = mods
+        self.hasMore = hasMore
+    }
+
+    /// Slices an already-filtered list. Out-of-range pages are empty with `hasMore == false`.
+    static func slice(_ all: [NexusModSummary], page: Int, pageSize: Int) -> NexusPage {
+        guard page >= 0, pageSize > 0 else { return NexusPage(mods: [], hasMore: false) }
+        let (start, overflow) = page.multipliedReportingOverflow(by: pageSize)
+        guard !overflow, start < all.count else { return NexusPage(mods: [], hasMore: false) }
+        let end = min(all.count, start + pageSize)
+        return NexusPage(mods: Array(all[start..<end]), hasMore: end < all.count)
+    }
+}
+
 public enum NexusList: String, CaseIterable, Sendable {
     case trending
     case latestAdded = "latest_added"
@@ -62,6 +83,28 @@ extension NexusClient {
     public func list(_ list: NexusList, game: String = NexusClient.gameDomain) async throws -> [NexusModSummary] {
         let mods: [NexusModSummary] = try await get("games/\(game)/mods/\(list.rawValue).json")
         return mods.filter(\.isListable)
+    }
+
+    /// One page of a browse list. The v1 list endpoint does not page, so this fetches the whole
+    /// list once and slices it. The fetched list is cached inside this client instance (and any
+    /// copies of it) so later pages do not refetch; use a new `NexusClient` to refresh.
+    public func list(_ list: NexusList, page: Int, pageSize: Int, game: String = NexusClient.gameDomain) async throws -> NexusPage {
+        let key = "\(game)/\(list.rawValue)"
+        let all: [NexusModSummary]
+        if let cached = await listCache.value(for: key) {
+            all = cached
+        } else {
+            all = try await self.list(list, game: game)
+            await listCache.store(all, for: key)
+        }
+        return NexusPage.slice(all, page: page, pageSize: pageSize)
+    }
+
+    /// Requirements for a mod before it is installed, via the existing v2 lookup.
+    /// Throws `ClientError.requirementsUnavailable` when the API is unreachable or its schema changed.
+    public func requirementsBeforeInstall(modID: Int, game: String = NexusClient.gameDomain) async throws -> [NexusRequirement] {
+        guard let found = await requirements(modID: modID, game: game) else { throw ClientError.requirementsUnavailable }
+        return found
     }
 
     public func files(modID: Int, game: String = NexusClient.gameDomain) async throws -> [NexusFile] {
@@ -83,10 +126,29 @@ extension NexusClient {
     /// Searches mods by name through the Nexus v2 GraphQL API.
     /// The schema is outside our control, so any failure returns nil and callers fall back to local filtering.
     public func search(_ term: String, game: String = NexusClient.gameDomain, count: Int = 30) async -> [NexusModSummary]? {
+        // `adultContent` lets search hide the same mods the browse lists hide.
+        // The field name is taken from the v2 schema, which is outside our
+        // control: if it is ever wrong or removed, GraphQL rejects the whole
+        // query and search would stop working altogether. So ask for it, and
+        // if the request fails, ask again without it. Losing the adult filter
+        // on search is a much smaller harm than losing search.
+        for fields in [Self.searchFields(includeAdult: true), Self.searchFields(includeAdult: false)] {
+            if let found = await searchOnce(term: term, game: game, count: count, fields: fields) {
+                return found
+            }
+        }
+        return nil
+    }
+
+    private static func searchFields(includeAdult: Bool) -> String {
+        "modId name summary pictureUrl endorsements version\(includeAdult ? " adultContent" : "") uploader { name }"
+    }
+
+    private func searchOnce(term: String, game: String, count: Int, fields: String) async -> [NexusModSummary]? {
         let query = """
         query Search($filter: ModsFilter, $count: Int) {
           mods(filter: $filter, count: $count) {
-            nodes { modId name summary pictureUrl endorsements version uploader { name } }
+            nodes { \(fields) }
           }
         }
         """
@@ -107,7 +169,13 @@ extension NexusClient {
         if !apiKey.isEmpty { request.setValue(apiKey, forHTTPHeaderField: "apikey") }
         guard let result = try? await session.data(for: request),
               (result.1 as? HTTPURLResponse)?.statusCode == 200 else { return nil }
-        return Self.parseSearch(result.0)
+        // GraphQL answers an unknown field with 200 and an `errors` array, so a
+        // status code alone does not mean the query was understood.
+        if let json = try? JSONSerialization.jsonObject(with: result.0) as? [String: Any],
+           let errors = json["errors"] as? [[String: Any]], !errors.isEmpty {
+            return nil
+        }
+        return Self.parseSearch(result.0)?.filter(\.isListable)
     }
 
     static func parseSearch(_ data: Data) -> [NexusModSummary]? {
@@ -124,8 +192,28 @@ extension NexusClient {
                 pictureURL: node["pictureUrl"] as? String,
                 endorsements: node["endorsements"] as? Int,
                 author: (node["uploader"] as? [String: Any])?["name"] as? String,
-                version: node["version"] as? String
+                version: node["version"] as? String,
+                // Absent stays nil so behaviour is unchanged for responses without these fields.
+                available: (node["status"] as? String).map { $0.lowercased() == "published" },
+                containsAdultContent: node["adultContent"] as? Bool
             )
         }
     }
+}
+
+extension Array where Element == NexusRequirement {
+    /// Requirements that mean this mod runs code in the game, as opposed to
+    /// replacing assets. Bingus Shared Loader and HD2Runtime exist to patch
+    /// the running game, so needing either is the pre-install equivalent of
+    /// CosmeticCheck's runtimeDependency signal. Mod managers are excluded:
+    /// Liberty Loader replaces them on the Mac.
+    public var runtimeRequirements: [NexusRequirement] {
+        filter { requirement in
+            guard !requirement.isModManager else { return false }
+            let name = requirement.name.lowercased()
+            return ["bingus", "hd2runtime", "hd2 runtime"].contains { name.contains($0) }
+        }
+    }
+
+    public var needsModRuntime: Bool { !runtimeRequirements.isEmpty }
 }

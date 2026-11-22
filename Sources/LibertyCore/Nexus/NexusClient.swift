@@ -28,6 +28,7 @@ public struct NexusClient {
         case missingAPIKey
         case http(Int)
         case noDownloadLink
+        case requirementsUnavailable
 
         public var errorDescription: String? {
             switch self {
@@ -36,11 +37,20 @@ public struct NexusClient {
             case .http(403): return String(localized: "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website.")
             case .http(let code): return String(localized: "Nexus Mods returned an error (\(code)).")
             case .noDownloadLink: return String(localized: "Nexus Mods did not return a download link.")
+            case .requirementsUnavailable: return String(localized: "Nexus Mods did not return this mod's requirements.")
             }
         }
     }
 
+    /// Per-client cache of fetched browse lists, shared by copies of this client. Not global.
+    actor ListCache {
+        private var lists: [String: [NexusModSummary]] = [:]
+        func value(for key: String) -> [NexusModSummary]? { lists[key] }
+        func store(_ mods: [NexusModSummary], for key: String) { lists[key] = mods }
+    }
+
     public let apiKey: String
+    let listCache = ListCache()
     public var session: URLSession = .shared
     let base = URL(string: "https://api.nexusmods.com/v1/")!
 

@@ -33,14 +33,30 @@ struct BrowseView: View {
     @State private var mods: [NexusModSummary] = []
     @State private var searchResults: [NexusModSummary]?
     @State private var isLoading = false
+    @State private var isLoadingMore = false
     @State private var loadError: String?
     @State private var detail: NexusModSummary?
+    @State private var sort: BrowseQuery.Sort = .nexus
+    @State private var hideInstalled = false
+    @State private var allowAdult = false
+    @State private var page = 0
+    @State private var hasMore = false
+
+    private static let pageSize = 40
+
+    private var query: BrowseQuery {
+        // Server-side search already matched the term, so re-applying it here
+        // would only narrow results the API deliberately returned.
+        BrowseQuery(text: searchResults == nil ? search : "",
+                    sort: sort, hideInstalled: hideInstalled, allowAdult: allowAdult)
+    }
 
     private var shown: [NexusModSummary] {
-        if let searchResults { return searchResults }
-        guard !search.isEmpty else { return mods }
-        return mods.filter { ($0.name ?? "").localizedCaseInsensitiveContains(search) }
+        query.apply(to: searchResults ?? mods, installedIDs: model.installedNexusIDs)
     }
+
+    /// Paging only makes sense on a browse list, not on a search result set.
+    private var canLoadMore: Bool { searchResults == nil && hasMore && !isLoading }
 
     var body: some View {
         HDPage {
@@ -58,6 +74,7 @@ struct BrowseView: View {
                 }
             } else {
                 controls
+                filters
                 if model.nexusUser != nil && model.nexusUser?.is_premium != true {
                     Text("Free Nexus account: Install opens the mod page. Click “Mod Manager Download” there and Liberty Loader takes over.")
                         .font(.caption)
@@ -90,6 +107,7 @@ struct BrowseView: View {
                 TextField("Search Nexus Mods", text: $search)
                     .textFieldStyle(.plain)
                     .onSubmit { Task { await runSearch() } }
+                    .help("Filters as you type; press Return to search all of Nexus Mods.")
                 if !search.isEmpty {
                     Button {
                         search = ""
@@ -111,6 +129,44 @@ struct BrowseView: View {
         }
     }
 
+    private var filters: some View {
+        HStack(spacing: 14) {
+            Picker("Sort", selection: $sort) {
+                Text("Nexus order").tag(BrowseQuery.Sort.nexus)
+                Text("Most endorsed").tag(BrowseQuery.Sort.endorsements)
+                Text("Name").tag(BrowseQuery.Sort.name)
+            }
+            .pickerStyle(.menu)
+            .labelsHidden()
+            .frame(width: 150)
+            .help("“Nexus order” keeps the ranking Nexus returned for this tab.")
+
+            Toggle("Hide installed", isOn: $hideInstalled)
+                .toggleStyle(.checkbox)
+            Toggle("Show adult", isOn: $allowAdult)
+                .toggleStyle(.checkbox)
+                .help("Adult mods are hidden unless you ask for them.")
+
+            Spacer()
+
+            if !shown.isEmpty {
+                Text(resultCount)
+                    .font(.hdLabel(10))
+                    .foregroundStyle(Color.hdMuted)
+            }
+        }
+        .font(.caption)
+        .foregroundStyle(Color.hdMuted)
+    }
+
+    private var resultCount: String {
+        let total = (searchResults ?? mods).count
+        let visible = shown.count
+        return visible == total
+            ? String(localized: "\(visible) mods")
+            : String(localized: "\(visible) of \(total) mods")
+    }
+
     @ViewBuilder
     private var content: some View {
         if isLoading && shown.isEmpty {
@@ -121,14 +177,46 @@ struct BrowseView: View {
                     .buttonStyle(HDSecondaryButtonStyle())
             }
         } else if shown.isEmpty {
-            Text("No mods found.").foregroundStyle(Color.hdMuted)
+            // Distinguish "Nexus returned nothing" from "your filters hid it all",
+            // because the fix is different.
+            VStack(spacing: 10) {
+                Text(filtersHidEverything ? "Every mod here is filtered out." : "No mods found.")
+                    .foregroundStyle(Color.hdMuted)
+                if filtersHidEverything {
+                    Button("Clear filters") {
+                        sort = .nexus
+                        hideInstalled = false
+                        allowAdult = false
+                        search = ""
+                        searchResults = nil
+                    }
+                    .buttonStyle(HDSecondaryButtonStyle())
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 120)
         } else {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 230), spacing: 14)], spacing: 14) {
                 ForEach(shown) { mod in
                     BrowseCard(mod: mod) { detail = mod }
                 }
             }
+            if canLoadMore {
+                Button {
+                    Task { await loadMore() }
+                } label: {
+                    if isLoadingMore { Text("Loading…") } else { Text("Load more") }
+                }
+                .buttonStyle(HDSecondaryButtonStyle())
+                .disabled(isLoadingMore)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 6)
+            }
         }
+    }
+
+    /// True when Nexus returned mods but the current filters hide all of them.
+    private var filtersHidEverything: Bool {
+        !(searchResults ?? mods).isEmpty
     }
 
     private func load() async {
@@ -136,11 +224,30 @@ struct BrowseView: View {
         isLoading = true
         defer { isLoading = false }
         do {
-            mods = try await NexusClient(apiKey: model.nexusAPIKey).list(tab.list)
+            page = 0
+            let first = try await NexusClient(apiKey: model.nexusAPIKey)
+                .list(tab.list, page: 0, pageSize: Self.pageSize)
+            mods = first.mods
+            hasMore = first.hasMore
             loadError = nil
         } catch {
             loadError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
+    }
+
+    private func loadMore() async {
+        guard canLoadMore, !model.nexusAPIKey.isEmpty else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+        let next = page + 1
+        guard let more = try? await NexusClient(apiKey: model.nexusAPIKey)
+            .list(tab.list, page: next, pageSize: Self.pageSize) else { return }
+        // Nexus can repeat a mod across pages; appending blindly would give
+        // SwiftUI duplicate ids and a broken grid.
+        let known = Set(mods.map(\.mod_id))
+        mods += more.mods.filter { !known.contains($0.mod_id) }
+        hasMore = more.hasMore
+        page = next
     }
 
     private func runSearch() async {
@@ -222,6 +329,7 @@ struct ModDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     let mod: NexusModSummary
     @State private var isInstalling = false
+    @State private var requirements: [NexusRequirement]?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -253,6 +361,7 @@ struct ModDetailSheet: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(maxHeight: 140)
+                requirementsSection
                 HStack(spacing: 10) {
                     Button {
                         isInstalling = true
@@ -287,6 +396,44 @@ struct ModDetailSheet: View {
         .frame(width: 560)
         .background(Color.hdBackground)
         .preferredColorScheme(.dark)
+        .task {
+            // Requirements are not in the list payload, so this is the first
+            // chance to say what a mod needs — before it is downloaded.
+            requirements = await NexusClient(apiKey: model.nexusAPIKey)
+                .requirements(modID: mod.id) ?? []
+        }
+    }
+
+    /// What this mod needs, shown before installing rather than after.
+    ///
+    /// A mod needing Bingus or HD2Runtime runs code in the game, which is the
+    /// browse-time counterpart of CosmeticCheck's runtimeDependency signal.
+    @ViewBuilder
+    private var requirementsSection: some View {
+        if let requirements {
+            let needed = requirements.filter { !$0.isModManager }
+            if needed.isEmpty {
+                Text("No required mods listed.")
+                    .font(.caption)
+                    .foregroundStyle(Color.hdMuted)
+            } else {
+                VStack(alignment: .leading, spacing: 6) {
+                    if needed.needsModRuntime {
+                        HStack(spacing: 6) {
+                            HDTag(text: "Runs code", color: .hdYellow)
+                            Text("Needs a mod runtime that patches the game while it runs.")
+                                .font(.caption)
+                                .foregroundStyle(Color.hdMuted)
+                        }
+                    }
+                    Text("Requires: \(needed.map(\.name).joined(separator: ", "))")
+                        .font(.caption)
+                        .foregroundStyle(Color.hdMuted)
+                        .lineLimit(3)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
     }
 }
 
