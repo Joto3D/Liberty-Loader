@@ -139,6 +139,7 @@
 "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing." = "Helldivers 2 kann mehr brauchen, dann lagert macOS aus und das Spiel ruckelt. Niedrige Texturen helfen am meisten. Schließe Browser und Discord beim Spielen.";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 gefunden in Bottle „%@“";
 "Helldivers 2 hasn't started" = "Helldivers 2 ist nicht gestartet";
+"Helldivers 2 install" = "Helldivers 2-Installation";
 "Helldivers 2 is running" = "Helldivers 2 läuft";
 "Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 braucht %@. Starte das Spiel nach dieser Mission neu.";
 "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 braucht %@. Das Spiel kann bald abstürzen: Beende die Mission und starte das Spiel neu.";
@@ -200,6 +201,7 @@
 "Low-memory textures applied. Restart the game if it is running." = "Speichersparende Texturen angewendet. Starte das Spiel neu, falls es läuft.";
 "MSync" = "MSync";
 "Major Order" = "Hauptbefehl";
+"Managed by" = "Verwaltet von";
 "Manual edit" = "Manuelle Änderung";
 "Max Performance" = "Maximale Leistung";
 "Memory %@" = "Speicher %@";
@@ -238,6 +240,7 @@
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods hat den API-Schlüssel abgelehnt. Prüf ihn in den Einstellungen.";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods hat einen Fehler gemeldet (%lld).";
 "Nexus mod %lld" = "Nexus-Mod %lld";
+"No Helldivers 2 install found. Looked in %@ and %@." = "Keine Helldivers 2-Installation gefunden. Gesucht in %@ und %@.";
 "No backup is available for this file." = "Für diese Datei gibt es kein Backup.";
 "No backups yet." = "Noch keine Backups.";
 "No bottle selected." = "Keine Bottle ausgewählt.";
@@ -253,6 +256,7 @@
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Nicht in deiner Konfiguration: %@. Starte das Spiel einmal und ändere eine Grafikoption, damit eine vollständige Konfiguration entsteht.";
 "Not set" = "Nicht gesetzt";
 "OK" = "OK";
+"Obelisk" = "Obelisk";
 "Off" = "Aus";
 "Off gives much higher FPS. On looks sharper but renders 4× the pixels." = "Aus bringt deutlich mehr FPS. An sieht schärfer aus, berechnet aber 4× so viele Pixel.";
 "Only %lld GB memory" = "Nur %lld GB Arbeitsspeicher";
