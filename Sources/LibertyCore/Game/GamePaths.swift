@@ -4,24 +4,43 @@ import Foundation
 public struct GamePaths: Equatable, Sendable {
     public static let steamAppID = "553850"
 
-    /// `~/Library/Application Support/CrossOver/Bottles/<name>`
+    /// The Wine prefix root — a CrossOver bottle, or Obelisk's `.../prefix`.
+    /// Either way this is the folder that contains `drive_c`.
     public let bottleURL: URL
-    /// Folder that contains `steam.exe`.
+    /// Folder that contains `steam.exe`. Not meaningful for Obelisk.
     public let steamRootURL: URL
     /// Steam library folder that contains `steamapps/common/Helldivers 2`.
+    /// Not meaningful for Obelisk, which stores the game outside the prefix.
     public let libraryURL: URL
+    /// Which manager this install belongs to.
+    public let source: InstallSource
+    /// Set when the game is not at the Steam-shaped path under `libraryURL`.
+    private let gameRootOverride: URL?
 
-    public init(bottleURL: URL, steamRootURL: URL, libraryURL: URL) {
+    public init(bottleURL: URL, steamRootURL: URL, libraryURL: URL,
+                source: InstallSource = .crossOver, gameRootOverride: URL? = nil) {
         self.bottleURL = bottleURL
         self.steamRootURL = steamRootURL
         self.libraryURL = libraryURL
+        self.source = source
+        self.gameRootOverride = gameRootOverride
+    }
+
+    /// An Obelisk install, where the game lives outside the prefix entirely.
+    /// `prefixRoot` is the folder containing `drive_c`; `gameRoot` is the
+    /// install directory holding `bin/` and `data/`.
+    public init(obeliskGameRoot gameRoot: URL, prefixRoot: URL) {
+        self.init(bottleURL: prefixRoot, steamRootURL: gameRoot,
+                  libraryURL: gameRoot, source: .obelisk, gameRootOverride: gameRoot)
     }
 
     public var bottleName: String { bottleURL.lastPathComponent }
     public var driveC: URL { bottleURL.appendingPathComponent("drive_c") }
     public var bottleConfigURL: URL { bottleURL.appendingPathComponent("cxbottle.conf") }
 
-    public var gameRoot: URL { libraryURL.appendingPathComponent("steamapps/common/Helldivers 2") }
+    public var gameRoot: URL {
+        gameRootOverride ?? libraryURL.appendingPathComponent("steamapps/common/Helldivers 2")
+    }
     public var dataDir: URL { gameRoot.appendingPathComponent("data") }
     public var executableURL: URL { gameRoot.appendingPathComponent("bin/helldivers2.exe") }
     public var appManifestURL: URL {
