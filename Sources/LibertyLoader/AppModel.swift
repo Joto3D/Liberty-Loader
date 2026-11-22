@@ -73,6 +73,11 @@ final class AppModel {
     // Caches filled by reloadMods so views never touch the disk while scrolling.
     var manifestCache: [UUID: ModManifest] = [:]
     var previewCache: [UUID: URL] = [:]
+    /// What each mod ships, so the list can flag the ones that run code.
+    /// Filled in `reloadMods`; inspecting every installed mod takes a few
+    /// milliseconds, so it belongs with the other disk lookups rather than
+    /// in a view body.
+    var cosmeticCache: [UUID: CosmeticCheck.Report] = [:]
 
     // Automation
     var autoApplyMods: Bool {
@@ -317,6 +322,10 @@ final class AppModel {
         if let store {
             manifestCache = Dictionary(uniqueKeysWithValues: mods.compactMap { mod in store.manifest(for: mod).map { (mod.id, $0) } })
             previewCache = Dictionary(uniqueKeysWithValues: mods.compactMap { mod in store.previewImageURL(for: mod).map { (mod.id, $0) } })
+            let check = CosmeticCheck()
+            cosmeticCache = Dictionary(uniqueKeysWithValues: mods.map { mod in
+                (mod.id, check.inspect(modDirectory: store.folderURL(for: mod)))
+            })
             let pinned = store.takeRecentlyAutoPinned()
             if pinned.count == 1, let name = pinned.first {
                 statusMessage = mods.first(where: { $0.name == name })?.loadOrderPin == .top
