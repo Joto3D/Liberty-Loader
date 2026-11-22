@@ -170,6 +170,11 @@ extension AppModel {
     func installedMod(for nexusID: Int) -> InstalledMod? {
         mods.first { $0.nexusModID == nexusID }
     }
+
+    /// Nexus ids of everything already installed, for `BrowseQuery`.
+    var installedNexusIDs: Set<Int> {
+        Set(mods.compactMap(\.nexusModID))
+    }
 }
 
 // MARK: - Mod diagnosis & requirements

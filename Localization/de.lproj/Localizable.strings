@@ -2,6 +2,8 @@
 
 "%@ applied. Restart the game if it is running." = "%@ angewendet. Starte das Spiel neu, falls es läuft.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ ist in %@ deaktiviert. DirectX 12 kann nicht starten, deshalb weicht das Spiel auf DirectX 11 aus.";
+"%@ mods" = "%@ Mods";
+"%@ of %@ mods" = "%@ von %@ Mods";
 "%lld Helldivers online" = "%lld Helldivers online";
 "%lld file overlaps. Mods lower in the list win." = "%lld Datei-Überschneidungen. Mods weiter unten in der Liste gewinnen.";
 "%lld files are not in the game folder yet." = "%lld Dateien sind noch nicht im Spielordner.";
@@ -11,6 +13,7 @@
 "API key" = "API-Schlüssel";
 "Add your Nexus Mods API key in Settings first." = "Trag zuerst deinen Nexus-Mods-API-Schlüssel in den Einstellungen ein.";
 "Add your free Nexus Mods API key in Settings to browse and install mods here." = "Trag deinen kostenlosen Nexus-Mods-API-Schlüssel in den Einstellungen ein, um hier Mods zu durchsuchen und zu installieren.";
+"Adult mods are hidden unless you ask for them." = "Mods für Erwachsene sind ausgeblendet, bis du sie anforderst.";
 "All" = "Alle";
 "All Nexus mods are up to date." = "Alle Nexus-Mods sind aktuell.";
 "All game settings" = "Alle Spieleinstellungen";
@@ -48,6 +51,7 @@
 "Checks every mod against your game folder and explains what's wrong." = "Prüft jede Mod gegen deinen Spielordner und erklärt, was nicht stimmt.";
 "Checks why mods might not show up in game." = "Prüft, warum Mods im Spiel nicht auftauchen.";
 "Choose CrossOver.app…" = "CrossOver.app auswählen…";
+"Clear filters" = "Filter zurücksetzen";
 "Clear filters to reorder" = "Filter entfernen, um die Reihenfolge zu ändern";
 "Click “Mod Manager Download” on Nexus Mods to finish installing." = "Klick auf Nexus Mods auf „Mod Manager Download“, um die Installation abzuschließen.";
 "Close" = "Schließen";
@@ -113,6 +117,7 @@
 "Field manual" = "Feldhandbuch";
 "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them." = "Dateien im Spielordner, die nicht von Liberty Loader stammen (z. B. von einem anderen Mod-Manager oder per Hand installiert). Sie können deine Mods überschreiben oder kaputt machen. Liberty Loader löscht sie nie; entferne sie selbst, wenn du sie nicht brauchst.";
 "Filter" = "Filter";
+"Filters as you type; press Return to search all of Nexus Mods." = "Filtert beim Tippen; mit Return durchsuchst du ganz Nexus Mods.";
 "For Max/Ultra chips. High shadows, reflections and effects." = "Für Max/Ultra-Chips. Hohe Schatten, Spiegelungen und Effekte.";
 "For Pro chips with 16–32 GB. Medium shadows and effects, 60 FPS cap." = "Für Pro-Chips mit 16–32 GB. Mittlere Schatten und Effekte, 60-FPS-Limit.";
 "For Super Earth" = "Für Über-Erde";
@@ -151,6 +156,7 @@
 "Helldivers 2 was not found, so mods can't be checked." = "Helldivers 2 wurde nicht gefunden, deshalb können die Mods nicht geprüft werden.";
 "Helldivers 2 was updated" = "Helldivers 2 wurde aktualisiert";
 "Hide Log" = "Protokoll ausblenden";
+"Hide installed" = "Installierte ausblenden";
 "High Resolution (Retina) Mode" = "Hochauflösender Modus (Retina)";
 "High Resolution Mode turned off." = "Hochauflösender Modus ausgeschaltet.";
 "High Resolution Mode turned on." = "Hochauflösender Modus eingeschaltet.";
@@ -196,7 +202,9 @@
 "Liberty Loader's Discord application is preset. Only change the ID if you want to use your own application. Discord must be running on this Mac." = "Die Discord-Anwendung von Liberty Loader ist schon eingetragen. Ändere die ID nur, wenn du eine eigene Anwendung nutzen willst. Discord muss auf diesem Mac laufen.";
 "Liberty Loader's launch options force DirectX 11." = "Die Startoptionen von Liberty Loader erzwingen DirectX 11.";
 "Load Order" = "Reihenfolge";
+"Load more" = "Mehr laden";
 "Loading the description from Nexus Mods…" = "Lade die Beschreibung von Nexus Mods…";
+"Loading…" = "Wird geladen…";
 "Location" = "Ort";
 "Low-memory textures applied. Restart the game if it is running." = "Speichersparende Texturen angewendet. Starte das Spiel neu, falls es läuft.";
 "MSync" = "MSync";
@@ -226,20 +234,25 @@
 "Mods were never copied into the game" = "Die Mods wurden nie ins Spiel kopiert";
 "Mods, performance and launch, managed for your Mac." = "Mods, Leistung und Start, alles für deinen Mac.";
 "More" = "Mehr";
+"Most endorsed" = "Meiste Empfehlungen";
 "Move to Bottom" = "Nach unten schieben";
+"Name" = "Name";
 "Name, e.g. Cosmetics only" = "Name, z. B. Nur Optik";
 "Name, e.g. My Settings" = "Name, z. B. Meine Einstellungen";
 "Needs %@" = "Braucht %@";
+"Needs a mod runtime that patches the game while it runs." = "Benötigt eine Mod-Laufzeit, die das laufende Spiel verändert.";
 "Needs the D3DMetal graphics backend." = "Braucht das Grafik-Backend D3DMetal.";
 "Needs “%@”, which isn't installed." = "Braucht „%@“, das nicht installiert ist.";
 "New" = "Neu";
 "Nexus Mods" = "Nexus Mods";
 "Nexus Mods API key saved." = "Nexus-Mods-API-Schlüssel gespeichert.";
 "Nexus Mods did not return a download link." = "Nexus Mods hat keinen Download-Link geliefert.";
+"Nexus Mods did not return this mod's requirements." = "Nexus Mods hat die Voraussetzungen dieser Mod nicht geliefert.";
 "Nexus Mods refused the download. Free accounts must use the “Mod Manager Download” button on the website." = "Nexus Mods hat den Download abgelehnt. Mit einem kostenlosen Konto musst du den Button „Mod Manager Download“ auf der Website nutzen.";
 "Nexus Mods rejected the API key. Check it in Settings." = "Nexus Mods hat den API-Schlüssel abgelehnt. Prüf ihn in den Einstellungen.";
 "Nexus Mods returned an error (%lld)." = "Nexus Mods hat einen Fehler gemeldet (%lld).";
 "Nexus mod %lld" = "Nexus-Mod %lld";
+"Nexus order" = "Nexus-Reihenfolge";
 "No Helldivers 2 install found. Looked in %@ and %@." = "Keine Helldivers 2-Installation gefunden. Gesucht in %@ und %@.";
 "No backup is available for this file." = "Für diese Datei gibt es kein Backup.";
 "No backups yet." = "Noch keine Backups.";
@@ -252,6 +265,7 @@
 "No mods found." = "Keine Mods gefunden.";
 "No mods installed." = "Keine Mods installiert.";
 "No mods match." = "Keine passenden Mods.";
+"No required mods listed." = "Keine erforderlichen Mods angegeben.";
 "Not found" = "Nicht gefunden";
 "Not in your config: %@. Launch the game once and change a graphics option to create a complete config." = "Nicht in deiner Konfiguration: %@. Starte das Spiel einmal und ändere eine Grafikoption, damit eine vollständige Konfiguration entsteht.";
 "Not set" = "Nicht gesetzt";
@@ -305,6 +319,7 @@
 "Remove All Mod Files From Game…" = "Alle Mod-Dateien aus dem Spiel entfernen…";
 "Remove all mod files from the game folder?" = "Alle Mod-Dateien aus dem Spielordner entfernen?";
 "Removed all mod files. The game folder is vanilla again." = "Alle Mod-Dateien entfernt. Der Spielordner ist wieder im Originalzustand.";
+"Requires: %@" = "Benötigt: %@";
 "Rescan" = "Neu suchen";
 "Restore" = "Wiederherstellen";
 "Restore Original Settings" = "Originaleinstellungen wiederherstellen";
@@ -333,6 +348,7 @@
 "Show Game Folder" = "Spielordner zeigen";
 "Show Guide" = "Anleitung zeigen";
 "Show Log" = "Protokoll zeigen";
+"Show adult" = "Erwachsenen-Mods zeigen";
 "Show all %lld backups" = "Alle %lld Backups zeigen";
 "Show fewer" = "Weniger zeigen";
 "Show in Finder" = "Im Finder zeigen";
@@ -343,6 +359,7 @@
 "Some mods may not work" = "Manche Mods funktionieren vielleicht nicht";
 "Some settings were skipped" = "Einige Einstellungen wurden übersprungen";
 "Something went wrong" = "Etwas ist schiefgelaufen";
+"Sort" = "Sortierung";
 "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again." = "Steam oder die Bottle hängt vielleicht. Liberty Loader kann alles in der Bottle beenden und es nochmal versuchen.";
 "Steam still forces DirectX 11" = "Steam erzwingt noch DirectX 11";
 "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties." = "Die Steam-Startoptionen erzwingen DirectX 11 (Steam-Nutzer %@). Lösche --use-d3d11 in Steam → Helldivers 2 → Eigenschaften.";
@@ -410,3 +427,4 @@
 "“%@” didn't run in your last game session" = "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen";
 "“%@” is kept at the bottom of the list, as its description asks." = "„%@“ bleibt ganz unten in der Liste, wie es ihre Beschreibung verlangt.";
 "“%@” is kept at the top of the list, as its description asks." = "„%@“ bleibt ganz oben in der Liste, wie es ihre Beschreibung verlangt.";
+"“Nexus order” keeps the ranking Nexus returned for this tab." = "„Nexus-Reihenfolge“ behält das Ranking bei, das Nexus für diesen Tab geliefert hat.";

@@ -131,7 +131,32 @@ let tests: [TestCase] = [
     test(CosmeticCheckTests.self, "CosmeticCheckTests.testUnrecognisedFilesAreCounted") { try $0.testUnrecognisedFilesAreCounted() },
     test(CosmeticCheckTests.self, "CosmeticCheckTests.testSymlinksAreNotFollowed") { try $0.testSymlinksAreNotFollowed() },
     test(CosmeticCheckTests.self, "CosmeticCheckTests.testSignalOrderingIsDeterministic") { try $0.testSignalOrderingIsDeterministic() },
-    test(CosmeticCheckTests.self, "CosmeticCheckTests.testPathsAreRelative") { try $0.testPathsAreRelative() }
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testPathsAreRelative") { try $0.testPathsAreRelative() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testDefaultQueryKeepsEverythingInOrder") { try $0.testDefaultQueryKeepsEverythingInOrder() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testAdultHiddenByDefaultShownWhenAllowed") { try $0.testAdultHiddenByDefaultShownWhenAllowed() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testUnavailableHiddenEvenWhenAdultAllowed") { try $0.testUnavailableHiddenEvenWhenAdultAllowed() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testNilNameAlwaysHidden") { try $0.testNilNameAlwaysHidden() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testHideInstalledRemovesExactlyInstalled") { try $0.testHideInstalledRemovesExactlyInstalled() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testTextMatchesNameSummaryAuthorIndependently") { try $0.testTextMatchesNameSummaryAuthorIndependently() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testMultiWordRequiresAllWords") { try $0.testMultiWordRequiresAllWords() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testWordsMayMatchAcrossFields") { try $0.testWordsMayMatchAcrossFields() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testCaseAndDiacriticInsensitive") { try $0.testCaseAndDiacriticInsensitive() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testWhitespaceOnlyTextIsNoFilter") { try $0.testWhitespaceOnlyTextIsNoFilter() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testEndorsementsDescendingNilAsZero") { try $0.testEndorsementsDescendingNilAsZero() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testNameAscendingNilLast") { try $0.testNameAscendingNilLast() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testTiesBreakByModIDUnderEverySort") { try $0.testTiesBreakByModIDUnderEverySort() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testDuplicateIDsStayStable") { try $0.testDuplicateIDsStayStable() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testDeterministicAcrossRepeatedApplication") { try $0.testDeterministicAcrossRepeatedApplication() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testEmptyInput") { try $0.testEmptyInput() },
+    test(BrowseQueryTests.self, "BrowseQueryTests.testIsDefault") { try $0.testIsDefault() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testParseSearchReadsAdultAndAvailability") { try $0.testParseSearchReadsAdultAndAvailability() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testParseSearchWithoutFieldsLeavesNil") { try $0.testParseSearchWithoutFieldsLeavesNil() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testSearchResultsFilterAdultAndUnavailable") { try $0.testSearchResultsFilterAdultAndUnavailable() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testPagingSlicesAndHasMore") { try $0.testPagingSlicesAndHasMore() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testPagingOutOfRangeIsEmpty") { try $0.testPagingOutOfRangeIsEmpty() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testClientPagingFetchesOnceAndFilters") { try $0.testClientPagingFetchesOnceAndFilters() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testNeedsModRuntime") { try $0.testNeedsModRuntime() },
+    test(NexusBrowseTests.self, "NexusBrowseTests.testRequirementsParseFixtureFeedsRuntimeCheck") { try $0.testRequirementsParseFixtureFeedsRuntimeCheck() }
 ]
 
 var passed = 0, failed = 0, skipped = 0
