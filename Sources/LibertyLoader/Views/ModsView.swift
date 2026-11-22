@@ -3,7 +3,7 @@ import LibertyCore
 import SwiftUI
 
 enum ModFilter: CaseIterable, Identifiable {
-    case all, enabled, updates, conflicts
+    case all, enabled, updates, conflicts, runsCode
 
     var id: Self { self }
 
@@ -13,6 +13,7 @@ enum ModFilter: CaseIterable, Identifiable {
         case .enabled: return "Enabled"
         case .updates: return "Updates"
         case .conflicts: return "Overlaps"
+        case .runsCode: return "Runs code"
         }
     }
 }
@@ -37,6 +38,7 @@ struct ModsView: View {
         case .enabled: return mod.enabled
         case .updates: return mod.hasUpdate
         case .conflicts: return mod.enabled && conflictingNames.contains(mod.name)
+        case .runsCode: return model.cosmeticCache[mod.id]?.verdict == .runsCode
         }
     }
 
@@ -281,6 +283,14 @@ struct ModRow: View {
 
     private var conflictList: String { conflictsWith.joined(separator: ", ") }
 
+    /// Tooltip naming what was found, so the tag is judgeable without digging.
+    /// Built with `verbatim` Text because the body is file paths, not prose.
+    private func codeHelp(_ report: CosmeticCheck.Report) -> String {
+        let lines = report.signals.prefix(6).map { "• \($0.path) — \($0.detail)" }
+        let more = report.signals.count > 6 ? "\n• …and \(report.signals.count - 6) more" : ""
+        return report.summary + "\n\n" + lines.joined(separator: "\n") + more
+    }
+
     private var conflictsWith: [String] {
         Array(Set(model.conflicts.values.filter { $0.contains(mod.name) }.flatMap { $0 })
             .subtracting([mod.name])).sorted()
@@ -319,6 +329,13 @@ struct ModRow: View {
                         .help(mod.pinIsManual == true
                               ? Text("You pinned this mod. Right-click to change it.")
                               : Text("The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it."))
+                    }
+                    // Only mods that run code are tagged. There is deliberately
+                    // no "cosmetic" badge: the check cannot open patch archives,
+                    // so a green tag would promise a safety it never established.
+                    if let report = model.cosmeticCache[mod.id], report.verdict == .runsCode {
+                        HDTag(text: "Runs code", color: .hdYellow)
+                            .help(Text(verbatim: codeHelp(report)))
                     }
                     ForEach(model.missingRequirements(for: mod), id: \.self) { requirement in
                         Button {
