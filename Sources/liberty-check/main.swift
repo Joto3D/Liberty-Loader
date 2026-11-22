@@ -115,7 +115,23 @@ let tests: [TestCase] = [
     test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedNeedsBothSides") { try $0.testGameChangedNeedsBothSides() },
     test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedOnDifferentBuildID") { try $0.testGameChangedOnDifferentBuildID() },
     test(InstallSelectionTests.self, "InstallSelectionTests.testSwitchingSourcesIsNotAnUpdate") { try $0.testSwitchingSourcesIsNotAnUpdate() },
-    test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedOnDifferentHash") { try $0.testGameChangedOnDifferentHash() }
+    test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedOnDifferentHash") { try $0.testGameChangedOnDifferentHash() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testSoundModIsAssetsOnly") { try $0.testSoundModIsAssetsOnly() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testDllIsNativeCode") { try $0.testDllIsNativeCode() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testLuaIsScript") { try $0.testLuaIsScript() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testManifestRequiringHD2Runtime") { try $0.testManifestRequiringHD2Runtime() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testBingusFilenameIsRuntimeDependency") { try $0.testBingusFilenameIsRuntimeDependency() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testManifestWithoutRequiresIsNotASignal") { try $0.testManifestWithoutRequiresIsNotASignal() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testMalformedManifestDoesNotCrash") { try $0.testMalformedManifestDoesNotCrash() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testRuntimeFolderIsRuntimeDependency") { try $0.testRuntimeFolderIsRuntimeDependency() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testExecutableShellScriptIsReportedOnce") { try $0.testExecutableShellScriptIsReportedOnce() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testExecutableBitOnPlainFile") { try $0.testExecutableBitOnPlainFile() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testEmptyFolderIsInconclusive") { try $0.testEmptyFolderIsInconclusive() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testMissingFolderIsInconclusive") { try $0.testMissingFolderIsInconclusive() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testUnrecognisedFilesAreCounted") { try $0.testUnrecognisedFilesAreCounted() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testSymlinksAreNotFollowed") { try $0.testSymlinksAreNotFollowed() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testSignalOrderingIsDeterministic") { try $0.testSignalOrderingIsDeterministic() },
+    test(CosmeticCheckTests.self, "CosmeticCheckTests.testPathsAreRelative") { try $0.testPathsAreRelative() }
 ]
 
 var passed = 0, failed = 0, skipped = 0
