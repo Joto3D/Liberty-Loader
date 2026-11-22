@@ -14,5 +14,9 @@ let package = Package(
         // SwiftUI macOS app.
         .executableTarget(name: "LibertyLoader", dependencies: ["LibertyCore"]),
         .testTarget(name: "LibertyCoreTests", dependencies: ["LibertyCore"]),
+        // Runs the same assertions as LibertyCoreTests without XCTest, which
+        // Command Line Tools does not ship. CI still runs `swift test`; this is
+        // so work can be verified on a machine with no Xcode.
+        .executableTarget(name: "liberty-check", dependencies: ["LibertyCore"]),
     ]
 )
