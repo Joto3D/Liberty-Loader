@@ -29,6 +29,39 @@ public struct CosmeticCheck: Sendable {
         case inconclusive
     }
 
+    /// A kind of game resource a mod's patches replace.
+    ///
+    /// This is read from the patch archives themselves, so it describes what a
+    /// mod actually changes rather than what files happen to sit beside it. It
+    /// is the difference between "no code found" and "replaces audio".
+    public enum ResourceKind: String, CaseIterable, Equatable, Sendable, Codable {
+        case audio, texture, material, mesh, animation, stateMachine, particles, bones, physics, strings
+
+        public var displayName: String {
+            switch self {
+            case .stateMachine: return "state machines"
+            default: return rawValue
+            }
+        }
+
+        /// Changes what is drawn. This is where visibility advantages live —
+        /// removed fog, high-contrast or transparent skins, thinner silhouettes.
+        public var isVisual: Bool {
+            switch self {
+            case .texture, .material, .mesh, .particles: return true
+            default: return false
+            }
+        }
+
+        /// Governs behaviour rather than appearance.
+        public var affectsBehaviour: Bool {
+            switch self {
+            case .stateMachine, .physics: return true
+            default: return false
+            }
+        }
+    }
+
     /// One reason a mod was judged to run code.
     public struct Signal: Equatable, Sendable, Codable {
         public enum Kind: String, Equatable, Sendable, Codable {
@@ -64,12 +97,40 @@ public struct CosmeticCheck: Sendable {
         public let patchFileCount: Int
         /// Files the check did not recognise as either assets or code.
         public let unrecognisedFileCount: Int
+        /// Resource kinds this mod's patches replace, in a stable order.
+        ///
+        /// Empty when the patches carry no type hash this check recognises,
+        /// which means "not identified", never "replaces nothing".
+        public let replaces: [ResourceKind]
 
-        public init(verdict: Verdict, signals: [Signal], patchFileCount: Int, unrecognisedFileCount: Int) {
+        public init(verdict: Verdict, signals: [Signal], patchFileCount: Int,
+                    unrecognisedFileCount: Int, replaces: [ResourceKind] = []) {
             self.verdict = verdict
             self.signals = signals
             self.patchFileCount = patchFileCount
             self.unrecognisedFileCount = unrecognisedFileCount
+            self.replaces = replaces
+        }
+
+        /// What this mod changes, for showing next to the verdict.
+        ///
+        /// Audio-only is the lowest-risk shape there is, because sound cannot
+        /// change what a player sees. That is a statement about effect, not a
+        /// promise of safety — this never claims a mod is allowed, only what it
+        /// touches.
+        public var replacesSummary: String {
+            guard !replaces.isEmpty else {
+                return patchFileCount == 0
+                    ? String(localized: "no asset patches")
+                    : String(localized: "contents not identified")
+            }
+            return replaces.map(\.displayName).joined(separator: ", ")
+        }
+
+        /// True when every identified resource is non-visual and non-behavioural.
+        /// Useful for ordering a list, not for telling anyone they are safe.
+        public var isAudioOnly: Bool {
+            !replaces.isEmpty && replaces.allSatisfy { $0 == .audio }
         }
 
         /// A one-line summary. Phrased so it never promises safety.
