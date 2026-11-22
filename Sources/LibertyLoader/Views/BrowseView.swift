@@ -2,24 +2,46 @@ import AppKit
 import LibertyCore
 import SwiftUI
 
+/// Each tab is a server-side sort over the whole Nexus catalogue.
+///
+/// These used to be the v1 list endpoints, which return about ten mods each
+/// and cannot page — so "Trending" showed eight results and stopped. The v2
+/// GraphQL `mods` query pages through all of them (13,762 for Helldivers 2 at
+/// the time of writing), so the tab now chooses the ordering instead of
+/// choosing a short fixed list.
+///
+/// "Trending" is gone because GraphQL has no trending sort and inventing one
+/// from endorsements would be a different thing wearing its name.
 enum BrowseTab: CaseIterable, Identifiable {
-    case trending, latestAdded, latestUpdated
+    case topRated, mostDownloaded, latestAdded, latestUpdated
 
     var id: Self { self }
 
     var title: LocalizedStringKey {
         switch self {
-        case .trending: return "Trending"
+        case .topRated: return "Top rated"
+        case .mostDownloaded: return "Most downloaded"
         case .latestAdded: return "New"
         case .latestUpdated: return "Updated"
         }
     }
 
+    /// The v1 list to fall back on when the GraphQL query fails. These lists
+    /// are short and unpageable, which is why they are no longer the main path.
     var list: NexusList {
         switch self {
-        case .trending: return .trending
+        case .topRated, .mostDownloaded: return .trending
         case .latestAdded: return .latestAdded
         case .latestUpdated: return .latestUpdated
+        }
+    }
+
+    var sort: NexusSort {
+        switch self {
+        case .topRated: return .endorsements
+        case .mostDownloaded: return .downloads
+        case .latestAdded: return .createdAt
+        case .latestUpdated: return .updatedAt
         }
     }
 }
@@ -28,7 +50,7 @@ enum BrowseTab: CaseIterable, Identifiable {
 struct BrowseView: View {
     @Environment(AppModel.self) private var model
     @Binding var selection: SidebarItem
-    @State private var tab: BrowseTab = .trending
+    @State private var tab: BrowseTab = .topRated
     @State private var search = ""
     @State private var mods: [NexusModSummary] = []
     @State private var searchResults: [NexusModSummary]?
@@ -36,10 +58,11 @@ struct BrowseView: View {
     @State private var isLoadingMore = false
     @State private var loadError: String?
     @State private var detail: NexusModSummary?
-    @State private var sort: BrowseQuery.Sort = .nexus
     @State private var hideInstalled = false
     @State private var allowAdult = false
-    @State private var page = 0
+    @State private var totalCount = 0
+    /// How many the server has returned so far, filtered or not: the next offset.
+    @State private var fetchedCount = 0
     @State private var hasMore = false
 
     private static let pageSize = 40
@@ -48,7 +71,7 @@ struct BrowseView: View {
         // Server-side search already matched the term, so re-applying it here
         // would only narrow results the API deliberately returned.
         BrowseQuery(text: searchResults == nil ? search : "",
-                    sort: sort, hideInstalled: hideInstalled, allowAdult: allowAdult)
+                    sort: .nexus, hideInstalled: hideInstalled, allowAdult: allowAdult)
     }
 
     private var shown: [NexusModSummary] {
@@ -131,16 +154,6 @@ struct BrowseView: View {
 
     private var filters: some View {
         HStack(spacing: 14) {
-            Picker("Sort", selection: $sort) {
-                Text("Nexus order").tag(BrowseQuery.Sort.nexus)
-                Text("Most endorsed").tag(BrowseQuery.Sort.endorsements)
-                Text("Name").tag(BrowseQuery.Sort.name)
-            }
-            .pickerStyle(.menu)
-            .labelsHidden()
-            .frame(width: 150)
-            .help("“Nexus order” keeps the ranking Nexus returned for this tab.")
-
             Toggle("Hide installed", isOn: $hideInstalled)
                 .toggleStyle(.checkbox)
             Toggle("Show adult", isOn: $allowAdult)
@@ -160,11 +173,10 @@ struct BrowseView: View {
     }
 
     private var resultCount: String {
-        let total = (searchResults ?? mods).count
         let visible = shown.count
-        return visible == total
-            ? String(localized: "\(visible) mods")
-            : String(localized: "\(visible) of \(total) mods")
+        if searchResults != nil { return String(localized: "\(visible) results") }
+        // totalCount is the whole catalogue, not what is loaded, so say both.
+        return String(localized: "\(visible) of \(totalCount) mods")
     }
 
     @ViewBuilder
@@ -184,7 +196,6 @@ struct BrowseView: View {
                     .foregroundStyle(Color.hdMuted)
                 if filtersHidEverything {
                     Button("Clear filters") {
-                        sort = .nexus
                         hideInstalled = false
                         allowAdult = false
                         search = ""
@@ -224,14 +235,27 @@ struct BrowseView: View {
         isLoading = true
         defer { isLoading = false }
         do {
-            page = 0
+            fetchedCount = 0
             let first = try await NexusClient(apiKey: model.nexusAPIKey)
-                .list(tab.list, page: 0, pageSize: Self.pageSize)
+                .browse(sort: tab.sort, offset: 0, count: Self.pageSize)
             mods = first.mods
             hasMore = first.hasMore
+            totalCount = first.totalCount
+            fetchedCount = Self.pageSize
             loadError = nil
         } catch {
-            loadError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            // GraphQL is the only path that can page, and its schema is outside
+            // our control. The v1 list is capped at about ten mods and cannot
+            // page, but ten mods beats an error screen, so fall back to it.
+            if let fallback = try? await NexusClient(apiKey: model.nexusAPIKey).list(tab.list) {
+                mods = fallback
+                hasMore = false
+                totalCount = fallback.count
+                fetchedCount = fallback.count
+                loadError = nil
+            } else {
+                loadError = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            }
         }
     }
 
@@ -239,15 +263,18 @@ struct BrowseView: View {
         guard canLoadMore, !model.nexusAPIKey.isEmpty else { return }
         isLoadingMore = true
         defer { isLoadingMore = false }
-        let next = page + 1
+        // The offset is how many the server has already given us, not how many
+        // survived filtering — otherwise skipped mods would be fetched forever.
+        let offset = fetchedCount
         guard let more = try? await NexusClient(apiKey: model.nexusAPIKey)
-            .list(tab.list, page: next, pageSize: Self.pageSize) else { return }
+            .browse(sort: tab.sort, offset: offset, count: Self.pageSize) else { return }
         // Nexus can repeat a mod across pages; appending blindly would give
         // SwiftUI duplicate ids and a broken grid.
         let known = Set(mods.map(\.mod_id))
         mods += more.mods.filter { !known.contains($0.mod_id) }
         hasMore = more.hasMore
-        page = next
+        totalCount = more.totalCount
+        fetchedCount = offset + Self.pageSize
     }
 
     private func runSearch() async {

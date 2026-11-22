@@ -156,7 +156,18 @@ let tests: [TestCase] = [
     test(NexusBrowseTests.self, "NexusBrowseTests.testPagingOutOfRangeIsEmpty") { try $0.testPagingOutOfRangeIsEmpty() },
     test(NexusBrowseTests.self, "NexusBrowseTests.testClientPagingFetchesOnceAndFilters") { try $0.testClientPagingFetchesOnceAndFilters() },
     test(NexusBrowseTests.self, "NexusBrowseTests.testNeedsModRuntime") { try $0.testNeedsModRuntime() },
-    test(NexusBrowseTests.self, "NexusBrowseTests.testRequirementsParseFixtureFeedsRuntimeCheck") { try $0.testRequirementsParseFixtureFeedsRuntimeCheck() }
+    test(NexusBrowseTests.self, "NexusBrowseTests.testRequirementsParseFixtureFeedsRuntimeCheck") { try $0.testRequirementsParseFixtureFeedsRuntimeCheck() },
+    test(NexusPagingTests.self, "NexusPagingTests.testBrowseParsesTotalCountAndMapsFields") { try $0.testBrowseParsesTotalCountAndMapsFields() },
+    test(NexusPagingTests.self, "NexusPagingTests.testStatusMapsToAvailable") { try $0.testStatusMapsToAvailable() },
+    test(NexusPagingTests.self, "NexusPagingTests.testAdultContentIsFilteredOut") { try $0.testAdultContentIsFilteredOut() },
+    test(NexusPagingTests.self, "NexusPagingTests.testHasMoreTrueWhenOffsetPlusCountBelowTotal") { try $0.testHasMoreTrueWhenOffsetPlusCountBelowTotal() },
+    test(NexusPagingTests.self, "NexusPagingTests.testHasMoreFalseAtEnd") { try $0.testHasMoreFalseAtEnd() },
+    test(NexusPagingTests.self, "NexusPagingTests.testHasMoreSurvivesFullyFilteredPage") { try $0.testHasMoreSurvivesFullyFilteredPage() },
+    test(NexusPagingTests.self, "NexusPagingTests.testEverySortProducesExpectedVariables") { try $0.testEverySortProducesExpectedVariables() },
+    test(NexusPagingTests.self, "NexusPagingTests.testGraphQLErrorsArrayIsFailure") { try $0.testGraphQLErrorsArrayIsFailure() },
+    test(NexusPagingTests.self, "NexusPagingTests.testMissingModsNodeIsMalformed") { try $0.testMissingModsNodeIsMalformed() },
+    test(NexusPagingTests.self, "NexusPagingTests.testDifferentOffsetsProduceDifferentRequests") { try $0.testDifferentOffsetsProduceDifferentRequests() },
+    test(NexusPagingTests.self, "NexusPagingTests.testRequestHeadersAndQuery") { try $0.testRequestHeadersAndQuery() }
 ]
 
 var passed = 0, failed = 0, skipped = 0

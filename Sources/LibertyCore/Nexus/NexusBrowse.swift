@@ -57,10 +57,13 @@ public struct NexusUser: Decodable, Equatable, Sendable {
 public struct NexusPage: Equatable, Sendable {
     public let mods: [NexusModSummary]
     public let hasMore: Bool
+    /// Server-side total for the query (all matching mods, before client filtering). 0 when unknown.
+    public let totalCount: Int
 
-    public init(mods: [NexusModSummary], hasMore: Bool) {
+    public init(mods: [NexusModSummary], hasMore: Bool, totalCount: Int = 0) {
         self.mods = mods
         self.hasMore = hasMore
+        self.totalCount = totalCount
     }
 
     /// Slices an already-filtered list. Out-of-range pages are empty with `hasMore == false`.
@@ -79,6 +82,29 @@ public enum NexusList: String, CaseIterable, Sendable {
     case latestUpdated = "latest_updated"
 }
 
+/// Sort orders for the paged v2 browse. Raw values are the GraphQL `ModsSort` field names.
+public enum NexusSort: String, CaseIterable, Sendable {
+    case endorsements, downloads, createdAt, updatedAt, name
+
+    /// Natural direction: popularity and recency descend, names ascend.
+    public var direction: String { self == .name ? "ASC" : "DESC" }
+
+    /// The `sort` GraphQL variable: `[{ <field>: { direction: ... } }]`.
+    public var variable: [[String: Any]] { [[rawValue: ["direction": direction]]] }
+}
+
+public enum NexusBrowseError: Error, LocalizedError {
+    case graphQL(String)
+    case malformedResponse
+
+    public var errorDescription: String? {
+        switch self {
+        case .graphQL(let message): return String(localized: "Nexus Mods rejected the browse query: \(message)")
+        case .malformedResponse: return String(localized: "Nexus Mods returned an unexpected browse response.")
+        }
+    }
+}
+
 extension NexusClient {
     public func list(_ list: NexusList, game: String = NexusClient.gameDomain) async throws -> [NexusModSummary] {
         let mods: [NexusModSummary] = try await get("games/\(game)/mods/\(list.rawValue).json")
@@ -88,6 +114,7 @@ extension NexusClient {
     /// One page of a browse list. The v1 list endpoint does not page, so this fetches the whole
     /// list once and slices it. The fetched list is cached inside this client instance (and any
     /// copies of it) so later pages do not refetch; use a new `NexusClient` to refresh.
+    @available(*, deprecated, message: "The v1 list endpoint returns about ten mods and cannot page, so this can never show more. Use browse(sort:offset:count:game:).")
     public func list(_ list: NexusList, page: Int, pageSize: Int, game: String = NexusClient.gameDomain) async throws -> NexusPage {
         let key = "\(game)/\(list.rawValue)"
         let all: [NexusModSummary]
@@ -98,6 +125,53 @@ extension NexusClient {
             await listCache.store(all, for: key)
         }
         return NexusPage.slice(all, page: page, pageSize: pageSize)
+    }
+
+    /// One server-side page of the v2 GraphQL mod list. `hasMore` is computed from the unfiltered
+    /// node count against `totalCount`, so a page that is entirely filtered out does not stall paging.
+    public func browse(sort: NexusSort, offset: Int, count: Int, game: String = NexusClient.gameDomain) async throws -> NexusPage {
+        let request = try browseRequest(sort: sort, offset: offset, count: count, game: game)
+        let (data, response) = try await session.data(for: request)
+        if let code = (response as? HTTPURLResponse)?.statusCode, code != 200 { throw ClientError.http(code) }
+        return try Self.parseBrowse(data, offset: offset)
+    }
+
+    static let browseQuery = """
+    query Browse($filter: ModsFilter, $sort: [ModsSort!], $offset: Int, $count: Int) {
+      mods(filter: $filter, sort: $sort, offset: $offset, count: $count) {
+        totalCount
+        nodes { modId name summary pictureUrl endorsements version adultContent status uploader { name } }
+      }
+    }
+    """
+
+    static func browseVariables(sort: NexusSort, offset: Int, count: Int, game: String) -> [String: Any] {
+        [
+            "count": count,
+            "offset": offset,
+            "filter": ["gameDomainName": [["value": game, "op": "EQUALS"]]],
+            "sort": sort.variable,
+        ]
+    }
+
+    func browseRequest(sort: NexusSort, offset: Int, count: Int, game: String) throws -> URLRequest {
+        guard let request = graphQLRequest(query: Self.browseQuery,
+                                           variables: Self.browseVariables(sort: sort, offset: offset, count: count, game: game))
+        else { throw NexusBrowseError.malformedResponse }
+        return request
+    }
+
+    /// Parses a `mods` ModPage response. Throws on a GraphQL `errors` array or a missing `mods` node.
+    static func parseBrowse(_ data: Data, offset: Int) throws -> NexusPage {
+        if let message = graphQLErrorMessage(in: data) { throw NexusBrowseError.graphQL(message) }
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let mods = (json["data"] as? [String: Any])?["mods"] as? [String: Any],
+              let nodes = mods["nodes"] as? [[String: Any]] else { throw NexusBrowseError.malformedResponse }
+        let total = mods["totalCount"] as? Int ?? 0
+        let all = nodes.compactMap(summary(from:))
+        return NexusPage(mods: all.filter(\.isListable),
+                         hasMore: offset + nodes.count < total,
+                         totalCount: total)
     }
 
     /// Requirements for a mod before it is installed, via the existing v2 lookup.
@@ -159,6 +233,17 @@ extension NexusClient {
                 "name": [["value": term, "op": "WILDCARD"]],
             ],
         ]
+        guard let request = graphQLRequest(query: query, variables: variables),
+              let result = try? await session.data(for: request),
+              (result.1 as? HTTPURLResponse)?.statusCode == 200 else { return nil }
+        // GraphQL answers an unknown field with 200 and an `errors` array, so a
+        // status code alone does not mean the query was understood.
+        if Self.graphQLErrorMessage(in: result.0) != nil { return nil }
+        return Self.parseSearch(result.0)?.filter(\.isListable)
+    }
+
+    /// A v2 GraphQL POST with the standard headers. Nil only if the body cannot be encoded.
+    func graphQLRequest(query: String, variables: [String: Any]) -> URLRequest? {
         guard let url = URL(string: "https://api.nexusmods.com/v2/graphql"),
               let body = try? JSONSerialization.data(withJSONObject: ["query": query, "variables": variables]) else { return nil }
         var request = URLRequest(url: url)
@@ -167,15 +252,30 @@ extension NexusClient {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("LibertyLoader", forHTTPHeaderField: "Application-Name")
         if !apiKey.isEmpty { request.setValue(apiKey, forHTTPHeaderField: "apikey") }
-        guard let result = try? await session.data(for: request),
-              (result.1 as? HTTPURLResponse)?.statusCode == 200 else { return nil }
-        // GraphQL answers an unknown field with 200 and an `errors` array, so a
-        // status code alone does not mean the query was understood.
-        if let json = try? JSONSerialization.jsonObject(with: result.0) as? [String: Any],
-           let errors = json["errors"] as? [[String: Any]], !errors.isEmpty {
-            return nil
-        }
-        return Self.parseSearch(result.0)?.filter(\.isListable)
+        return request
+    }
+
+    /// The first message of a non-empty GraphQL `errors` array, else nil.
+    static func graphQLErrorMessage(in data: Data) -> String? {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let errors = json["errors"] as? [[String: Any]], !errors.isEmpty else { return nil }
+        return errors.first?["message"] as? String ?? "unknown GraphQL error"
+    }
+
+    static func summary(from node: [String: Any]) -> NexusModSummary? {
+        guard let id = node["modId"] as? Int else { return nil }
+        return NexusModSummary(
+            modID: id,
+            name: node["name"] as? String,
+            summary: node["summary"] as? String,
+            pictureURL: node["pictureUrl"] as? String,
+            endorsements: node["endorsements"] as? Int,
+            author: (node["uploader"] as? [String: Any])?["name"] as? String,
+            version: node["version"] as? String,
+            // Absent stays nil so behaviour is unchanged for responses without these fields.
+            available: (node["status"] as? String).map { $0.lowercased() == "published" },
+            containsAdultContent: node["adultContent"] as? Bool
+        )
     }
 
     static func parseSearch(_ data: Data) -> [NexusModSummary]? {
@@ -183,21 +283,7 @@ extension NexusClient {
               let dataNode = json["data"] as? [String: Any],
               let mods = dataNode["mods"] as? [String: Any],
               let nodes = mods["nodes"] as? [[String: Any]] else { return nil }
-        return nodes.compactMap { node in
-            guard let id = node["modId"] as? Int else { return nil }
-            return NexusModSummary(
-                modID: id,
-                name: node["name"] as? String,
-                summary: node["summary"] as? String,
-                pictureURL: node["pictureUrl"] as? String,
-                endorsements: node["endorsements"] as? Int,
-                author: (node["uploader"] as? [String: Any])?["name"] as? String,
-                version: node["version"] as? String,
-                // Absent stays nil so behaviour is unchanged for responses without these fields.
-                available: (node["status"] as? String).map { $0.lowercased() == "published" },
-                containsAdultContent: node["adultContent"] as? Bool
-            )
-        }
+        return nodes.compactMap(summary(from:))
     }
 }
 
