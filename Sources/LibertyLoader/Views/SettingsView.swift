@@ -22,26 +22,30 @@ struct SettingsView: View {
                     .buttonStyle(HDSecondaryButtonStyle())
             }
 
-            section("Bottle") {
-                let bottlesWithGame = model.bottles.filter { $0.game != nil }
-                if bottlesWithGame.isEmpty {
-                    Text("No bottle with Helldivers 2 found in \(BottleScanner.defaultBottlesDirectory.path).")
+            section("Install") {
+                if model.installs.isEmpty {
+                    Text("No Helldivers 2 install found. Looked in \(BottleScanner.defaultBottlesDirectory.path) and \(ObeliskScanner.defaultRoot.path).")
                         .foregroundStyle(Color.hdMuted)
                 } else {
                     HStack {
-                        Text("Helldivers 2 bottle").foregroundStyle(Color.hdText)
+                        Text("Helldivers 2 install").foregroundStyle(Color.hdText)
                         Spacer()
                         Picker("", selection: Binding(
-                            get: { model.game?.bottleURL.path ?? "" },
+                            get: { model.selectedInstall?.id ?? "" },
                             set: { model.selectedBottlePath = $0; model.refresh() }
                         )) {
-                            ForEach(bottlesWithGame) { Text(verbatim: $0.name).tag($0.url.path) }
+                            // Several installs can share a name, so show which
+                            // manager each one belongs to.
+                            ForEach(model.installs) {
+                                Text(verbatim: "\($0.name) (\($0.source.displayName))").tag($0.id)
+                            }
                         }
                         .labelsHidden()
                         .frame(width: 240)
                     }
                 }
                 if let game = model.game {
+                    InfoRow(label: "Managed by", value: game.source.displayName)
                     InfoRow(label: "Game folder", value: game.gameRoot.path)
                     HStack {
                         Button("Reveal Game Folder") { NSWorkspace.shared.activateFileViewerSelecting([game.gameRoot]) }

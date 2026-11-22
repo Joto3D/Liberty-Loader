@@ -9,6 +9,12 @@ final class AppModel {
     // MARK: Environment
     var crossOver: CrossOverInstall?
     var bottles: [Bottle] = []
+    /// Every install from every source. `bottles` is still populated because
+    /// CrossOver-only screens (bottle config, registry, DirectX report) need it.
+    var installs: [GameInstall] = []
+    /// Identifies the chosen install. Historically a bottle path; now a game
+    /// root, since Obelisk installs have no bottle. `InstallScanner.resolve`
+    /// accepts both so an upgrade keeps pointing at the same install.
     var selectedBottlePath: String? {
         didSet { UserDefaults.standard.set(selectedBottlePath, forKey: Keys.bottle) }
     }
@@ -131,7 +137,11 @@ final class AppModel {
         static let crossOver = "crossOverPath"
         static let launchArgs = "launchArguments"
         static let directX = "directXVersion"
+        /// Legacy: a bare Steam build id, written before Obelisk support.
         static let buildID = "lastDeployedBuildID"
+        /// An encoded `InstallFingerprint`, which also covers installs with no
+        /// Steam appmanifest.
+        static let fingerprint = "lastDeployedFingerprint"
         static let autoUpdate = "autoCheckUpdates"
         static let nexusKeychain = "nexus-api-key"
         static let discordEnabled = "discordEnabled"
@@ -174,10 +184,40 @@ final class AppModel {
     /// Game or Steam is running in a bottle; bottle/registry files must not be edited then.
     var isBottleBusy: Bool { isGameRunning || isSteamRunning }
 
-    var game: GamePaths? {
-        let withGame = bottles.filter { $0.game != nil }
-        return (withGame.first { $0.url.path == selectedBottlePath } ?? withGame.first)?.game
+    var selectedInstall: GameInstall? {
+        InstallScanner.resolve(key: selectedBottlePath, among: installs)
     }
+
+    var game: GamePaths? { selectedInstall?.paths }
+
+    /// What the game looked like when mods were last deployed.
+    ///
+    /// Reads the legacy bare build id when no fingerprint has been stored yet,
+    /// so upgrading does not immediately claim the game was updated. A
+    /// CrossOver user keeps comparing build ids exactly as before; an Obelisk
+    /// user compares a hash to that legacy build id, which is `.notComparable`
+    /// and therefore not reported as an update — the fingerprint is rewritten
+    /// on their next deploy.
+    var lastDeployedFingerprint: InstallFingerprint? {
+        get {
+            if let data = UserDefaults.standard.data(forKey: Keys.fingerprint),
+               let stored = try? JSONDecoder().decode(InstallFingerprint.self, from: data) {
+                return stored
+            }
+            guard let legacy = UserDefaults.standard.string(forKey: Keys.buildID),
+                  !legacy.isEmpty else { return nil }
+            return InstallFingerprint(kind: .buildID, buildID: legacy, sha256: nil,
+                                      executableSize: 0, executableModified: .distantPast)
+        }
+        set {
+            let encoded = newValue.flatMap { try? JSONEncoder().encode($0) }
+            UserDefaults.standard.set(encoded, forKey: Keys.fingerprint)
+        }
+    }
+
+    /// Obelisk runs the game itself, so Liberty Loader must not offer to launch
+    /// it through CrossOver's wine.
+    var canLaunch: Bool { game?.source.canLaunchThroughCrossOver ?? false }
 
     var deployer: PatchDeployer? {
         game.map { PatchDeployer(dataDir: $0.dataDir, stateDirectory: supportDirectory) }
@@ -188,10 +228,12 @@ final class AppModel {
     func refresh() {
         crossOver = CrossOverLocator.locate(preferred: crossOverPath.map { URL(fileURLWithPath: $0) })
         bottles = BottleScanner().bottles()
-        if selectedBottlePath == nil { selectedBottlePath = game?.bottleURL.path }
+        installs = InstallScanner().installs()
+        if selectedBottlePath == nil { selectedBottlePath = selectedInstall?.id }
         isGameRunning = GameLauncher.isGameRunning()
-        let lastBuild = UserDefaults.standard.string(forKey: Keys.buildID)
-        gameUpdatedSinceLastSync = lastBuild != nil && game?.buildID != nil && lastBuild != game?.buildID
+        gameUpdatedSinceLastSync = InstallFingerprint.gameChanged(
+            current: game.flatMap { InstallFingerprint.of($0, reusing: lastDeployedFingerprint) },
+            lastDeployed: lastDeployedFingerprint)
         reloadMods()
     }
 
@@ -352,7 +394,7 @@ final class AppModel {
         }
         let plan = try deployer.sync(store.resolvedEnabledMods())
         conflicts = plan.conflicts
-        UserDefaults.standard.set(game?.buildID, forKey: Keys.buildID)
+        lastDeployedFingerprint = game.flatMap { InstallFingerprint.of($0) }
         UserDefaults.standard.set(Date(), forKey: "lastDeployDate")
         gameUpdatedSinceLastSync = false
         if runDiagnostics()?.hasBlockingProblems == true {

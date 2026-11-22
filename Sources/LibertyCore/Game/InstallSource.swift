@@ -58,6 +58,20 @@ public struct InstallScanner: Sendable {
         self.obelisk = obelisk
     }
 
+    /// Resolves a persisted selection against a list of installs.
+    ///
+    /// Liberty Loader has always stored the chosen install as a bottle path.
+    /// Obelisk installs have no bottle, so the key is now the game root — but
+    /// settings saved before this change still hold a bottle path, and a user
+    /// who selected the CrossOver shim bottle must not silently get a different
+    /// install after upgrading. Both spellings are therefore accepted.
+    public static func resolve(key: String?, among installs: [GameInstall]) -> GameInstall? {
+        guard let key, !key.isEmpty else { return installs.first }
+        return installs.first { $0.id == key }
+            ?? installs.first { $0.paths.bottleURL.path == key }
+            ?? installs.first
+    }
+
     /// CrossOver bottles that contain the game, then Obelisk installs.
     public func installs() -> [GameInstall] {
         let fromBottles = bottles.bottlesWithGame().compactMap { bottle -> GameInstall? in
@@ -68,5 +82,22 @@ public struct InstallScanner: Sendable {
             GameInstall(name: InstallSource.obelisk.displayName, paths: $0)
         }
         return fromBottles + fromObelisk
+    }
+}
+
+extension InstallFingerprint {
+    /// Whether to warn that the game changed underneath the deployed mods.
+    ///
+    /// Only a confirmed change warns. `.notComparable` means the two
+    /// fingerprints are different kinds — which happens when the user switches
+    /// between a CrossOver install (Steam build id) and an Obelisk one
+    /// (executable hash). That is a change of install, not evidence the game
+    /// was patched, so it must not raise a false "Helldivers 2 was updated".
+    /// Callers should re-record the fingerprint when this returns false but the
+    /// comparison was not `.same`.
+    public static func gameChanged(current: InstallFingerprint?,
+                                   lastDeployed: InstallFingerprint?) -> Bool {
+        guard let current, let lastDeployed else { return false }
+        return current.compare(to: lastDeployed) == .changed
     }
 }

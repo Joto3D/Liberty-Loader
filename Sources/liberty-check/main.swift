@@ -106,7 +106,16 @@ let tests: [TestCase] = [
     test(V3FeatureTests.self, "V3FeatureTests.testDiscordActivityPayload") { try $0.testDiscordActivityPayload() },
     test(V3FeatureTests.self, "V3FeatureTests.testCrashDetection") { $0.testCrashDetection() },
     test(V3FeatureTests.self, "V3FeatureTests.testRecentCrashFiles") { try $0.testRecentCrashFiles() },
-    test(V3FeatureTests.self, "V3FeatureTests.testSetupStatus") { try $0.testSetupStatus() }
+    test(V3FeatureTests.self, "V3FeatureTests.testSetupStatus") { try $0.testSetupStatus() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testNilKeyPicksFirst") { try $0.testNilKeyPicksFirst() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testEmptyListResolvesToNil") { try $0.testEmptyListResolvesToNil() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testResolvesByGameRootID") { try $0.testResolvesByGameRootID() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testLegacyBottlePathStillResolves") { try $0.testLegacyBottlePathStillResolves() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testUnknownKeyFallsBackToFirst") { try $0.testUnknownKeyFallsBackToFirst() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedNeedsBothSides") { try $0.testGameChangedNeedsBothSides() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedOnDifferentBuildID") { try $0.testGameChangedOnDifferentBuildID() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testSwitchingSourcesIsNotAnUpdate") { try $0.testSwitchingSourcesIsNotAnUpdate() },
+    test(InstallSelectionTests.self, "InstallSelectionTests.testGameChangedOnDifferentHash") { try $0.testGameChangedOnDifferentHash() }
 ]
 
 var passed = 0, failed = 0, skipped = 0
