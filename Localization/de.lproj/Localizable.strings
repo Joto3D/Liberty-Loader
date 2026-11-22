@@ -319,6 +319,10 @@
 "Remove All Mod Files From Game…" = "Alle Mod-Dateien aus dem Spiel entfernen…";
 "Remove all mod files from the game folder?" = "Alle Mod-Dateien aus dem Spielordner entfernen?";
 "Removed all mod files. The game folder is vanilla again." = "Alle Mod-Dateien entfernt. Der Spielordner ist wieder im Originalzustand.";
+"Replaces %@." = "Ersetzt %@.";
+"Replaces %@. %@ govern behaviour rather than appearance." = "Ersetzt %@. %@ steuern das Verhalten, nicht das Aussehen.";
+"Replaces %@. Changing %@ alters what is drawn on screen." = "Ersetzt %@. Änderungen an %@ verändern das Bild auf dem Schirm.";
+"Replaces sound only, so it cannot change what you see. That describes what it touches, not whether it is allowed." = "Ersetzt nur Ton und kann daher nichts am Bild ändern. Das beschreibt, was berührt wird — nicht, ob es erlaubt ist.";
 "Requires: %@" = "Benötigt: %@";
 "Rescan" = "Neu suchen";
 "Restore" = "Wiederherstellen";
@@ -417,12 +421,15 @@
 "You pinned this mod. Right-click to change it." = "Du hast diese Mod festgesetzt. Rechtsklick zum Ändern.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Deine Mod-Sammlung bleibt erhalten. Nur Dateien, die Liberty Loader in den Spielordner gelegt hat, werden entfernt.";
 "Your saved settings." = "Deine gespeicherten Einstellungen.";
+"contents not identified" = "Inhalt nicht erkannt";
 "file has the executable bit set" = "Datei hat das Ausführungs-Bit gesetzt";
 "launch arguments force DX11" = "launch arguments force DX11";
 "native code (.%@)" = "nativer Code (.%@)";
+"no asset patches" = "keine Asset-Patches";
 "no cause found" = "no cause found";
 "script (.%@)" = "Skript (.%@)";
 "ships a top-level \"%@\" folder with files in it" = "enthält einen Ordner \"%@\" mit Dateien auf oberster Ebene";
+"state machines" = "Zustandsautomaten";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config nicht gefunden. Starte Helldivers 2 einmal, damit sie erstellt wird.";
 "“%@” didn't run in your last game session" = "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen";
 "“%@” is kept at the bottom of the list, as its description asks." = "„%@“ bleibt ganz unten in der Liste, wie es ihre Beschreibung verlangt.";

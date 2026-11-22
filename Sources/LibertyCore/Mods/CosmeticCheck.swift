@@ -166,6 +166,7 @@ public struct CosmeticCheck: Sendable {
         var signals: [Signal] = []
         var patchCount = 0
         var unrecognised = 0
+        var patchPaths: [String] = []
 
         // Top-level runtime/mod directories holding at least one file.
         let topLevel = (try? fm.contentsOfDirectory(atPath: root)) ?? []
@@ -229,6 +230,7 @@ public struct CosmeticCheck: Sendable {
 
             if Self.isPatchFile(lower) {
                 patchCount += 1
+                patchPaths.append(full)
             } else if Self.isPatchSibling(lower) || Self.assetExtensions.contains(ext) {
                 // asset or metadata: not a signal, not unrecognised
             } else if !reported {
@@ -245,7 +247,57 @@ public struct CosmeticCheck: Sendable {
         }
 
         let verdict: Verdict = !signals.isEmpty ? .runsCode : (patchCount > 0 ? .assetsOnly : .inconclusive)
-        return Report(verdict: verdict, signals: signals, patchFileCount: patchCount, unrecognisedFileCount: unrecognised)
+        var found = Set<ResourceKind>()
+        for path in patchPaths { found.formUnion(Self.resourceKinds(inPatchAt: path)) }
+        let replaces = ResourceKind.allCases.filter { found.contains($0) }
+        return Report(verdict: verdict, signals: signals, patchFileCount: patchCount,
+                      unrecognisedFileCount: unrecognised, replaces: replaces)
+    }
+
+    // MARK: - Patch contents
+
+    /// How much of each `.patch_<n>` is scanned.
+    ///
+    /// Do not "fix" this to read whole files. Measured on a real library of 57
+    /// patch files (largest 86 MB), a 256 KiB cap gave results identical to
+    /// scanning every byte on all 57: the type hashes live in the header
+    /// region, and the bulk payload lives in the `.stream` / `.gpu_resources`
+    /// siblings. Some patches are hundreds of megabytes, and this runs for
+    /// every installed mod on each reload.
+    static let patchScanLimit = 256 * 1024
+
+    /// Stingray resource type hashes (8-byte little-endian) -> kind.
+    private static let typeHashes: [UInt64: ResourceKind] = [
+        0x504B55235D63CCCF: .audio,        // wwise_stream
+        0x535A7BD3E650D799: .audio,        // wwise_bank
+        0xCD4238C6A0C69E32: .texture,
+        0xEAC0B497876ADEDF: .material,
+        0xE0A48D0BE9A7453F: .mesh,         // unit
+        0x931E336D7646CC26: .animation,
+        0xA486D4045106165C: .stateMachine,
+        0xA14E8DFA2CD117E2: .particles,
+        0x18DEAD01056B72E9: .bones,
+        0x5F7203C8F280DAB8: .physics,
+        0x9831CA893B0D087D: .strings,
+        0xAA5965F03029FA18: .strings,
+    ]
+
+    /// Reads at most `patchScanLimit` bytes and matches 8-byte-aligned words
+    /// against the hash table. Unreadable or short files yield nothing.
+    private static func resourceKinds(inPatchAt path: String) -> Set<ResourceKind> {
+        guard let handle = FileHandle(forReadingAtPath: path) else { return [] }
+        defer { try? handle.close() }
+        guard let data = try? handle.read(upToCount: patchScanLimit), data.count >= 8 else { return [] }
+        var kinds = Set<ResourceKind>()
+        data.withUnsafeBytes { (raw: UnsafeRawBufferPointer) in
+            var offset = 0
+            while offset + 8 <= raw.count {
+                let word = UInt64(littleEndian: raw.loadUnaligned(fromByteOffset: offset, as: UInt64.self))
+                if let kind = typeHashes[word] { kinds.insert(kind) }
+                offset += 8
+            }
+        }
+        return kinds
     }
 
     // MARK: - Classification tables

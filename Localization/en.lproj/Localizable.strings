@@ -319,6 +319,10 @@
 "Remove All Mod Files From Game…" = "Remove All Mod Files From Game…";
 "Remove all mod files from the game folder?" = "Remove all mod files from the game folder?";
 "Removed all mod files. The game folder is vanilla again." = "Removed all mod files. The game folder is vanilla again.";
+"Replaces %@." = "Replaces %@.";
+"Replaces %@. %@ govern behaviour rather than appearance." = "Replaces %@. %@ govern behaviour rather than appearance.";
+"Replaces %@. Changing %@ alters what is drawn on screen." = "Replaces %@. Changing %@ alters what is drawn on screen.";
+"Replaces sound only, so it cannot change what you see. That describes what it touches, not whether it is allowed." = "Replaces sound only, so it cannot change what you see. That describes what it touches, not whether it is allowed.";
 "Requires: %@" = "Requires: %@";
 "Rescan" = "Rescan";
 "Restore" = "Restore";
@@ -417,12 +421,15 @@
 "You pinned this mod. Right-click to change it." = "You pinned this mod. Right-click to change it.";
 "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed." = "Your mod library is kept. Only files Liberty Loader placed in the game folder are removed.";
 "Your saved settings." = "Your saved settings.";
+"contents not identified" = "contents not identified";
 "file has the executable bit set" = "file has the executable bit set";
 "launch arguments force DX11" = "launch arguments force DX11";
 "native code (.%@)" = "native code (.%@)";
+"no asset patches" = "no asset patches";
 "no cause found" = "no cause found";
 "script (.%@)" = "script (.%@)";
 "ships a top-level \"%@\" folder with files in it" = "ships a top-level \"%@\" folder with files in it";
+"state machines" = "state machines";
 "user_settings.config not found. Launch Helldivers 2 once to create it." = "user_settings.config not found. Launch Helldivers 2 once to create it.";
 "“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
