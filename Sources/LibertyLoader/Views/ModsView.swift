@@ -283,6 +283,22 @@ struct ModRow: View {
 
     private var conflictList: String { conflictsWith.joined(separator: ", ") }
 
+    /// Explains the replaces tag without implying a verdict on safety.
+    private func replacesHelp(_ report: CosmeticCheck.Report) -> Text {
+        if report.isAudioOnly {
+            return Text("Replaces sound only, so it cannot change what you see. That describes what it touches, not whether it is allowed.")
+        }
+        let visual = report.replaces.filter(\.isVisual).map(\.displayName).joined(separator: ", ")
+        let behaviour = report.replaces.filter(\.affectsBehaviour).map(\.displayName).joined(separator: ", ")
+        if !behaviour.isEmpty {
+            return Text("Replaces \(report.replacesSummary). \(behaviour) govern behaviour rather than appearance.")
+        }
+        if !visual.isEmpty {
+            return Text("Replaces \(report.replacesSummary). Changing \(visual) alters what is drawn on screen.")
+        }
+        return Text("Replaces \(report.replacesSummary).")
+    }
+
     /// Tooltip naming what was found, so the tag is judgeable without digging.
     /// Built with `verbatim` Text because the body is file paths, not prose.
     private func codeHelp(_ report: CosmeticCheck.Report) -> String {
@@ -333,9 +349,20 @@ struct ModRow: View {
                     // Only mods that run code are tagged. There is deliberately
                     // no "cosmetic" badge: the check cannot open patch archives,
                     // so a green tag would promise a safety it never established.
-                    if let report = model.cosmeticCache[mod.id], report.verdict == .runsCode {
-                        HDTag(text: "Runs code", color: .hdYellow)
-                            .help(Text(verbatim: codeHelp(report)))
+                    if let report = model.cosmeticCache[mod.id] {
+                        if report.verdict == .runsCode {
+                            HDTag(text: "Runs code", color: .hdYellow)
+                                .help(Text(verbatim: codeHelp(report)))
+                        }
+                        // What the patches actually replace. Audio cannot change
+                        // what you see; textures and meshes can. Shown plainly
+                        // rather than scored, because this says what a mod
+                        // touches and never that it is allowed.
+                        if !report.replaces.isEmpty {
+                            HDTag(text: LocalizedStringKey(report.replacesSummary),
+                                  color: report.isAudioOnly ? .hdMuted : .hdInfo)
+                                .help(replacesHelp(report))
+                        }
                     }
                     ForEach(model.missingRequirements(for: mod), id: \.self) { requirement in
                         Button {
