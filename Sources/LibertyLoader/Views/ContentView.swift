@@ -64,6 +64,10 @@ struct ContentView: View {
         .sheet(isPresented: $model.showSetup) {
             SetupWizardView().environment(model)
         }
+        .sheet(item: $model.nexusWebInstall) { mod in
+            NexusWebSheet(mod: mod)
+                .environment(model)
+        }
         .task { model.showSetupIfNeeded() }
         .alert("Something went wrong", isPresented: Binding(
             get: { model.errorMessage != nil },

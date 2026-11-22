@@ -68,6 +68,7 @@
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Copy enabled mods into the game folder (also done automatically on launch).";
 "Could not extract the mod archive: %@" = "Could not extract the mod archive: %@";
 "Couldn't load mods" = "Couldn't load mods";
+"Couldn't load the page" = "Couldn't load the page";
 "Crash helper" = "Crash helper";
 "CrossOver" = "CrossOver";
 "CrossOver %@" = "CrossOver %@";
@@ -162,6 +163,7 @@
 "High Resolution Mode turned off." = "High Resolution Mode turned off.";
 "High Resolution Mode turned on." = "High Resolution Mode turned on.";
 "How to use" = "How to use";
+"If this page will not load here, finish the install in your browser instead." = "If this page will not load here, finish the install in your browser instead.";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam.";
 "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11." = "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11.";
 "Install" = "Install";
@@ -283,6 +285,7 @@
 "Open Liberty Loader" = "Open Liberty Loader";
 "Open Liberty Loader Folder" = "Open Liberty Loader Folder";
 "Open Settings" = "Open Settings";
+"Open in Browser" = "Open in Browser";
 "Open on Nexus Mods" = "Open on Nexus Mods";
 "Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them." = "Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them.";
 "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here." = "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here.";
@@ -305,6 +308,7 @@
 "Plug in your MacBook and set Energy Mode to High Power where available." = "Plug in your MacBook and set Energy Mode to High Power where available.";
 "Pre-flight check" = "Pre-flight check";
 "Presets" = "Presets";
+"Press “Mod Manager Download” on this page. Liberty Loader takes it from there." = "Press “Mod Manager Download” on this page. Liberty Loader takes it from there.";
 "Problems found" = "Problems found";
 "Profiles" = "Profiles";
 "Quality" = "Quality";

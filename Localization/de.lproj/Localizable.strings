@@ -68,6 +68,7 @@
 "Copy enabled mods into the game folder (also done automatically on launch)." = "Aktivierte Mods in den Spielordner kopieren (passiert beim Start auch automatisch).";
 "Could not extract the mod archive: %@" = "Das Mod-Archiv konnte nicht entpackt werden: %@";
 "Couldn't load mods" = "Mods konnten nicht geladen werden";
+"Couldn't load the page" = "Seite konnte nicht geladen werden";
 "Crash helper" = "Absturz-Helfer";
 "CrossOver" = "CrossOver";
 "CrossOver %@" = "CrossOver %@";
@@ -162,6 +163,7 @@
 "High Resolution Mode turned off." = "Hochauflösender Modus ausgeschaltet.";
 "High Resolution Mode turned on." = "Hochauflösender Modus eingeschaltet.";
 "How to use" = "So geht's";
+"If this page will not load here, finish the install in your browser instead." = "Wenn die Seite hier nicht lädt, schließe die Installation im Browser ab.";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "Wähl in CrossOver „Windows-Anwendung installieren“, such nach Steam und installier es. Melde dich danach bei Steam an.";
 "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11." = "In Steam Rechtsklick auf Helldivers 2 → Eigenschaften und --use-d3d11 aus den Startoptionen löschen. Sonst bleibt das Spiel bei DirectX 11.";
 "Install" = "Installieren";
@@ -283,6 +285,7 @@
 "Open Liberty Loader" = "Liberty Loader öffnen";
 "Open Liberty Loader Folder" = "Liberty-Loader-Ordner öffnen";
 "Open Settings" = "Einstellungen öffnen";
+"Open in Browser" = "Im Browser öffnen";
 "Open on Nexus Mods" = "Auf Nexus Mods öffnen";
 "Opened %lld required mods on Nexus Mods. Click “Mod Manager Download” on each page and Liberty Loader installs them." = "%lld benötigte Mods auf Nexus Mods geöffnet. Klick auf jeder Seite auf „Mod Manager Download“, dann installiert Liberty Loader sie.";
 "Opens the mod's files on Nexus Mods. Click “Mod Manager Download” there to update it here." = "Öffnet die Dateien der Mod auf Nexus Mods. Klick dort auf „Mod Manager Download“, um sie hier zu aktualisieren.";
@@ -305,6 +308,7 @@
 "Plug in your MacBook and set Energy Mode to High Power where available." = "Schließ dein MacBook ans Netzteil an und stell den Energiemodus auf „Hohe Leistung“, falls verfügbar.";
 "Pre-flight check" = "Startcheck";
 "Presets" = "Voreinstellungen";
+"Press “Mod Manager Download” on this page. Liberty Loader takes it from there." = "Klicke auf dieser Seite auf „Mod Manager Download“. Liberty Loader übernimmt dann.";
 "Problems found" = "Probleme gefunden";
 "Profiles" = "Profile";
 "Quality" = "Qualität";
