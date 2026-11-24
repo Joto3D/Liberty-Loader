@@ -2,6 +2,7 @@
 
 "%@ applied. Restart the game if it is running." = "%@ angewendet. Starte das Spiel neu, falls es läuft.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ ist in %@ deaktiviert. DirectX 12 kann nicht starten, deshalb weicht das Spiel auf DirectX 11 aus.";
+"%@ look applied. Restart the game if it is running." = "Look %@ angewendet. Starte das Spiel neu, falls es läuft.";
 "%@ of %@ mods" = "%@ von %@ Mods";
 "%@ results" = "%@ Ergebnisse";
 "%lld Helldivers online" = "%lld Helldivers online";
@@ -20,6 +21,7 @@
 "All game settings" = "Alle Spieleinstellungen";
 "All mods look good" = "Alle Mods sehen gut aus";
 "App updates" = "App-Updates";
+"Applied" = "Angewendet";
 "Apply %@" = "%@ anwenden";
 "Apply Low-Memory Textures" = "Speichersparende Texturen anwenden";
 "Apply Now" = "Jetzt anwenden";
@@ -30,6 +32,7 @@
 "Backups" = "Backups";
 "Balanced" = "Ausgewogen";
 "Before %@" = "Vor %@";
+"Before %@ look" = "Vor Look %@";
 "Before low-memory textures" = "Vor speichersparenden Texturen";
 "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS." = "Unter den niedrigsten Einstellungen des Spiels, wie die Ultimate-Performance-Mod. Alle Effekte aus, sogar Sonnenschatten, für schwache Macs oder maximale FPS.";
 "Bottle settings" = "Bottle-Einstellungen";
@@ -51,6 +54,8 @@
 "Checks every mod against your game folder and explains what's wrong." = "Prüft jede Mod gegen deinen Spielordner und erklärt, was nicht stimmt.";
 "Checks why mods might not show up in game." = "Prüft, warum Mods im Spiel nicht auftauchen.";
 "Choose CrossOver.app…" = "CrossOver.app auswählen…";
+"Cinematic" = "Filmisch";
+"Clean and readable. Blur, depth of field and heat haze off, sharpening up. Slightly faster than Cinematic." = "Klar und gut lesbar. Unschärfe, Tiefenschärfe und Hitzeflimmern aus, Schärfe hoch. Etwas schneller als Filmisch.";
 "Clear filters" = "Filter zurücksetzen";
 "Clear filters to reorder" = "Filter entfernen, um die Reihenfolge zu ändern";
 "Close" = "Schließen";
@@ -68,6 +73,7 @@
 "Couldn't load mods" = "Mods konnten nicht geladen werden";
 "Couldn't load the page" = "Seite konnte nicht geladen werden";
 "Crash helper" = "Absturz-Helfer";
+"Crisp" = "Klar";
 "CrossOver" = "CrossOver";
 "CrossOver %@" = "CrossOver %@";
 "CrossOver bottle" = "CrossOver-Bottle";
@@ -117,6 +123,7 @@
 "Faster thread synchronisation." = "Schnellere Thread-Synchronisation.";
 "Field manual" = "Feldhandbuch";
 "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them." = "Dateien im Spielordner, die nicht von Liberty Loader stammen (z. B. von einem anderen Mod-Manager oder per Hand installiert). Sie können deine Mods überschreiben oder kaputt machen. Liberty Loader löscht sie nie; entferne sie selbst, wenn du sie nicht brauchst.";
+"Film-like. Colour grading, bloom, depth of field and a little motion blur, with sharpening eased off. Costs some frames." = "Wie im Kino. Farbgebung, Bloom, Tiefenschärfe und etwas Bewegungsunschärfe, dafür weniger Schärfe. Kostet ein paar Frames.";
 "Filter" = "Filter";
 "Filters as you type; press Return to search all of Nexus Mods." = "Filtert beim Tippen; mit Return durchsuchst du ganz Nexus Mods.";
 "For Max/Ultra chips. High shadows, reflections and effects." = "Für Max/Ultra-Chips. Hohe Schatten, Spiegelungen und Effekte.";
@@ -209,6 +216,7 @@
 "Loading the description from Nexus Mods…" = "Lade die Beschreibung von Nexus Mods…";
 "Loading…" = "Wird geladen…";
 "Location" = "Ort";
+"Look" = "Bildstil";
 "Low-memory textures applied. Restart the game if it is running." = "Speichersparende Texturen angewendet. Starte das Spiel neu, falls es läuft.";
 "MSync" = "MSync";
 "Major Order" = "Hauptbefehl";
@@ -302,6 +310,7 @@
 "Playtime" = "Spielzeit";
 "Playtime: %@" = "Spielzeit: %@";
 "Plug in your MacBook and set Energy Mode to High Power where available." = "Schließ dein MacBook ans Netzteil an und stell den Energiemodus auf „Hohe Leistung“, falls verfügbar.";
+"Post-processing only: grading, bloom, depth of field, blur and sharpening. Your quality settings — shadows, textures, view distance — are left alone. This is the part of a ReShade preset the game can do itself; anything needing the depth buffer is not available." = "Nur Nachbearbeitung: Farbgebung, Bloom, Tiefenschärfe, Unschärfe und Schärfe. Deine Qualitätseinstellungen — Schatten, Texturen, Sichtweite — bleiben unangetastet. Das ist der Teil eines ReShade-Presets, den das Spiel selbst kann; alles, was den Tiefenpuffer braucht, gibt es nicht.";
 "Pre-flight check" = "Startcheck";
 "Presets" = "Voreinstellungen";
 "Press “Mod Manager Download” on this page. Liberty Loader takes it from there." = "Klicke auf dieser Seite auf „Mod Manager Download“. Liberty Loader übernimmt dann.";
