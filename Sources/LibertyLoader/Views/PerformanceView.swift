@@ -40,6 +40,7 @@ struct PerformanceView: View {
             StatusBanner()
             diagnosisSection
             presetsSection
+            lookSection
             bottleSection
             tipsSection
             advancedSection
@@ -57,6 +58,65 @@ struct PerformanceView: View {
         } message: {
             Text("Saves your current game and bottle settings so you can switch back to them later.")
         }
+    }
+
+    // MARK: Look
+
+    /// Post-processing only. Kept apart from the presets above because the two
+    /// are different choices: a quality preset decides how much the GPU does,
+    /// a look decides what is done with the result. Applying one leaves the
+    /// other alone.
+    private var lookSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HDSectionHeader(title: "Look")
+            Text("Post-processing only: grading, bloom, depth of field, blur and sharpening. Your quality settings — shadows, textures, view distance — are left alone. This is the part of a ReShade preset the game can do itself; anything needing the depth buffer is not available.")
+                .font(.caption)
+                .foregroundStyle(Color.hdMuted)
+                .fixedSize(horizontal: false, vertical: true)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 260), spacing: 12)], spacing: 12) {
+                ForEach(LookPreset.all) { look in
+                    HDPanel {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 8) {
+                                Text(LocalizedStringKey(look.name))
+                                    .font(.hdDisplay(18))
+                                    .textCase(.uppercase)
+                                    .foregroundStyle(Color.hdText)
+                                Spacer()
+                                if isApplied(look) { HDTag(text: "Applied", color: .hdInfo) }
+                            }
+                            Text(LocalizedStringKey(look.summary))
+                                .font(.caption)
+                                .foregroundStyle(Color.hdMuted)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Button { apply(look) } label: {
+                                Label { Text("Apply \(Text(LocalizedStringKey(look.name)))") } icon: { Image(systemName: "camera.filters") }
+                            }
+                            .buttonStyle(HDSecondaryButtonStyle())
+                            .disabled(model.game == nil || model.isGameRunning || config == nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func isApplied(_ look: LookPreset) -> Bool {
+        guard let config else { return false }
+        return look.matches(config)
+    }
+
+    private func apply(_ look: LookPreset) {
+        guard let game = model.game else { return }
+        model.perform {
+            guard var config = try? UserSettingsConfig.load(from: game.userSettingsURL) else { return }
+            try model.backups?.backup(game.userSettingsURL, label: "Before \(look.name) look")
+            skippedKeys = config.apply(look.settings)
+            try config.write(to: game.userSettingsURL)
+            let name = String(localized: String.LocalizationValue(look.name))
+            model.statusMessage = String(localized: "\(name) look applied. Restart the game if it is running.")
+        }
+        load()
     }
 
     // MARK: Presets

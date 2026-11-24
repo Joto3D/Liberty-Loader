@@ -459,4 +459,13 @@ DE = {
     "Every mod here is filtered out.": "Hier ist jede Mod ausgefiltert.",
     "Helldivers 2 is not running": "Helldivers 2 läuft nicht",
     "This install is managed by %@": "Diese Installation wird von %@ verwaltet",
+    "%@ look applied. Restart the game if it is running.": "Look %@ angewendet. Starte das Spiel neu, falls es läuft.",
+    "Applied": "Angewendet",
+    "Before %@ look": "Vor Look %@",
+    "Post-processing only: grading, bloom, depth of field, blur and sharpening. Your quality settings — shadows, textures, view distance — are left alone. This is the part of a ReShade preset the game can do itself; anything needing the depth buffer is not available.": "Nur Nachbearbeitung: Farbgebung, Bloom, Tiefenschärfe, Unschärfe und Schärfe. Deine Qualitätseinstellungen — Schatten, Texturen, Sichtweite — bleiben unangetastet. Das ist der Teil eines ReShade-Presets, den das Spiel selbst kann; alles, was den Tiefenpuffer braucht, gibt es nicht.",
+    "Cinematic": "Filmisch",
+    "Clean and readable. Blur, depth of field and heat haze off, sharpening up. Slightly faster than Cinematic.": "Klar und gut lesbar. Unschärfe, Tiefenschärfe und Hitzeflimmern aus, Schärfe hoch. Etwas schneller als Filmisch.",
+    "Crisp": "Klar",
+    "Film-like. Colour grading, bloom, depth of field and a little motion blur, with sharpening eased off. Costs some frames.": "Wie im Kino. Farbgebung, Bloom, Tiefenschärfe und etwas Bewegungsunschärfe, dafür weniger Schärfe. Kostet ein paar Frames.",
+    "Look": "Bildstil",
 }

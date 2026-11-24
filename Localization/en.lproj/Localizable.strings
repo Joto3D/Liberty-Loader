@@ -2,6 +2,7 @@
 
 "%@ applied. Restart the game if it is running." = "%@ applied. Restart the game if it is running.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11.";
+"%@ look applied. Restart the game if it is running." = "%@ look applied. Restart the game if it is running.";
 "%@ of %@ mods" = "%@ of %@ mods";
 "%@ results" = "%@ results";
 "%lld Helldivers online" = "%lld Helldivers online";
@@ -20,6 +21,7 @@
 "All game settings" = "All game settings";
 "All mods look good" = "All mods look good";
 "App updates" = "App updates";
+"Applied" = "Applied";
 "Apply %@" = "Apply %@";
 "Apply Low-Memory Textures" = "Apply Low-Memory Textures";
 "Apply Now" = "Apply Now";
@@ -30,6 +32,7 @@
 "Backups" = "Backups";
 "Balanced" = "Balanced";
 "Before %@" = "Before %@";
+"Before %@ look" = "Before %@ look";
 "Before low-memory textures" = "Before low-memory textures";
 "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS." = "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS.";
 "Bottle settings" = "Bottle settings";
@@ -51,6 +54,8 @@
 "Checks every mod against your game folder and explains what's wrong." = "Checks every mod against your game folder and explains what's wrong.";
 "Checks why mods might not show up in game." = "Checks why mods might not show up in game.";
 "Choose CrossOver.app…" = "Choose CrossOver.app…";
+"Cinematic" = "Cinematic";
+"Clean and readable. Blur, depth of field and heat haze off, sharpening up. Slightly faster than Cinematic." = "Clean and readable. Blur, depth of field and heat haze off, sharpening up. Slightly faster than Cinematic.";
 "Clear filters" = "Clear filters";
 "Clear filters to reorder" = "Clear filters to reorder";
 "Close" = "Close";
@@ -68,6 +73,7 @@
 "Couldn't load mods" = "Couldn't load mods";
 "Couldn't load the page" = "Couldn't load the page";
 "Crash helper" = "Crash helper";
+"Crisp" = "Crisp";
 "CrossOver" = "CrossOver";
 "CrossOver %@" = "CrossOver %@";
 "CrossOver bottle" = "CrossOver bottle";
@@ -117,6 +123,7 @@
 "Faster thread synchronisation." = "Faster thread synchronisation.";
 "Field manual" = "Field manual";
 "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them." = "Files in the game folder that Liberty Loader didn't install (for example from another mod manager or a manual install). They can override or break your mods. Liberty Loader never deletes them; remove them by hand if you don't need them.";
+"Film-like. Colour grading, bloom, depth of field and a little motion blur, with sharpening eased off. Costs some frames." = "Film-like. Colour grading, bloom, depth of field and a little motion blur, with sharpening eased off. Costs some frames.";
 "Filter" = "Filter";
 "Filters as you type; press Return to search all of Nexus Mods." = "Filters as you type; press Return to search all of Nexus Mods.";
 "For Max/Ultra chips. High shadows, reflections and effects." = "For Max/Ultra chips. High shadows, reflections and effects.";
@@ -209,6 +216,7 @@
 "Loading the description from Nexus Mods…" = "Loading the description from Nexus Mods…";
 "Loading…" = "Loading…";
 "Location" = "Location";
+"Look" = "Look";
 "Low-memory textures applied. Restart the game if it is running." = "Low-memory textures applied. Restart the game if it is running.";
 "MSync" = "MSync";
 "Major Order" = "Major Order";
@@ -302,6 +310,7 @@
 "Playtime" = "Playtime";
 "Playtime: %@" = "Playtime: %@";
 "Plug in your MacBook and set Energy Mode to High Power where available." = "Plug in your MacBook and set Energy Mode to High Power where available.";
+"Post-processing only: grading, bloom, depth of field, blur and sharpening. Your quality settings — shadows, textures, view distance — are left alone. This is the part of a ReShade preset the game can do itself; anything needing the depth buffer is not available." = "Post-processing only: grading, bloom, depth of field, blur and sharpening. Your quality settings — shadows, textures, view distance — are left alone. This is the part of a ReShade preset the game can do itself; anything needing the depth buffer is not available.";
 "Pre-flight check" = "Pre-flight check";
 "Presets" = "Presets";
 "Press “Mod Manager Download” on this page. Liberty Loader takes it from there." = "Press “Mod Manager Download” on this page. Liberty Loader takes it from there.";

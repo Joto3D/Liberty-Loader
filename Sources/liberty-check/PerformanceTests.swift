@@ -83,6 +83,56 @@ final class PerformanceTests: TempDirTestCase {
         XCTAssertTrue(config.text.contains("\t\t456\n"))
     }
 
+    /// The look keys as the real file holds them: all inside `render_settings`,
+    /// which is why a look names the leaf and lets `apply` resolve it.
+    let lookConfig = "render_settings = {\n\tbloom_enabled = true\n\tdof_enabled = true\n\tmotion_blur_enabled = false\n"
+        + "\tmotion_blur_amount_multiplier = 0\n\theathaze_enabled = false\n\tcolor_grading_enabled = true\n"
+        + "\tlens_quality_enabled = true\n\tsharpening_enabled = true\n\tsharpening_amount = 0.75\n"
+        + "\tvrs_sharpening_enabled = true\n\tvrs_sharpening_strength = 0.5\n\tscreen_brightness = 1.059999942779541\n"
+        + "\tshadows = 1\n\ttexture_quality = 1\n\tview_distance = \"medium\"\n}\nframerate_limit = 144\n"
+
+    func testLookPresetsOnlyUseRealConfigKeys() {
+        for look in LookPreset.all {
+            var config = UserSettingsConfig(text: lookConfig)
+            XCTAssertEqual(config.apply(look.settings), [], look.id)
+        }
+    }
+
+    /// The point of keeping looks apart from presets: choosing how the frame is
+    /// graded must not silently re-decide how much work the GPU does.
+    func testLookPresetsLeaveQualitySettingsAlone() {
+        let qualityKeys: Set<String> = [
+            "shadows", "particle_quality", "terrain_quality", "texture_quality",
+            "volumetric_clouds_quality", "volumetric_fog_quality", "reflection_quality",
+            "lighting_and_material_quality", "upscaling_quality", "ssao_enabled", "ssr_enabled",
+            "view_distance", "object_lod_quality", "space_quality", "sun_shadows",
+            "framerate_limit", "framerate_limit_enabled", "vsync", "render_resolution",
+        ]
+        XCTAssertTrue(LookPreset.allKeys.isDisjoint(with: qualityKeys))
+
+        var config = UserSettingsConfig(text: lookConfig)
+        _ = config.apply(LookPreset.cinematic.settings)
+        XCTAssertTrue(config.text.contains("\tshadows = 1\n"))
+        XCTAssertTrue(config.text.contains("\ttexture_quality = 1\n"))
+        XCTAssertTrue(config.text.contains("view_distance = \"medium\""))
+        XCTAssertTrue(config.text.contains("framerate_limit = 144"))
+        // Brightness is the user's own calibration, not part of a look.
+        XCTAssertTrue(config.text.contains("screen_brightness = 1.059999942779541"))
+    }
+
+    func testLookMatchesConfigNumerically() {
+        var config = UserSettingsConfig(text: lookConfig)
+        XCTAssertFalse(LookPreset.cinematic.matches(config))
+        _ = config.apply(LookPreset.cinematic.settings)
+        XCTAssertTrue(LookPreset.cinematic.matches(config))
+        XCTAssertFalse(LookPreset.crisp.matches(config))
+        // The game rewrites floats with its own precision; that is still a match.
+        XCTAssertTrue(config.set("render_settings.sharpening_amount", to: "0.40000001"))
+        XCTAssertTrue(LookPreset.cinematic.matches(config))
+        XCTAssertTrue(config.set("render_settings.sharpening_amount", to: "0.9"))
+        XCTAssertFalse(LookPreset.cinematic.matches(config))
+    }
+
     func testBuiltInPresetsAddMacFriendlySettings() {
         let settings = PerformancePreset.balanced.settingsToApply
         XCTAssertEqual(settings["IGNORE_APPROVED_DRIVER_WARNING"], "true")
