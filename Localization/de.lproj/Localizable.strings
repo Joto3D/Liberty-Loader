@@ -2,7 +2,6 @@
 
 "%@ applied. Restart the game if it is running." = "%@ angewendet. Starte das Spiel neu, falls es läuft.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ ist in %@ deaktiviert. DirectX 12 kann nicht starten, deshalb weicht das Spiel auf DirectX 11 aus.";
-"%@ mods" = "%@ Mods";
 "%@ of %@ mods" = "%@ von %@ Mods";
 "%@ results" = "%@ Ergebnisse";
 "%lld Helldivers online" = "%lld Helldivers online";
@@ -10,6 +9,7 @@
 "%lld files are not in the game folder yet." = "%lld Dateien sind noch nicht im Spielordner.";
 "%lld mods are pinned in the load order, as their descriptions ask." = "%lld Mods sind in der Reihenfolge festgesetzt, wie es ihre Beschreibungen verlangen.";
 "%lld mods enabled" = "%lld Mods aktiviert";
+"%lld of %lld selected" = "%lld von %lld ausgewählt";
 "%lld patch files from another tool" = "%lld Patch-Dateien von einem anderen Programm";
 "API key" = "API-Schlüssel";
 "Add your Nexus Mods API key in Settings first." = "Trag zuerst deinen Nexus-Mods-API-Schlüssel in den Einstellungen ein.";
@@ -32,7 +32,6 @@
 "Before %@" = "Vor %@";
 "Before low-memory textures" = "Vor speichersparenden Texturen";
 "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS." = "Unter den niedrigsten Einstellungen des Spiels, wie die Ultimate-Performance-Mod. Alle Effekte aus, sogar Sonnenschatten, für schwache Macs oder maximale FPS.";
-"Bottle" = "Bottle";
 "Bottle settings" = "Bottle-Einstellungen";
 "Browse" = "Entdecken";
 "Browse Helldivers 2 Mods" = "Helldivers-2-Mods ansehen";
@@ -54,7 +53,6 @@
 "Choose CrossOver.app…" = "CrossOver.app auswählen…";
 "Clear filters" = "Filter zurücksetzen";
 "Clear filters to reorder" = "Filter entfernen, um die Reihenfolge zu ändern";
-"Click “Mod Manager Download” on Nexus Mods to finish installing." = "Klick auf Nexus Mods auf „Mod Manager Download“, um die Installation abzuschließen.";
 "Close" = "Schließen";
 "Config file not found: %@" = "Konfigurationsdatei nicht gefunden: %@";
 "Connect Nexus Mods" = "Nexus Mods verbinden";
@@ -112,6 +110,7 @@
 "Enable All" = "Alle aktivieren";
 "Enabled" = "Aktiv";
 "Ends %@" = "Endet %@";
+"Every mod here is filtered out." = "Hier ist jede Mod ausgefiltert.";
 "Everything looks right but mods still don't show? Start the game from Liberty Loader, or press Apply Now after starting it through Steam." = "Alles sieht gut aus, aber die Mods fehlen trotzdem? Starte das Spiel über Liberty Loader oder drück „Jetzt anwenden“, nachdem du es über Steam gestartet hast.";
 "Extra launch options" = "Zusätzliche Startoptionen";
 "Fallback if MSync is unstable." = "Alternative, falls MSync instabil ist.";
@@ -142,11 +141,11 @@
 "Graphics backend" = "Grafik-Backend";
 "Graphics backend switched to %@. Try launching again." = "Grafik-Backend auf %@ umgestellt. Versuch es nochmal zu starten.";
 "Guide: how to use this mod" = "Anleitung: So benutzt du diese Mod";
-"Helldivers 2 bottle" = "Helldivers-2-Bottle";
 "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing." = "Helldivers 2 kann mehr brauchen, dann lagert macOS aus und das Spiel ruckelt. Niedrige Texturen helfen am meisten. Schließe Browser und Discord beim Spielen.";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 gefunden in Bottle „%@“";
 "Helldivers 2 hasn't started" = "Helldivers 2 ist nicht gestartet";
 "Helldivers 2 install" = "Helldivers 2-Installation";
+"Helldivers 2 is not running" = "Helldivers 2 läuft nicht";
 "Helldivers 2 is running" = "Helldivers 2 läuft";
 "Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 braucht %@. Starte das Spiel nach dieser Mission neu.";
 "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 braucht %@. Das Spiel kann bald abstürzen: Beende die Mission und starte das Spiel neu.";
@@ -166,6 +165,7 @@
 "If this page will not load here, finish the install in your browser instead." = "Wenn die Seite hier nicht lädt, schließe die Installation im Browser ab.";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "Wähl in CrossOver „Windows-Anwendung installieren“, such nach Steam und installier es. Melde dich danach bei Steam an.";
 "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11." = "In Steam Rechtsklick auf Helldivers 2 → Eigenschaften und --use-d3d11 aus den Startoptionen löschen. Sonst bleibt das Spiel bei DirectX 11.";
+"Include" = "Aktivieren";
 "Install" = "Installieren";
 "Install %@" = "%@ installieren";
 "Install All Missing" = "Alle fehlenden installieren";
@@ -238,9 +238,7 @@
 "Mods, performance and launch, managed for your Mac." = "Mods, Leistung und Start, alles für deinen Mac.";
 "More" = "Mehr";
 "Most downloaded" = "Meiste Downloads";
-"Most endorsed" = "Meiste Empfehlungen";
 "Move to Bottom" = "Nach unten schieben";
-"Name" = "Name";
 "Name, e.g. Cosmetics only" = "Name, z. B. Nur Optik";
 "Name, e.g. My Settings" = "Name, z. B. Meine Einstellungen";
 "Needs %@" = "Braucht %@";
@@ -258,12 +256,10 @@
 "Nexus Mods returned an error (%lld)." = "Nexus Mods hat einen Fehler gemeldet (%lld).";
 "Nexus Mods returned an unexpected browse response." = "Nexus Mods hat eine unerwartete Browse-Antwort geliefert.";
 "Nexus mod %lld" = "Nexus-Mod %lld";
-"Nexus order" = "Nexus-Reihenfolge";
 "No Helldivers 2 install found. Looked in %@ and %@." = "Keine Helldivers 2-Installation gefunden. Gesucht in %@ und %@.";
 "No backup is available for this file." = "Für diese Datei gibt es kein Backup.";
 "No backups yet." = "Noch keine Backups.";
 "No bottle selected." = "Keine Bottle ausgewählt.";
-"No bottle with Helldivers 2 found in %@." = "Keine Bottle mit Helldivers 2 in %@ gefunden.";
 "No cause found in the bottle. The game may fall back to DirectX 11 on its own. Copy the report and send it." = "Keine Ursache in der Flasche gefunden. Das Spiel weicht vielleicht von selbst auf DirectX 11 aus. Kopiere den Bericht und schick ihn.";
 "No errors in the log" = "Keine Fehler im Protokoll";
 "No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then." = "Noch keine Mod-Protokolle gefunden. Starte einmal einen Einsatz mit aktivierten Mods; Mod-Loader wie Bingus Shared Loader schreiben dann ein Protokoll.";
@@ -352,6 +348,7 @@
 "Saves your current game and bottle settings so you can switch back to them later." = "Speichert deine aktuellen Spiel- und Bottle-Einstellungen, damit du später zu ihnen zurückwechseln kannst.";
 "Search Nexus Mods" = "Nexus Mods durchsuchen";
 "Search mods" = "Mods suchen";
+"Select All" = "Alle auswählen";
 "Settings" = "Einstellungen";
 "Setup assistant" = "Einrichtungs-Assistent";
 "Setup in progress" = "Einrichtung läuft";
@@ -371,7 +368,6 @@
 "Some mods may not work" = "Manche Mods funktionieren vielleicht nicht";
 "Some settings were skipped" = "Einige Einstellungen wurden übersprungen";
 "Something went wrong" = "Etwas ist schiefgelaufen";
-"Sort" = "Sortierung";
 "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again." = "Steam oder die Bottle hängt vielleicht. Liberty Loader kann alles in der Bottle beenden und es nochmal versuchen.";
 "Steam still forces DirectX 11" = "Steam erzwingt noch DirectX 11";
 "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties." = "Die Steam-Startoptionen erzwingen DirectX 11 (Steam-Nutzer %@). Lösche --use-d3d11 in Steam → Helldivers 2 → Eigenschaften.";
@@ -393,6 +389,7 @@
 "The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it." = "Die Beschreibung der Mod verlangt diese Position, deshalb hält Liberty Loader sie dort. Rechtsklick zum Ändern.";
 "The selected variant contains no mod files. Pick another variant on the Mods page." = "Die gewählte Variante enthält keine Mod-Dateien. Wähl auf der Mods-Seite eine andere Variante.";
 "This happens when the game is started through Steam instead of Liberty Loader." = "Das passiert, wenn das Spiel über Steam statt über Liberty Loader gestartet wird.";
+"This install is managed by %@" = "Diese Installation wird von %@ verwaltet";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "Das ist ein Windows-Programm (z. B. ein Mod-Manager), keine Mod. Du brauchst es nicht: Liberty Loader übernimmt diese Aufgabe auf deinem Mac. Lade stattdessen die Mod selbst herunter.";
 "This mod does not contain any Helldivers 2 patch files." = "Diese Mod enthält keine Patch-Dateien für Helldivers 2.";
 "This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader." = "Diese Mod beschreibt keine besondere Steuerung. Die meisten Mods wirken automatisch, sobald sie angewendet sind: Starte das Spiel einfach über Liberty Loader.";
@@ -400,7 +397,6 @@
 "This mod needs another mod. Click to install it." = "Diese Mod braucht eine andere Mod. Klick, um sie zu installieren.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tipp: Den hochauflösenden Modus (Retina) auf der Leistung-Seite auszuschalten hilft auch bei Abstürzen wegen wenig Arbeitsspeicher.";
 "Top rated" = "Bestbewertet";
-"Trending" = "Angesagt";
 "Try Again" = "Nochmal versuchen";
 "Turn Off" = "Ausschalten";
 "Turn On" = "Einschalten";
@@ -443,4 +439,3 @@
 "“%@” didn't run in your last game session" = "„%@“ ist bei deiner letzten Spielrunde nicht gelaufen";
 "“%@” is kept at the bottom of the list, as its description asks." = "„%@“ bleibt ganz unten in der Liste, wie es ihre Beschreibung verlangt.";
 "“%@” is kept at the top of the list, as its description asks." = "„%@“ bleibt ganz oben in der Liste, wie es ihre Beschreibung verlangt.";
-"“Nexus order” keeps the ranking Nexus returned for this tab." = "„Nexus-Reihenfolge“ behält das Ranking bei, das Nexus für diesen Tab geliefert hat.";

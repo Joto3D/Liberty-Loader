@@ -27,6 +27,82 @@ final class ModTests: TempDirTestCase {
         XCTAssertEqual(manifest.includedFolders(option: 9, subOption: nil), ["blue"])
     }
 
+    func testCombinableOptionsStack() throws {
+        // A weapon-skin pack: every option is its own folder, so there is no
+        // reason to make the user pick one.
+        let json = """
+        {"Version":1,"Name":"Menacing Weapons","Options":[
+            {"Name":"Rifle","Include":["Weapons/Rifle"]},
+            {"Name":"Cannon","Include":["Weapons/Cannon"],"SubOptions":[{"Name":"Quiet","Include":["Weapons/Cannon/Quiet"]},{"Name":"Loud","Include":["Weapons/Cannon/Loud"]}]},
+            {"Name":"Laser","Include":["Weapons/Laser"]}]}
+        """
+        let manifest = try ModManifest.parse(Data(json.utf8))
+        XCTAssertTrue(manifest.optionsAreCombinable)
+        XCTAssertEqual(manifest.includedFolders(options: [0, 2], subOptions: [:]),
+                       ["Weapons/Rifle", "Weapons/Laser"])
+        // Sub-options stay single: one style per chosen option, not both.
+        XCTAssertEqual(manifest.includedFolders(options: [0, 1], subOptions: [1: 1]),
+                       ["Weapons/Rifle", "Weapons/Cannon", "Weapons/Cannon/Loud"])
+        XCTAssertEqual(manifest.includedFolders(options: [1], subOptions: [:]),
+                       ["Weapons/Cannon", "Weapons/Cannon/Quiet"])
+        // Indices that no longer exist are dropped, not clamped.
+        XCTAssertEqual(manifest.includedFolders(options: [2, 9], subOptions: [:]), ["Weapons/Laser"])
+        // Nothing chosen resolves like the old single-selection default.
+        XCTAssertEqual(manifest.includedFolders(options: [], subOptions: [:]), ["Weapons/Rifle"])
+    }
+
+    func testOverlappingOptionsStaySingleSelection() throws {
+        // Both options write the same folder, so stacking them would only mean
+        // one of them winning. Such a mod keeps a radio group.
+        let json = """
+        {"Version":1,"Name":"Armor","Options":[
+            {"Name":"Red","Include":["armor","red"]},
+            {"Name":"Blue","Include":["armor","blue"]}]}
+        """
+        let manifest = try ModManifest.parse(Data(json.utf8))
+        XCTAssertFalse(manifest.optionsAreCombinable)
+        // Still resolvable if asked, and a shared folder is deployed once.
+        XCTAssertEqual(manifest.includedFolders(options: [0, 1], subOptions: [:]), ["armor", "red", "blue"])
+    }
+
+    func testSingleOptionIsNotCombinable() throws {
+        let manifest = try ModManifest.parse(Data(#"{"Version":1,"Name":"One","Options":[{"Name":"Only","Include":["only"]}]}"#.utf8))
+        XCTAssertFalse(manifest.optionsAreCombinable)
+    }
+
+    func testChosenSelectionFallsBackToLegacyFields() throws {
+        // A mod installed before options could be combined has only the old
+        // fields in mods.json; it must still resolve to what the user picked.
+        var mod = InstalledMod(id: UUID(), name: "Old", enabled: true,
+                               selectedOption: 1, selectedSubOption: 2,
+                               installedAt: Date(), folderName: "old")
+        XCTAssertEqual(mod.chosenOptions, [1])
+        XCTAssertEqual(mod.chosenSubOptions, [1: 2])
+
+        mod.choose(options: [0, 3], subOptions: [3: 1])
+        XCTAssertEqual(mod.chosenOptions, [0, 3])
+        XCTAssertEqual(mod.chosenSubOptions, [3: 1])
+        // The legacy fields keep a sensible single answer for older builds.
+        XCTAssertEqual(mod.selectedOption, 0)
+        XCTAssertNil(mod.selectedSubOption)
+    }
+
+    func testDeploysEveryChosenOption() throws {
+        let store = try ModStore(rootURL: tmp.appendingPathComponent("store"))
+        let source = tmp.appendingPathComponent("download")
+        try write("manifest.json", #"{"Version":1,"Name":"Pack","Options":[{"Name":"A","Include":["a"]},{"Name":"B","Include":["b"]},{"Name":"C","Include":["c"]}]}"#, in: source)
+        try write("a/\(hashA).patch_0", "a", in: source)
+        try write("b/\(hashB).patch_0", "b", in: source)
+        try write("c/\(hashA).patch_1", "c", in: source)
+
+        var mod = try store.install(from: source)
+        XCTAssertEqual(store.resolve(mod).patchSets.count, 1)   // defaults to the first option
+
+        mod.choose(options: [0, 1, 2], subOptions: [:])
+        try store.update(mod)
+        XCTAssertEqual(store.resolve(mod).patchSets.count, 3)
+    }
+
     func testLegacyManifest() throws {
         let manifest = try ModManifest.parse(Data(#"{"Guid":"x","Name":"Old","Options":["A","B"]}"#.utf8))
         XCTAssertNil(manifest.version)

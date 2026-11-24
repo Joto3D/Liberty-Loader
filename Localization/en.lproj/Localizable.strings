@@ -2,7 +2,6 @@
 
 "%@ applied. Restart the game if it is running." = "%@ applied. Restart the game if it is running.";
 "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11." = "%@ is disabled in %@. DirectX 12 can't start, so the game falls back to DirectX 11.";
-"%@ mods" = "%@ mods";
 "%@ of %@ mods" = "%@ of %@ mods";
 "%@ results" = "%@ results";
 "%lld Helldivers online" = "%lld Helldivers online";
@@ -10,6 +9,7 @@
 "%lld files are not in the game folder yet." = "%lld files are not in the game folder yet.";
 "%lld mods are pinned in the load order, as their descriptions ask." = "%lld mods are pinned in the load order, as their descriptions ask.";
 "%lld mods enabled" = "%lld mods enabled";
+"%lld of %lld selected" = "%lld of %lld selected";
 "%lld patch files from another tool" = "%lld patch files from another tool";
 "API key" = "API key";
 "Add your Nexus Mods API key in Settings first." = "Add your Nexus Mods API key in Settings first.";
@@ -32,7 +32,6 @@
 "Before %@" = "Before %@";
 "Before low-memory textures" = "Before low-memory textures";
 "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS." = "Below the game's lowest settings, like the Ultimate Performance mod. Every effect off, even sun shadows, for weak Macs or the highest FPS.";
-"Bottle" = "Bottle";
 "Bottle settings" = "Bottle settings";
 "Browse" = "Browse";
 "Browse Helldivers 2 Mods" = "Browse Helldivers 2 Mods";
@@ -54,7 +53,6 @@
 "Choose CrossOver.app…" = "Choose CrossOver.app…";
 "Clear filters" = "Clear filters";
 "Clear filters to reorder" = "Clear filters to reorder";
-"Click “Mod Manager Download” on Nexus Mods to finish installing." = "Click “Mod Manager Download” on Nexus Mods to finish installing.";
 "Close" = "Close";
 "Config file not found: %@" = "Config file not found: %@";
 "Connect Nexus Mods" = "Connect Nexus Mods";
@@ -112,6 +110,7 @@
 "Enable All" = "Enable All";
 "Enabled" = "Enabled";
 "Ends %@" = "Ends %@";
+"Every mod here is filtered out." = "Every mod here is filtered out.";
 "Everything looks right but mods still don't show? Start the game from Liberty Loader, or press Apply Now after starting it through Steam." = "Everything looks right but mods still don't show? Start the game from Liberty Loader, or press Apply Now after starting it through Steam.";
 "Extra launch options" = "Extra launch options";
 "Fallback if MSync is unstable." = "Fallback if MSync is unstable.";
@@ -142,11 +141,11 @@
 "Graphics backend" = "Graphics backend";
 "Graphics backend switched to %@. Try launching again." = "Graphics backend switched to %@. Try launching again.";
 "Guide: how to use this mod" = "Guide: how to use this mod";
-"Helldivers 2 bottle" = "Helldivers 2 bottle";
 "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing." = "Helldivers 2 can use more than that, so macOS swaps and the game stutters. Low textures help most. Close browsers and Discord while playing.";
 "Helldivers 2 found in bottle “%@”" = "Helldivers 2 found in bottle “%@”";
 "Helldivers 2 hasn't started" = "Helldivers 2 hasn't started";
 "Helldivers 2 install" = "Helldivers 2 install";
+"Helldivers 2 is not running" = "Helldivers 2 is not running";
 "Helldivers 2 is running" = "Helldivers 2 is running";
 "Helldivers 2 is using %@. Restart the game after this mission." = "Helldivers 2 is using %@. Restart the game after this mission.";
 "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game." = "Helldivers 2 is using %@. The game may crash soon: finish the mission and restart the game.";
@@ -166,6 +165,7 @@
 "If this page will not load here, finish the install in your browser instead." = "If this page will not load here, finish the install in your browser instead.";
 "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam." = "In CrossOver, choose “Install a Windows Application”, search for Steam and install it. Then sign in to Steam.";
 "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11." = "In Steam, right-click Helldivers 2 → Properties and remove --use-d3d11 from Launch Options. Otherwise the game keeps using DirectX 11.";
+"Include" = "Include";
 "Install" = "Install";
 "Install %@" = "Install %@";
 "Install All Missing" = "Install All Missing";
@@ -238,9 +238,7 @@
 "Mods, performance and launch, managed for your Mac." = "Mods, performance and launch, managed for your Mac.";
 "More" = "More";
 "Most downloaded" = "Most downloaded";
-"Most endorsed" = "Most endorsed";
 "Move to Bottom" = "Move to Bottom";
-"Name" = "Name";
 "Name, e.g. Cosmetics only" = "Name, e.g. Cosmetics only";
 "Name, e.g. My Settings" = "Name, e.g. My Settings";
 "Needs %@" = "Needs %@";
@@ -258,12 +256,10 @@
 "Nexus Mods returned an error (%lld)." = "Nexus Mods returned an error (%lld).";
 "Nexus Mods returned an unexpected browse response." = "Nexus Mods returned an unexpected browse response.";
 "Nexus mod %lld" = "Nexus mod %lld";
-"Nexus order" = "Nexus order";
 "No Helldivers 2 install found. Looked in %@ and %@." = "No Helldivers 2 install found. Looked in %@ and %@.";
 "No backup is available for this file." = "No backup is available for this file.";
 "No backups yet." = "No backups yet.";
 "No bottle selected." = "No bottle selected.";
-"No bottle with Helldivers 2 found in %@." = "No bottle with Helldivers 2 found in %@.";
 "No cause found in the bottle. The game may fall back to DirectX 11 on its own. Copy the report and send it." = "No cause found in the bottle. The game may fall back to DirectX 11 on its own. Copy the report and send it.";
 "No errors in the log" = "No errors in the log";
 "No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then." = "No mod logs found yet. Start a mission once with your mods enabled; mod loaders like Bingus Shared Loader write a log then.";
@@ -352,6 +348,7 @@
 "Saves your current game and bottle settings so you can switch back to them later." = "Saves your current game and bottle settings so you can switch back to them later.";
 "Search Nexus Mods" = "Search Nexus Mods";
 "Search mods" = "Search mods";
+"Select All" = "Select All";
 "Settings" = "Settings";
 "Setup assistant" = "Setup assistant";
 "Setup in progress" = "Setup in progress";
@@ -371,7 +368,6 @@
 "Some mods may not work" = "Some mods may not work";
 "Some settings were skipped" = "Some settings were skipped";
 "Something went wrong" = "Something went wrong";
-"Sort" = "Sort";
 "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again." = "Steam or the bottle may be stuck. Liberty Loader can stop everything in the bottle and try again.";
 "Steam still forces DirectX 11" = "Steam still forces DirectX 11";
 "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties." = "Steam's launch options force DirectX 11 (Steam user %@). Remove --use-d3d11 in Steam → Helldivers 2 → Properties.";
@@ -393,6 +389,7 @@
 "The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it." = "The mod's description asks for this position, so Liberty Loader keeps it there. Right-click to change it.";
 "The selected variant contains no mod files. Pick another variant on the Mods page." = "The selected variant contains no mod files. Pick another variant on the Mods page.";
 "This happens when the game is started through Steam instead of Liberty Loader." = "This happens when the game is started through Steam instead of Liberty Loader.";
+"This install is managed by %@" = "This install is managed by %@";
 "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead." = "This is a Windows program (for example a mod manager), not a mod. You don't need it: Liberty Loader does that job on your Mac. Download the mod itself instead.";
 "This mod does not contain any Helldivers 2 patch files." = "This mod does not contain any Helldivers 2 patch files.";
 "This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader." = "This mod doesn't describe special controls. Most mods work automatically once applied: start the game from Liberty Loader.";
@@ -400,7 +397,6 @@
 "This mod needs another mod. Click to install it." = "This mod needs another mod. Click to install it.";
 "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory." = "Tip: turning off High Resolution (Retina) Mode on the Performance page also helps with crashes from low memory.";
 "Top rated" = "Top rated";
-"Trending" = "Trending";
 "Try Again" = "Try Again";
 "Turn Off" = "Turn Off";
 "Turn On" = "Turn On";
@@ -443,4 +439,3 @@
 "“%@” didn't run in your last game session" = "“%@” didn't run in your last game session";
 "“%@” is kept at the bottom of the list, as its description asks." = "“%@” is kept at the bottom of the list, as its description asks.";
 "“%@” is kept at the top of the list, as its description asks." = "“%@” is kept at the top of the list, as its description asks.";
-"“Nexus order” keeps the ranking Nexus returned for this tab." = "“Nexus order” keeps the ranking Nexus returned for this tab.";

@@ -434,13 +434,119 @@ struct ModRow: View {
         }
     }
 
+    /// Options a mod ships are usually independent — twelve weapon reskins that
+    /// share no files — so this offers tick boxes rather than a radio group when
+    /// the manifest says they can stack. Mods whose options overwrite each other
+    /// keep the single picker, since stacking them would just mean one winning.
     @ViewBuilder
     private func optionPickers(_ manifest: ModManifest) -> some View {
-        let optionIndex = min(mod.selectedOption ?? 0, manifest.options.count - 1)
+        if manifest.optionsAreCombinable {
+            combinableOptionMenu(manifest)
+        } else {
+            singleOptionPickers(manifest)
+        }
+    }
+
+    /// Selections as the UI should show them. A mod installed before this
+    /// existed has no set, and resolves to the first option, so show that.
+    private func chosenOptions(_ manifest: ModManifest) -> Set<Int> {
+        let chosen = mod.chosenOptions.filter { $0 >= 0 && $0 < manifest.options.count }
+        return chosen.isEmpty ? [0] : chosen
+    }
+
+    private func apply(options: Set<Int>, subOptions: [Int: Int]) {
+        var m = mod
+        m.choose(options: options, subOptions: subOptions)
+        model.update(m)
+    }
+
+    @ViewBuilder
+    private func combinableOptionMenu(_ manifest: ModManifest) -> some View {
+        let chosen = chosenOptions(manifest)
+        HStack(spacing: 10) {
+            Menu {
+                Button("Select All") {
+                    apply(options: Set(manifest.options.indices), subOptions: mod.chosenSubOptions)
+                }
+                Divider()
+                ForEach(manifest.options.indices, id: \.self) { i in
+                    let option = manifest.options[i]
+                    if option.subOptions.isEmpty {
+                        // verbatim: option names come from the mod, so they are
+                        // not localization keys.
+                        Toggle(isOn: inclusion(i, chosen: chosen)) {
+                            Text(verbatim: option.name)
+                        }
+                    } else {
+                        // Nested so one row stays one control however many
+                        // options the mod ships.
+                        Menu {
+                            Toggle("Include", isOn: inclusion(i, chosen: chosen))
+                            Divider()
+                            Picker("Style", selection: subSelection(i, count: option.subOptions.count)) {
+                                ForEach(option.subOptions.indices, id: \.self) { s in
+                                    Text(verbatim: option.subOptions[s].name).tag(s)
+                                }
+                            }
+                            .pickerStyle(.inline)
+                        } label: {
+                            Text(verbatim: option.name)
+                        }
+                    }
+                }
+            } label: {
+                Text("\(chosen.count) of \(manifest.options.count) selected")
+            }
+            .frame(maxWidth: 240)
+
+            Text(verbatim: chosen.sorted().map { manifest.options[$0].name }.joined(separator: ", "))
+                .font(.caption)
+                .foregroundStyle(Color.hdMuted)
+                .lineLimit(1)
+                .truncationMode(.tail)
+        }
+        .controlSize(.small)
+    }
+
+    private func inclusion(_ index: Int, chosen: Set<Int>) -> Binding<Bool> {
+        Binding(
+            get: { chosen.contains(index) },
+            set: { isOn in
+                var set = chosen
+                if isOn { set.insert(index) } else { set.remove(index) }
+                // An enabled mod has to deploy something, so the last ticked
+                // option cannot be unticked — turn the mod off instead.
+                guard !set.isEmpty else { return }
+                apply(options: set, subOptions: mod.chosenSubOptions)
+            }
+        )
+    }
+
+    private func subSelection(_ index: Int, count: Int) -> Binding<Int> {
+        Binding(
+            get: { min(max(mod.chosenSubOptions[index] ?? 0, 0), count - 1) },
+            set: { value in
+                var subs = mod.chosenSubOptions
+                subs[index] = value
+                apply(options: chosenOptionsIncluding(index), subOptions: subs)
+            }
+        )
+    }
+
+    /// Picking a style for an option implies wanting that option.
+    private func chosenOptionsIncluding(_ index: Int) -> Set<Int> {
+        var set = mod.chosenOptions.isEmpty ? [0] : mod.chosenOptions
+        set.insert(index)
+        return set
+    }
+
+    @ViewBuilder
+    private func singleOptionPickers(_ manifest: ModManifest) -> some View {
+        let optionIndex = min(max(mod.chosenOptions.sorted().first ?? 0, 0), manifest.options.count - 1)
         HStack(spacing: 10) {
             Picker("Variant", selection: Binding(
                 get: { optionIndex },
-                set: { var m = mod; m.selectedOption = $0; m.selectedSubOption = 0; model.update(m) }
+                set: { apply(options: [$0], subOptions: [$0: 0]) }
             )) {
                 ForEach(manifest.options.indices, id: \.self) { i in
                     Text(verbatim: manifest.options[i].name).tag(i)
@@ -451,8 +557,8 @@ struct ModRow: View {
             let subOptions = manifest.options[optionIndex].subOptions
             if !subOptions.isEmpty {
                 Picker("Style", selection: Binding(
-                    get: { min(mod.selectedSubOption ?? 0, subOptions.count - 1) },
-                    set: { var m = mod; m.selectedSubOption = $0; model.update(m) }
+                    get: { min(max(mod.chosenSubOptions[optionIndex] ?? 0, 0), subOptions.count - 1) },
+                    set: { apply(options: [optionIndex], subOptions: [optionIndex: $0]) }
                 )) {
                     ForEach(subOptions.indices, id: \.self) { i in
                         Text(verbatim: subOptions[i].name).tag(i)

@@ -5,8 +5,42 @@ public struct InstalledMod: Codable, Identifiable, Equatable, Sendable {
     public var name: String
     public var description: String?
     public var enabled: Bool
+    /// Legacy single selection. Still decoded and encoded so an index written
+    /// by an older build keeps working, and so downgrading does not lose it.
     public var selectedOption: Int?
     public var selectedSubOption: Int?
+    /// Every chosen top-level option. Nil means this mod predates
+    /// multi-selection; `chosenOptions` then falls back to `selectedOption`.
+    public var selectedOptions: Set<Int>?
+    /// Chosen sub-option per option index. Sub-options are variants of one
+    /// option, so exactly one applies to each.
+    public var selectedSubOptions: [Int: Int]?
+
+    /// The options to deploy, whichever era wrote this record.
+    public var chosenOptions: Set<Int> {
+        if let selectedOptions { return selectedOptions }
+        return selectedOption.map { [$0] } ?? []
+    }
+
+    /// The sub-option per option, whichever era wrote this record.
+    public var chosenSubOptions: [Int: Int] {
+        if let selectedSubOptions { return selectedSubOptions }
+        guard let sub = selectedSubOption else { return [:] }
+        return [selectedOption ?? 0: sub]
+    }
+
+    /// Records a selection, keeping the single-selection fields in step.
+    ///
+    /// The legacy fields are still written so that a profile saved from here,
+    /// or an older build reading `mods.json`, sees a sensible single choice
+    /// rather than nothing at all.
+    public mutating func choose(options: Set<Int>, subOptions: [Int: Int]) {
+        selectedOptions = options
+        selectedSubOptions = subOptions
+        let primary = options.sorted().first
+        selectedOption = primary
+        selectedSubOption = primary.flatMap { subOptions[$0] }
+    }
     public var installedAt: Date
     /// Mod contents, relative to the store's mods directory.
     public var folderName: String
@@ -152,9 +186,18 @@ public final class ModStore {
             mod.folderName = id.uuidString
             mod.name = manifest?.name ?? mod.name
             mod.description = manifest?.description ?? mod.description
-            if let options = manifest?.options, let selected = mod.selectedOption, selected >= options.count {
-                mod.selectedOption = 0
-                mod.selectedSubOption = 0
+            if let options = manifest?.options {
+                // An update can remove options, so drop any selection that no
+                // longer exists rather than deploying the wrong folder.
+                if let selected = mod.selectedOption, selected >= options.count {
+                    mod.selectedOption = 0
+                    mod.selectedSubOption = 0
+                }
+                if let chosen = mod.selectedOptions {
+                    let kept = chosen.filter { $0 >= 0 && $0 < options.count }
+                    mod.selectedOptions = kept.isEmpty ? [0] : kept
+                    mod.selectedSubOptions = mod.selectedSubOptions?.filter { kept.contains($0.key) }
+                }
             }
             mods[index] = mod
             detectPins()
@@ -243,7 +286,7 @@ public final class ModStore {
         let root = folderURL(for: mod)
         let directories: [URL]
         if let manifest = manifest(for: mod), !manifest.options.isEmpty {
-            directories = manifest.includedFolders(option: mod.selectedOption, subOption: mod.selectedSubOption)
+            directories = manifest.includedFolders(options: mod.chosenOptions, subOptions: mod.chosenSubOptions)
                 .map { $0.isEmpty ? root : root.appendingPathComponent($0.replacingOccurrences(of: "\\", with: "/")) }
         } else {
             directories = [root]

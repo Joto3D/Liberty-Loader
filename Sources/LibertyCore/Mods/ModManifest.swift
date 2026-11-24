@@ -55,14 +55,60 @@ public struct ModManifest: Equatable, Sendable {
     }
 
     /// Folders (relative to the mod root) whose patch files should be deployed for a selection.
+    ///
+    /// Kept for callers that still think in single selections; forwards to the
+    /// set-based version below.
+    /// Note this clamps an out-of-range index to the last option, which the
+    /// set-based version deliberately does not do — there, an index that no
+    /// longer exists is dropped. Callers of the old API relied on clamping.
     public func includedFolders(option: Int?, subOption: Int?) -> [String] {
         guard !options.isEmpty else { return [""] }
-        let chosen = options[min(max(option ?? 0, 0), options.count - 1)]
-        var folders = chosen.include
-        if !chosen.subOptions.isEmpty {
-            let sub = chosen.subOptions[min(max(subOption ?? 0, 0), chosen.subOptions.count - 1)]
-            folders += sub.include
+        let index = min(max(option ?? 0, 0), options.count - 1)
+        return includedFolders(options: [index], subOptions: subOption.map { [index: $0] } ?? [:])
+    }
+
+    /// Folders for any number of chosen options.
+    ///
+    /// Top-level options are usually independent — a mod offering twelve
+    /// weapons ships twelve folders that share no files, so there is no reason
+    /// to make the user pick one. Sub-options are the opposite: they are
+    /// variants of a single option ("Quiet Ping" or "Loud Ping" for the same
+    /// autocannon), so exactly one applies per chosen option, which is why
+    /// `subOptions` is keyed by option index rather than being a set.
+    ///
+    /// An empty `options` means "nothing chosen yet" and falls back to the
+    /// first option, matching the old single-selection behaviour for mods
+    /// installed before multi-selection existed.
+    public func includedFolders(options chosen: Set<Int>, subOptions: [Int: Int]) -> [String] {
+        guard !options.isEmpty else { return [""] }
+        let valid = chosen.filter { $0 >= 0 && $0 < options.count }.sorted()
+        let indices = valid.isEmpty ? [0] : valid
+        var folders: [String] = []
+        for index in indices {
+            let option = options[index]
+            folders += option.include
+            if !option.subOptions.isEmpty {
+                let raw = subOptions[index] ?? 0
+                let sub = option.subOptions[min(max(raw, 0), option.subOptions.count - 1)]
+                folders += sub.include
+            }
         }
-        return folders
+        // Two options can legitimately name the same folder; deploy it once.
+        var seen = Set<String>()
+        return folders.filter { seen.insert($0).inserted }
+    }
+
+    /// Whether these options can be combined, or must behave as a radio group.
+    ///
+    /// Options that would deploy the same folder cannot stack — one would
+    /// simply win — so such a mod keeps single-selection. This is decided from
+    /// the manifest rather than assumed, because the format has no flag for it.
+    public var optionsAreCombinable: Bool {
+        guard options.count > 1 else { return false }
+        var seen = Set<String>()
+        for option in options {
+            for folder in option.include where !seen.insert(folder).inserted { return false }
+        }
+        return true
     }
 }
