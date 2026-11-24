@@ -56,17 +56,20 @@ def source_keys() -> set[str]:
         re.compile(r"^\s*[?:]\s*" + LITERAL, re.M),
         # `return "…"` inside `var title: LocalizedStringKey` switches.
         re.compile(r"case \.\w+: return " + LITERAL),
+        # `Text(cond ? "a" : "b")` — both branches, written on one line. Without
+        # this the second branch is invisible and gen_strings.py prunes it.
+        re.compile(POSITIONAL + r"\([^\n\"]*\?\s*" + LITERAL + r"\s*:\s*" + LITERAL),
     ]
     for folder in SOURCES:
         for file in folder.rglob("*.swift"):
             text = file.read_text()
             for pattern in patterns:
                 for match in pattern.finditer(text):
-                    literal = match.group(1)
-                    # Skip URLs, paths and SF Symbol names ("play.fill", "speedometer").
-                    if not literal or literal.startswith(("http", "/")) or re.fullmatch(r"[a-z0-9.]+", literal) or ("." in literal and " " not in literal):
-                        continue
-                    keys.add(literal_to_key(literal))
+                    for literal in match.groups():
+                        # Skip URLs, paths and SF Symbol names ("play.fill", "speedometer").
+                        if not literal or literal.startswith(("http", "/")) or re.fullmatch(r"[a-z0-9.]+", literal) or ("." in literal and " " not in literal):
+                            continue
+                        keys.add(literal_to_key(literal))
     return keys
 
 

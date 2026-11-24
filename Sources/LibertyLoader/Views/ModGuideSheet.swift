@@ -138,7 +138,9 @@ struct ModGuideSheet: View {
     }
 
     private func variantsSection(_ manifest: ModManifest) -> some View {
-        let selected = mod?.selectedOption ?? 0
+        let chosen = mod?.chosenOptions ?? []
+        let selected = chosen.isEmpty ? [0] : chosen
+        let combinable = manifest.optionsAreCombinable
         return VStack(alignment: .leading, spacing: 10) {
             HDSectionHeader(title: "Variants")
             HDPanel {
@@ -147,8 +149,13 @@ struct ModGuideSheet: View {
                         let option = manifest.options[i]
                         VStack(alignment: .leading, spacing: 3) {
                             HStack(spacing: 6) {
-                                Image(systemName: i == selected ? "largecircle.fill.circle" : "circle")
-                                    .foregroundStyle(i == selected ? Color.hdYellow : Color.hdMuted)
+                                // Tick boxes where the options stack, a radio
+                                // dot where only one of them can apply.
+                                let on = selected.contains(i)
+                                Image(systemName: combinable
+                                      ? (on ? "checkmark.square.fill" : "square")
+                                      : (on ? "largecircle.fill.circle" : "circle"))
+                                    .foregroundStyle(on ? Color.hdYellow : Color.hdMuted)
                                 Text(verbatim: option.name).foregroundStyle(Color.hdText)
                             }
                             if let description = option.description, !description.isEmpty {
